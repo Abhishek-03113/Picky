@@ -2,17 +2,13 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <script>try{if(localStorage.getItem("picky-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta
-      name="description"
-      content="Picky saves products as you browse, turns each into one clean spec sheet, and shows where your shortlist actually differs."
-    />
-    <link rel="icon" type="image/png" href="/logo-128.png" />
-    <title>Picky: stop opening more tabs</title>
+    <meta name="robots" content="noindex" />
+    <title>Picky</title>
   </head>
   <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
+    <!-- The homepage now lives in the web app (apps/web, signed-out "/"); this page forwards there. -->
+    <p>Picky has moved. <a id="home-link" href="/">Continue to Picky</a>.</p>
+    <script type="module" src="/src/redirect-entry.ts"></script>
   </body>
 </html>

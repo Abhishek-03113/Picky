@@ -17,7 +17,8 @@ interface ScreenProps {
   autoImportUrl: string | undefined;
 }
 
-function WelcomeScreen({ autoImportUrl, extensionUrl }: ScreenProps & { extensionUrl: string }) {
+function WelcomeScreen({ autoImportUrl }: ScreenProps) {
+  const { config, extensionBridge } = listRouteApi.useRouteContext();
   return (
     <>
       <AppBar>
@@ -25,7 +26,11 @@ function WelcomeScreen({ autoImportUrl, extensionUrl }: ScreenProps & { extensio
         {/* The nav, not a bare title: a brand-new account lands here and must still be able to sign out. */}
         <MainNav />
       </AppBar>
-      <WelcomeView extensionUrl={extensionUrl} autoImportUrl={autoImportUrl} />
+      <WelcomeView
+        extensionUrl={config.extensionUrl}
+        extensionInstalled={extensionBridge.isAvailable()}
+        autoImportUrl={autoImportUrl}
+      />
     </>
   );
 }
@@ -65,13 +70,13 @@ function LibraryScreen({ autoImportUrl, products, comparisons, query, groupKey }
 
 /** Home: the welcome screen for an empty library, otherwise the grouped library with an add-by-link pill. */
 export function ProductListPage() {
-  const { productsClient, comparisonsClient, config } = listRouteApi.useRouteContext();
+  const { productsClient, comparisonsClient } = listRouteApi.useRouteContext();
   const { import: autoImportUrl, q = "", group = DEFAULT_GROUP_KEY } = listRouteApi.useSearch();
   const { data: products } = useSuspenseQuery(productListQuery(productsClient, q));
   const { data: comparisons } = useSuspenseQuery(comparisonListQuery(comparisonsClient));
   usePageTitle("Library");
   if (products.length === 0 && q === "") {
-    return <WelcomeScreen autoImportUrl={autoImportUrl} extensionUrl={config.extensionUrl} />;
+    return <WelcomeScreen autoImportUrl={autoImportUrl} />;
   }
   return (
     <LibraryScreen

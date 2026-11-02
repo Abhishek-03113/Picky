@@ -6,8 +6,14 @@ which is published to the Chrome Web Store instead.
 | Project         | Root directory | What it is                                  |
 | --------------- | -------------- | ------------------------------------------- |
 | `picky-api`     | `apps/api`     | Hono API on the Bun runtime (Fluid compute) |
-| `picky-web`     | `apps/web`     | Vite SPA: library and spec sheets           |
-| `picky-landing` | `apps/landing` | Vite static landing page                    |
+| `picky-web`     | `apps/web`     | Vite SPA: homepage, library and spec sheets |
+| `picky-landing` | `apps/landing` | Redirect from the old landing page to web   |
+
+The web app is the one link to share. Signed out, `/` is the homepage (what Picky does, then "Get
+started" and "Add to Chrome"); signed in, `/` is the library. `/extension` is the install guide and
+`/privacy` the privacy policy; both are public. `picky-landing` only forwards old landing links to the
+web app's homepage, keeping `#how`-style anchors; once its domain points at `picky-web` (or nobody
+uses it), delete the project and `apps/landing`.
 
 ## How products get in
 
@@ -35,7 +41,7 @@ Everything goes through the extension, so no scraping service is needed:
 - `apps/api/vercel.json`: Hono preset, `bunVersion: "1.4.x"`, migrations as the build command.
 - `apps/web/vercel.json`: forwards `/api/*` to the API project and serves `index.html` for every
   other path so deep links work. The browser sees one origin, so there's no CORS.
-- `apps/landing/vercel.json`: Vite preset.
+- `apps/landing/vercel.json`: Vite preset for the redirect page.
 
 ## Steps
 
@@ -60,8 +66,11 @@ Environment variables:
 | `picky-api`     | `WEB_ORIGIN`               | `https://<web domain>`                         |
 | `picky-api`     | `FIRECRAWL_API_KEY`        | Optional; turns on URL import                  |
 | `picky-web`     | `VITE_PICKY_EXTENSION_URL` | Chrome Web Store listing                       |
+| `picky-web`     | `PICKY_SITE_URL`           | Optional; public origin for link previews      |
 | `picky-landing` | `VITE_PICKY_WEB_URL`       | `https://<web domain>` (defaults to localhost) |
-| `picky-landing` | `VITE_PICKY_EXTENSION_URL` | Chrome Web Store listing (defaults to `#how`)  |
+
+`PICKY_SITE_URL` fills in the absolute `og:url` and `og:image` tags that chat apps use for link
+previews. Without it the build uses Vercel's production domain (`VERCEL_PROJECT_PRODUCTION_URL`).
 
 Never put the Firecrawl key in a `VITE_*` variable: those are bundled into public JavaScript.
 
@@ -77,14 +86,19 @@ environment variables in rewrites, so if the API's domain is different, edit tha
 
 ### 5. Deploy web, then landing
 
-### 6. Build the extension for production
+### 6. Package the extension for the Chrome Web Store
 
-The extension isn't hosted on Vercel. Build it against the deployed stack and upload `dist/` to the
+The extension isn't hosted on Vercel. Package it against the deployed stack and upload the zip to the
 Chrome Web Store:
 
 ```sh
-PICKY_WEB_URL=https://<web domain> bun run build:extension
+PICKY_WEB_URL=https://<web domain> bun run package:extension
 ```
+
+This builds, checks the package against the store's rules and writes
+`apps/extension/release/picky-extension-<version>.zip`. The listing text, privacy answers and promo
+images are in [chrome-web-store.md](chrome-web-store.md). On first install the extension opens
+`/extension` on the web app, which sees it is installed and points the new user at creating an account.
 
 Leave `PICKY_API_URL` unset. The extension then calls `/api` through the web domain (which forwards it
 to the API), so it sends the web app's session cookie and is signed in exactly when the web app is.
@@ -128,11 +142,9 @@ GitHub setup, in the `production` environment (only `feat/vercel-deploy` may dep
 
 ## Before launch
 
-- **Landing page:**
-  - The hero's paste-a-link form opens the web app with `?import=`. Without the extension the web
-    app ignores the link, so hide or reword the form for visitors who have not installed it.
-  - "Add to Chrome" points to `#how` until `VITE_PICKY_EXTENSION_URL` is set, which needs the store
-    listing.
-  - "Open app" silently falls back to `http://localhost:5173` if `VITE_PICKY_WEB_URL` is missing.
-  - The page has no favicon and no `og:` or `twitter:` preview tags.
+- **Store listing:** until `VITE_PICKY_EXTENSION_URL` is set, "Add to Chrome" opens a Chrome Web Store
+  search for "picky". Set it to the listing once it is approved.
+- **Privacy contact:** `/privacy` sends deletion requests to the GitHub issues page. Swap in a support
+  email (`PRIVACY_CONTACT_URL` in `apps/web/src/pages/privacy-page.tsx`) if you'd rather not take them
+  in public.
 - **Bun 1.4.x is in beta on Vercel.** If something breaks, set `bunVersion` to `"1.x"` (Bun 1.3).

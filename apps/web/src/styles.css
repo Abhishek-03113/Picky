@@ -5,6 +5,8 @@
 @import "./styles/compare.css";
 @import "./styles/welcome.css";
 @import "./styles/product.css";
+@import "./styles/guide.css";
+@import "./styles/home.css";
 
 *,
 *::before,

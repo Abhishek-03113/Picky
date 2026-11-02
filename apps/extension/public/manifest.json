@@ -1,17 +1,20 @@
 {
   "manifest_version": 3,
-  "name": "Picky capture",
-  "version": "1.1.0",
-  "description": "Sends the product page you are viewing (Amazon.in, Flipkart) to Picky as a clean spec sheet.",
+  "name": "Picky: Product Spec Sheets & Compare",
+  "short_name": "Picky",
+  "version": "1.2.0",
+  "description": "Turn Amazon.in and Flipkart product pages into clean spec sheets, save them to your Picky library, and compare.",
+  "minimum_chrome_version": "116",
   "icons": {
     "16": "logo-16.png",
+    "32": "logo-32.png",
     "48": "logo-48.png",
     "128": "logo-128.png"
   },
   "action": {
     "default_icon": {
       "16": "logo-16.png",
-      "48": "logo-48.png"
+      "32": "logo-32.png"
     },
     "default_title": "Quick Look: specs of this page"
   },

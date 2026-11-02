@@ -13,8 +13,8 @@
     "db:up": "docker compose up -d postgres",
     "dev:api": "bun run --cwd apps/api dev",
     "dev:web": "bun run --cwd apps/web dev",
-    "dev:landing": "bun run --cwd apps/landing dev",
     "build:extension": "bun run --cwd apps/extension build",
+    "package:extension": "bun run --cwd apps/extension release",
     "fixtures:capture": "bun --env-file=.env apps/api/scripts/capture-page-fixture.ts",
     "user:create": "bun --env-file=.env apps/api/scripts/create-user.ts",
     "fixtures:refresh": "bun run --cwd packages/catalog fixtures:refresh"

@@ -1,7 +1,7 @@
 import { parseImportSearch, type ImportSearch } from "../import/import-search.ts";
 import { parseGroupKey, type GroupKey } from "./group-options.ts";
 
-/** Search params of "/": the landing-page import URL, the library search text and the grouping. */
+/** Search params of "/": a product URL to import, the library search text and the grouping. */
 export interface LibrarySearch extends ImportSearch {
   q?: string | undefined;
   /** Absent means the default grouping (category), which keeps default URLs clean. */

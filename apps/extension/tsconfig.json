@@ -4,5 +4,5 @@
     "lib": ["ES2022", "DOM", "DOM.Iterable"],
     "types": ["bun", "chrome"]
   },
-  "include": ["src", "test", "build.ts"]
+  "include": ["src", "test", "build.ts", "release.ts"]
 }

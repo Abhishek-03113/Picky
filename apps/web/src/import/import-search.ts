@@ -1,4 +1,4 @@
-/** Search params of "/": `import` is a product URL handed over by the landing page. */
+/** Search params of "/": `import` is a product URL handed over in a link (`/?import=<url>`). */
 export interface ImportSearch {
   import?: string | undefined;
 }

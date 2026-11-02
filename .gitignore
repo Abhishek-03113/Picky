@@ -29,3 +29,6 @@ dist/
 
 # /brag launch-video output
 brag-output*/
+
+# Chrome Web Store packages (bun run package:extension)
+apps/extension/release/

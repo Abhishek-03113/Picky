@@ -32,9 +32,11 @@ describe("route guards", () => {
     expect(await thrownRedirect(guard)).toMatchObject({ to: "/login", search: { redirect: "/comparisons?x=1" } });
   });
 
-  test("lets a signed-in user through, and /login through for anyone", async () => {
-    await requireSignedIn(guardContext(new FakeAuthClient()), { pathname: "/", href: "/" });
-    await requireSignedIn(guardContext(signedOut()), { pathname: "/login", href: "/login" });
+  test("lets a signed-in user through, and the public pages through for anyone", async () => {
+    await requireSignedIn(guardContext(new FakeAuthClient()), { pathname: "/comparisons", href: "/comparisons" });
+    for (const pathname of ["/", "/login", "/extension", "/privacy"]) {
+      await requireSignedIn(guardContext(signedOut()), { pathname, href: pathname });
+    }
   });
 
   test("a signed-in user visiting /login goes straight to the redirect target", async () => {

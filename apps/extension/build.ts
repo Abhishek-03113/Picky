@@ -66,6 +66,8 @@ async function writeManifest(): Promise<void> {
   manifest.host_permissions = mergeHostPermissions(manifest.host_permissions, apiHostPermission(config));
   // The web app's origin is only known at build time, so its bridge script is added here.
   manifest.content_scripts.push(webBridgeContentScript(config));
+  // The store listing's "website" link and the extension's About link: the Picky homepage.
+  manifest.homepage_url = `${config.webBaseUrl}/`;
   await Bun.write(join(OUT_DIR, "manifest.json"), `${JSON.stringify(manifest, null, 2)}\n`);
 }
 
@@ -73,7 +75,7 @@ await rm(OUT_DIR, { recursive: true, force: true });
 await Promise.all(BUNDLES.map(buildBundle));
 await cp(join(import.meta.dir, "public"), OUT_DIR, { recursive: true });
 // Shared brand logo lives at the repo root so web, landing and extension use one file.
-for (const size of [16, 48, 128]) {
+for (const size of [16, 32, 48, 128]) {
   await cp(join(import.meta.dir, `../../assets/logo-${size}.png`), join(OUT_DIR, `logo-${size}.png`));
 }
 await writeManifest();

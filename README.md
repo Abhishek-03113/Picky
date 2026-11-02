@@ -92,10 +92,16 @@ bun install
 cp .env.example .env
 bun run db:up            # Postgres on 127.0.0.1:5433
 bun run dev:api          # API on http://localhost:8787
-bun run dev:web          # App on http://localhost:5173
-bun run dev:landing      # Landing page on http://localhost:5174
+bun run dev:web          # Homepage and app on http://localhost:5173
 bun run build:extension  # Browser extension build in apps/extension/dist
 ```
 
 To load the extension, open `chrome://extensions`, turn on Developer mode, choose **Load unpacked** and select
 `apps/extension/dist`.
+
+To publish the extension, package it against the deployed web app and follow
+[docs/chrome-web-store.md](docs/chrome-web-store.md):
+
+```bash
+PICKY_WEB_URL=https://<web domain> bun run package:extension
+```

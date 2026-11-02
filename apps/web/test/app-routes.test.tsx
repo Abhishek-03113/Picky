@@ -14,11 +14,26 @@ const populated = () =>
 
 describe("library route", () => {
   test("shows the welcome screen with the injected extension URL when the library is empty", async () => {
-    const html = await renderAppAt("/", new FakeProductsClient());
+    const noExtension = new FakeExtensionBridge(false);
+    const html = await renderAppAt(
+      "/",
+      new FakeProductsClient(),
+      new FakeComparisonsClient(),
+      new FakeAuthClient(),
+      noExtension,
+    );
     expect(html).toContain("Welcome to Picky");
     expect(html).toContain('href="https://store.example/picky"');
     expect(html).toContain("Install and pin");
+    expect(html).toContain("Alt + Shift + S");
+    expect(html).toContain('href="/extension"');
     expect(html).not.toContain("sample spec sheet");
+  });
+
+  test("with the extension installed, the welcome screen says so instead of selling it", async () => {
+    const html = await renderAppAt("/", new FakeProductsClient());
+    expect(html).toContain("The Picky extension is installed");
+    expect(html).not.toContain("Install and pin");
   });
 
   test("shows the card grid, count and store filter when products exist", async () => {

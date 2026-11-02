@@ -1,9 +1,13 @@
 import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
+import { siteOrigin, withSocialUrls } from "./social-urls.ts";
 
 // The dev server proxies /api to the Hono API, so the browser sees one origin and needs no CORS.
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    react(),
+    { name: "picky-social-urls", transformIndexHtml: (html) => withSocialUrls(html, siteOrigin(process.env)) },
+  ],
   server: {
     port: 5173,
     strictPort: true,

@@ -1,0 +1,109 @@
+/* /extension (install guide) and /privacy: plain reading pages anyone may open. */
+.guide-card,
+.install-card,
+.legal-card {
+  padding: var(--ez-space-24);
+  display: flex;
+  flex-direction: column;
+  gap: var(--ez-space-16);
+}
+.guide-card h2,
+.legal-card h2 {
+  margin: 0;
+  font-size: 19px;
+  font-weight: 600;
+}
+.install-card {
+  align-items: flex-start;
+}
+.install-card .hint {
+  margin: 0;
+}
+.install-card.is-installed {
+  box-shadow:
+    0 0 0 1px var(--ez-green-soft),
+    var(--ez-shadow-card);
+}
+.extension-ready {
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ez-space-8);
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--ez-green-text);
+}
+.guide-card .steps {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.gesture-list {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+.gesture-list div {
+  display: grid;
+  grid-template-columns: minmax(0, 240px) minmax(0, 1fr);
+  gap: var(--ez-space-16);
+  padding: var(--ez-space-12) 0;
+  border-bottom: 1px solid var(--ez-separator);
+}
+.gesture-list div:last-child {
+  border-bottom: 0;
+}
+.gesture-list dd {
+  margin: 0;
+  color: var(--ez-label-strong-secondary);
+}
+.extension-guide kbd {
+  font-family: var(--ez-font-mono);
+  font-size: 13px;
+  padding: 2px 6px;
+  border-radius: 6px;
+  background: var(--ez-fill);
+  border: 1px solid var(--ez-skeleton);
+  white-space: nowrap;
+}
+.guide-points,
+.legal-card ul {
+  margin: 0;
+  padding-left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--ez-space-8);
+  line-height: 1.5;
+}
+.guide-card .hint {
+  margin: 0;
+}
+.legal-card p {
+  margin: 0;
+  line-height: 1.6;
+}
+.legal-card h2 {
+  margin-top: var(--ez-space-8);
+}
+
+@media (max-width: 600px) {
+  .guide-card .steps {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .gesture-list div {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--ez-space-4);
+  }
+}
+
+/* A button that reads as a link inside a sentence. */
+.inline-link-button {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--ez-blue);
+  font-size: inherit;
+  text-decoration: underline;
+  cursor: pointer;
+}
+.inline-link-button:hover {
+  color: var(--ez-blue-hover);
+}

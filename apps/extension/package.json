@@ -4,7 +4,9 @@
   "type": "module",
   "scripts": {
     "build": "bun build.ts",
-    "typecheck": "tsc -p tsconfig.json"
+    "release": "bun release.ts",
+    "typecheck": "tsc -p tsconfig.json",
+    "store:images": "node store/render-images.cjs"
   },
   "dependencies": {
     "@picky/catalog": "workspace:*",

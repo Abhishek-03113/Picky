@@ -5,6 +5,7 @@ import { adaptChromePort } from "./chrome-duplex-port.ts";
 import { ChromeBrowserPort } from "./chrome-browser-port.ts";
 import { ChromeKeyValueStorage } from "./chrome-key-value-storage.ts";
 import { HttpComparisonsClient } from "./comparisons/http-comparisons-client.ts";
+import { welcomePageUrl } from "./install-welcome.ts";
 import { BadgeCounter, ChromeBadgeText } from "./link-capture/badge-counter.ts";
 import { ChromeContextMenu } from "./link-capture/chrome-context-menu.ts";
 import { ChromeSnapshotReader } from "./link-capture/chrome-snapshot-reader.ts";
@@ -71,7 +72,11 @@ chrome.tabs.onUpdated.addListener((tabId, change) => {
   if (change.status === "loading") void tabPort.clearPopupFor(tabId).catch(() => undefined);
 });
 
-chrome.runtime.onInstalled.addListener(refreshMenu);
+chrome.runtime.onInstalled.addListener(({ reason }) => {
+  refreshMenu();
+  const welcomeUrl = welcomePageUrl(reason, config.webBaseUrl);
+  if (welcomeUrl !== null) void chrome.tabs.create({ url: welcomeUrl });
+});
 chrome.runtime.onStartup.addListener(refreshMenu);
 refreshMenu();
 

@@ -5,6 +5,14 @@ import { currentUserQuery } from "../api/auth-queries.ts";
 import { afterSignInPath, type SignInSearch } from "./sign-in-search.ts";
 
 export const SIGN_IN_PATH = "/login";
+export const EXTENSION_PATH = "/extension";
+export const PRIVACY_PATH = "/privacy";
+
+/**
+ * Pages anyone may open. "/" is the library when signed in and the homepage when signed out, so a
+ * shared Picky link explains the product before it asks for an account.
+ */
+const PUBLIC_PATHS: ReadonlySet<string> = new Set(["/", SIGN_IN_PATH, EXTENSION_PATH, PRIVACY_PATH]);
 
 interface GuardContext {
   queryClient: QueryClient;
@@ -12,8 +20,17 @@ interface GuardContext {
 }
 
 /**
- * Root `beforeLoad`: the library and comparisons are per account, so every page but /login needs a
- * signed-in user. Throws a redirect to /login that remembers where the visitor was going.
+ * Whether a visitor is signed in, from the cached current user (fetched once per session).
+ *
+ * @example if (await isSignedIn(context)) await loadLibrary()
+ */
+export async function isSignedIn(context: GuardContext): Promise<boolean> {
+  return (await context.queryClient.ensureQueryData(currentUserQuery(context.authClient))) !== null;
+}
+
+/**
+ * Root `beforeLoad`: the library and comparisons are per account, so every page but the public ones
+ * needs a signed-in user. Throws a redirect to /login that remembers where the visitor was going.
  *
  * @example beforeLoad: ({ context, location }) => requireSignedIn(context, location)
  */
@@ -21,9 +38,8 @@ export async function requireSignedIn(
   context: GuardContext,
   location: { pathname: string; href: string },
 ): Promise<void> {
-  if (location.pathname === SIGN_IN_PATH) return;
-  const user = await context.queryClient.ensureQueryData(currentUserQuery(context.authClient));
-  if (user === null) throw redirect({ to: SIGN_IN_PATH, search: { redirect: location.href } });
+  if (PUBLIC_PATHS.has(location.pathname)) return;
+  if (!(await isSignedIn(context))) throw redirect({ to: SIGN_IN_PATH, search: { redirect: location.href } });
 }
 
 /**
@@ -32,6 +48,5 @@ export async function requireSignedIn(
  * @example beforeLoad: ({ context, search }) => skipSignInWhenSignedIn(context, search)
  */
 export async function skipSignInWhenSignedIn(context: GuardContext, search: SignInSearch): Promise<void> {
-  const user = await context.queryClient.ensureQueryData(currentUserQuery(context.authClient));
-  if (user !== null) throw redirect({ href: afterSignInPath(search) });
+  if (await isSignedIn(context)) throw redirect({ href: afterSignInPath(search) });
 }

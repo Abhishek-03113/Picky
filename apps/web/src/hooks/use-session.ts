@@ -33,7 +33,7 @@ export function useSignIn(mode: SignInMode, destination: string): UseMutationRes
 }
 
 /**
- * Ends the session, forgets every cached page of this user and returns to the sign-in page.
+ * Ends the session, forgets every cached page of this user and returns to the homepage.
  *
  * @example useSignOut().mutate()
  */
@@ -46,7 +46,7 @@ export function useSignOut(): UseMutationResult<void, Error, void> {
     onSuccess: async () => {
       queryClient.clear();
       queryClient.setQueryData(authQueryKeys.currentUser, null);
-      await navigate({ to: "/login", search: {} });
+      await navigate({ to: "/", search: {} });
     },
   });
 }

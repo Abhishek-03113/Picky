@@ -6,7 +6,14 @@ import type { ComparisonsClient } from "./api/comparisons-client.ts";
 import type { ExtensionBridge } from "./api/extension-bridge.ts";
 import { productDetailQuery, productListQuery } from "./api/product-queries.ts";
 import type { ProductsClient } from "./api/products-client.ts";
-import { SIGN_IN_PATH, requireSignedIn, skipSignInWhenSignedIn } from "./auth/route-guards.ts";
+import {
+  EXTENSION_PATH,
+  PRIVACY_PATH,
+  SIGN_IN_PATH,
+  isSignedIn,
+  requireSignedIn,
+  skipSignInWhenSignedIn,
+} from "./auth/route-guards.ts";
 import { parseSignInSearch } from "./auth/sign-in-search.ts";
 import type { AppConfig } from "./config/app-config.ts";
 import { AppLayout } from "./components/app-layout.tsx";
@@ -15,7 +22,9 @@ import { parseLibrarySearch } from "./library/library-search.ts";
 import { ComparisonPage } from "./pages/comparison-page.tsx";
 import { ComparisonsIndexPage } from "./pages/comparisons-index-page.tsx";
 import { ProductDetailPage } from "./pages/product-detail-page.tsx";
-import { ProductListPage } from "./pages/product-list-page.tsx";
+import { ExtensionPage } from "./pages/extension-page.tsx";
+import { HomeRoutePage } from "./pages/home-route-page.tsx";
+import { PrivacyPage } from "./pages/privacy-page.tsx";
 import { SignInPage } from "./pages/sign-in-page.tsx";
 
 /** Dependencies handed to every route through router context, instead of module-level singletons. */
@@ -32,10 +41,10 @@ export interface PickyRouterContext {
 const rootRoute = createRootRouteWithContext<PickyRouterContext>()({
   beforeLoad: ({ context, location }) => requireSignedIn(context, location),
   // Every signed-in page shows the comparison count in the app bar, so the list is loaded once at the root.
-  loader: ({ context, location }) =>
-    location.pathname === SIGN_IN_PATH
-      ? undefined
-      : context.queryClient.ensureQueryData(comparisonListQuery(context.comparisonsClient)),
+  loader: async ({ context, location }) => {
+    if (location.pathname === SIGN_IN_PATH || !(await isSignedIn(context))) return;
+    await context.queryClient.ensureQueryData(comparisonListQuery(context.comparisonsClient));
+  },
   component: AppLayout,
   errorComponent: RouteErrorPanel,
 });
@@ -45,9 +54,12 @@ const productListRoute = createRoute({
   path: "/",
   validateSearch: parseLibrarySearch,
   loaderDeps: ({ search }) => ({ query: search.q ?? "" }),
-  loader: ({ context, deps }) =>
-    context.queryClient.ensureQueryData(productListQuery(context.productsClient, deps.query)),
-  component: ProductListPage,
+  // Signed out, "/" is the homepage, which needs no library.
+  loader: async ({ context, deps }) => {
+    if (!(await isSignedIn(context))) return;
+    await context.queryClient.ensureQueryData(productListQuery(context.productsClient, deps.query));
+  },
+  component: HomeRoutePage,
 });
 
 const productDetailRoute = createRoute({
@@ -84,8 +96,22 @@ const signInRoute = createRoute({
   component: SignInPage,
 });
 
+const extensionRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: EXTENSION_PATH,
+  component: ExtensionPage,
+});
+
+const privacyRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: PRIVACY_PATH,
+  component: PrivacyPage,
+});
+
 const routeTree = rootRoute.addChildren([
   signInRoute,
+  extensionRoute,
+  privacyRoute,
   productListRoute,
   productDetailRoute,
   comparisonsIndexRoute,

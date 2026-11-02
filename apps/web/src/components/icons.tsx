@@ -27,7 +27,7 @@ function StrokeIcon({ size = 16, strokeWidth, children }: StrokeIconProps) {
   );
 }
 
-/** The Picky mascot, shared with the landing page and extension. */
+/** The Picky mascot, shared with the homepage and extension. */
 export function LogoMark() {
   return <img className="logo-mark" src="/logo-128.png" width={28} height={28} alt="" />;
 }
