@@ -121,6 +121,38 @@ export function PrivacyPage() {
             guardian.
           </p>
 
+          <h2 id="product-information">Product information and disclaimer</h2>
+          <p>
+            Product details shown in Picky, including names, descriptions, specifications, prices, discounts,
+            availability, ratings and images, are taken from the Amazon.in and Flipkart product pages at the time you
+            view or save them, and are shown as they appear there. Picky does not create, edit or verify this
+            information.
+          </p>
+          <ul>
+            <li>
+              Prices, offers, stock and other details can change at any time. Information in your library reflects the
+              page when it was saved. Always confirm the details on the seller&apos;s page before you buy.
+            </li>
+            <li>
+              Purchases are made directly with Amazon.in, Flipkart or their sellers, under their terms. Picky is not a
+              party to any transaction and does not sell, ship or support any product.
+            </li>
+            <li>
+              Comparisons, including where Picky marks one product as better on a specification, are based only on that
+              information. They are general guidance, not professional advice or a recommendation to buy.
+            </li>
+            <li>
+              Picky is provided &ldquo;as is&rdquo;. To the fullest extent permitted by law, Picky makes no warranty
+              that product information is accurate, complete or up to date, and is not liable for any loss or damage
+              arising from your reliance on it, from errors or omissions in it, or from any purchase you make.
+            </li>
+            <li>
+              Amazon, Amazon.in, Flipkart and their names, logos, product images and content belong to their respective
+              owners. Picky is an independent service and is not affiliated with, endorsed by or sponsored by Amazon or
+              Flipkart.
+            </li>
+          </ul>
+
           <h2>Changes to this policy</h2>
           <p>
             If we update this policy, we will post the new version here and change the date at the top. If a change is
@@ -135,8 +167,6 @@ export function PrivacyPage() {
             </a>
             .
           </p>
-
-          <p className="hint">Picky is not affiliated with Amazon or Flipkart.</p>
         </article>
       </main>
     </>

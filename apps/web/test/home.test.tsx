@@ -69,6 +69,8 @@ describe("/privacy", () => {
     expect(html).toContain("Information we collect");
     expect(html).toContain("How the browser extension works");
     expect(html).toContain("We do not sell, rent or trade your information.");
+    expect(html).toContain('id="product-information"');
+    expect(html).toContain("not liable for any loss or damage");
   });
 });
 

@@ -7,7 +7,12 @@ export function SiteFooter(): ReactElement {
   return (
     <footer className="footer">
       <div className="footer-inner">
-        <span>Picky is not affiliated with Amazon or Flipkart.</span>
+        <span>
+          Product details are shown as listed on Amazon.in and Flipkart. Picky is not affiliated with either.{" "}
+          <Link to={PRIVACY_PATH} hash="product-information">
+            Disclaimer
+          </Link>
+        </span>
         <span className="footer-links">
           <Link to={PRIVACY_PATH}>Privacy</Link>
           <Link to={EXTENSION_PATH}>Chrome extension</Link>
