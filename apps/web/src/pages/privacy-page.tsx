@@ -34,8 +34,8 @@ export function PrivacyPage() {
           <h2>What Picky stores</h2>
           <ul>
             <li>
-              <strong>Your account:</strong> your email address and a one-way hash of your password (argon2id). Picky
-              never stores the password itself.
+              <strong>Your account:</strong> your email address and your password, kept securely. Picky never stores
+              your password in readable form.
             </li>
             <li>
               <strong>A sign-in cookie:</strong> a random session token that keeps you signed in for up to 30 days. It
