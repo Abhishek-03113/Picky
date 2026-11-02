@@ -62,12 +62,13 @@ describe("/extension install guide", () => {
 });
 
 describe("/privacy", () => {
-  test("is public and says what is stored and what is not", async () => {
+  test("is public and says what is collected and what is not done with it", async () => {
     const { html, router } = await renderSignedOut("/privacy");
     expect(router.state.location.pathname).toBe("/privacy");
     expect(html).toContain("Privacy policy");
-    expect(html).toContain("What the extension reads, and when");
-    expect(html).toContain("No advertising, no analytics");
+    expect(html).toContain("Information we collect");
+    expect(html).toContain("How the browser extension works");
+    expect(html).toContain("We do not sell, rent or trade your information.");
   });
 });
 
