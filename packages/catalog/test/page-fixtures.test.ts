@@ -2,6 +2,7 @@ import { describe, expect, test } from "bun:test";
 import { extractProductSnapshot } from "../src/extract/extract-product.ts";
 import { wrapDomDocument } from "../src/page/dom-page.ts";
 import { ProductSnapshotSchema } from "../src/product-snapshot-schema.ts";
+import { PRODUCT_SOURCES, type ProductSource } from "../src/product-snapshot.ts";
 import { DirectoryFixtureFiles } from "../src/testing/fixture-files.ts";
 import { PAGE_FIXTURES_DIR, PageFixtureStore, readSnapshotFromHtml } from "../src/testing/page-fixtures.ts";
 import { domFromHtml } from "./support/dom-from-html.ts";
@@ -11,8 +12,13 @@ import { domFromHtml } from "./support/dom-from-html.ts";
 const store = new PageFixtureStore(new DirectoryFixtureFiles(PAGE_FIXTURES_DIR));
 const fixtures = await Promise.all((await store.listNames()).map((name) => store.read(name)));
 
+// amazon.com shares the amazon.in extractor and has unit tests, but no captured page yet: capture one with
+// `bun run fixtures:capture https://www.amazon.com/dp/<ASIN> <slug>` and drop it from this list.
+const SOURCES_WITHOUT_FIXTURES: ReadonlySet<ProductSource> = new Set(["amazon.com"]);
+
 test("there is at least one fixture per supported source", () => {
-  expect(new Set(fixtures.map((fixture) => fixture.expected.source))).toEqual(new Set(["amazon.in", "flipkart.com"]));
+  const expected = PRODUCT_SOURCES.filter((source) => !SOURCES_WITHOUT_FIXTURES.has(source));
+  expect(new Set(fixtures.map((fixture) => fixture.expected.source))).toEqual(new Set(expected));
 });
 
 describe.each(fixtures.map((fixture) => [fixture.name, fixture] as const))("fixture %s", (_name, fixture) => {

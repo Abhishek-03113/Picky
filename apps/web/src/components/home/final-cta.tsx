@@ -35,7 +35,9 @@ export function FinalCta(): ReactElement {
             3
           </span>
           <span className="start-title">Save your first product</span>
-          <span className="start-hint">Open any Amazon.in or Flipkart product and right-click → Add to Picky.</span>
+          <span className="start-hint">
+            Open any Amazon.in, Amazon.com or Flipkart product and right-click → Add to Picky.
+          </span>
         </li>
       </ol>
       <Link className="pill pill-large" to={SIGN_IN_PATH} search={{ mode: "signup" }}>

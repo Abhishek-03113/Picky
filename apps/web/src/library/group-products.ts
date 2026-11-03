@@ -12,7 +12,8 @@ export interface ProductGroup {
 export const OTHER_GROUP_NAME = "Other";
 export const ALL_PRODUCTS_GROUP_NAME = "All products";
 
-// Rupee thresholds from the product brief: <₹25k, ₹25–35k, >₹35k. Products without a price get their own band.
+// Rupee thresholds from the product brief: <₹25k, ₹25–35k, >₹35k. Products without a price get their own band,
+// and so does each other currency (amazon.com lists in USD), since rupee thresholds mean nothing there.
 const PRICE_BANDS = ["Under ₹25k", "₹25k – ₹35k", "Over ₹35k"] as const;
 const NO_PRICE_BAND = "No price";
 const LOW_BAND_LIMIT = 25_000;
@@ -46,9 +47,11 @@ function sectionName(product: CatalogProductSummary, key: Exclude<GroupKey, "non
  * Price band a price falls in.
  *
  * @example priceBandName({ amount: 29999, currency: "INR" }) // "₹25k – ₹35k"
+ * @example priceBandName({ amount: 299, currency: "USD" }) // "Priced in USD"
  */
 export function priceBandName(price: Money | null): string {
   if (price === null) return NO_PRICE_BAND;
+  if (price.currency !== "INR") return `Priced in ${price.currency}`;
   if (price.amount < LOW_BAND_LIMIT) return PRICE_BANDS[0];
   return price.amount <= HIGH_BAND_LIMIT ? PRICE_BANDS[1] : PRICE_BANDS[2];
 }
@@ -60,11 +63,13 @@ function bySizeThenName(a: ProductGroup, b: ProductGroup): number {
   return b.products.length - a.products.length || a.name.localeCompare(b.name);
 }
 
+// Rupee bands cheapest first, then other currencies A–Z, then "No price".
 function byPriceBand(a: ProductGroup, b: ProductGroup): number {
-  return bandRank(a.name) - bandRank(b.name);
+  return bandRank(a.name) - bandRank(b.name) || a.name.localeCompare(b.name);
 }
 
 function bandRank(name: string): number {
+  if (name === NO_PRICE_BAND) return PRICE_BANDS.length + 1;
   const rank = PRICE_BANDS.findIndex((band) => band === name);
   return rank === -1 ? PRICE_BANDS.length : rank;
 }

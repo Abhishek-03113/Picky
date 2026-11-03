@@ -8,7 +8,8 @@ export function SiteFooter(): ReactElement {
     <footer className="footer">
       <div className="footer-inner">
         <span>
-          Product details are shown as listed on Amazon.in and Flipkart. Picky is not affiliated with either.{" "}
+          Product details are shown as listed on Amazon.in, Amazon.com and Flipkart. Picky is not affiliated with any of
+          them.{" "}
           <Link to={PRIVACY_PATH} hash="product-information">
             Disclaimer
           </Link>

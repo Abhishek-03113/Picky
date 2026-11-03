@@ -5,6 +5,7 @@ import {
   jsonLdBreadcrumbLabels,
 } from "../src/extract/shared/breadcrumb-category.ts";
 import { extractAmazonProduct } from "../src/extract/amazon/amazon-extractor.ts";
+import { AMAZON_IN } from "../src/extract/amazon/amazon-marketplace.ts";
 import { parseHtmlPage } from "../src/page/cheerio-page.ts";
 import { ProductSnapshotSchema } from "../src/product-snapshot-schema.ts";
 
@@ -45,7 +46,7 @@ describe("breadcrumb readers", () => {
 
   test("the Amazon extractor puts the category on the snapshot", () => {
     const page = parseHtmlPage(`<span id="productTitle">Dell</span>${AMAZON_TRAIL}`);
-    expect(extractAmazonProduct(page, { asin: "B000000001" }, new Date()).category).toBe("Monitors");
+    expect(extractAmazonProduct(page, { asin: "B000000001" }, new Date(), AMAZON_IN).category).toBe("Monitors");
   });
 });
 

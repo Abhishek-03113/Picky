@@ -69,7 +69,7 @@ export function emptyView(dom: Dom, model: QuickLookModel, actions: OverlayActio
     return notice(
       dom,
       "No comparisons yet",
-      "Open a product page on Amazon.in or Flipkart and press Quick Look to start one.",
+      "Open a product page on Amazon.in, Amazon.com or Flipkart and press Quick Look to start one.",
       null,
     );
   }

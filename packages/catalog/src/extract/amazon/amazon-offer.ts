@@ -17,23 +17,23 @@ const FIRST_DECIMAL = /\d+(?:\.\d+)?/;
 const NON_DIGIT = /\D/g;
 
 /**
- * Selling price (what the buyer pays), in INR.
+ * Selling price (what the buyer pays). `currency` is the storefront's, used when the text has no symbol.
  *
- * @example extractAmazonPrice(page) // { amount: 124900, currency: "INR" }
+ * @example extractAmazonPrice(page, "INR") // { amount: 124900, currency: "INR" }
  */
-export function extractAmazonPrice(page: PageNode): Money | null {
+export function extractAmazonPrice(page: PageNode, currency: string): Money | null {
   const display = firstText(page, PRICE_SELECTORS);
-  return display === null ? null : parseMoney(display, "INR");
+  return display === null ? null : parseMoney(display, currency);
 }
 
 /**
- * M.R.P. shown struck through next to a discounted price; null when there is no discount.
+ * List price (M.R.P. on Amazon.in) shown struck through next to a discounted price; null when there is no discount.
  *
- * @example extractAmazonListPrice(page) // { amount: 133399, currency: "INR" }
+ * @example extractAmazonListPrice(page, "INR") // { amount: 133399, currency: "INR" }
  */
-export function extractAmazonListPrice(page: PageNode): Money | null {
+export function extractAmazonListPrice(page: PageNode, currency: string): Money | null {
   const display = firstText(page, LIST_PRICE_SELECTORS);
-  return display === null ? null : parseMoney(display, "INR");
+  return display === null ? null : parseMoney(display, currency);
 }
 
 /**

@@ -35,6 +35,7 @@ describe("source labels", () => {
     expect(storeFilterOptions()).toEqual([
       { value: "all", label: "All" },
       { value: "amazon.in", label: "Amazon.in" },
+      { value: "amazon.com", label: "Amazon.com" },
       { value: "flipkart.com", label: "Flipkart" },
     ]);
   });

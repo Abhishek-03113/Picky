@@ -14,7 +14,7 @@ export interface GroupOption {
 export const GROUP_OPTIONS: readonly GroupOption[] = [
   { key: "category", label: "Category", hint: "From the store’s breadcrumb, e.g. Monitors" },
   { key: "brand", label: "Brand", hint: "LG, Dell, Samsung…" },
-  { key: "store", label: "Store", hint: "Amazon.in, Flipkart" },
+  { key: "store", label: "Store", hint: "Amazon, Flipkart" },
   { key: "price", label: "Price band", hint: "Under ₹25k, ₹25–35k, over ₹35k" },
   { key: "none", label: "None", hint: "One flat list, newest first" },
 ];

@@ -1,22 +1,19 @@
-import type { Money, ProductSnapshot } from "../product-snapshot.ts";
+import { formatMoney } from "../present/money-format.ts";
+import type { ProductSnapshot } from "../product-snapshot.ts";
 import { winningPositions } from "./mark-best.ts";
 import type { ComparisonCell } from "./types.ts";
 
-function formatMoney(money: Money): string {
-  const symbol = money.currency === "INR" ? "₹" : `${money.currency} `;
-  return `${symbol}${money.amount.toLocaleString("en-IN")}`;
-}
-
 /**
- * Price row: formatted amounts, the lowest flagged (ties all flagged, needs two prices).
+ * Price row: formatted amounts, the lowest flagged (ties all flagged, needs two prices). Nothing is
+ * flagged when prices are in different currencies: ₹ and $ amounts are not comparable.
  *
  * @example buildPriceCells(snapshots) // [{ text: "₹27,490", isBest: true }, { text: null, isBest: false }]
  */
 export function buildPriceCells(snapshots: readonly ProductSnapshot[]): ComparisonCell[] {
-  const winners = winningPositions(
-    snapshots.map((snapshot) => snapshot.price?.amount ?? null),
-    "lower",
-  );
+  const prices = snapshots.map((snapshot) => snapshot.price);
+  const currencies = new Set(prices.flatMap((price) => (price === null ? [] : [price.currency])));
+  const amounts = currencies.size > 1 ? prices.map(() => null) : prices.map((price) => price?.amount ?? null);
+  const winners = winningPositions(amounts, "lower");
   return snapshots.map((snapshot, index) => ({
     text: snapshot.price === null ? null : formatMoney(snapshot.price),
     isBest: winners[index] ?? false,

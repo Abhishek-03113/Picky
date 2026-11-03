@@ -46,7 +46,7 @@ export class ChromeSnapshotReader implements SnapshotReader {
     await chrome.offscreen.createDocument({
       url: this.offscreenPage,
       reasons: [chrome.offscreen.Reason.DOM_PARSER],
-      justification: "Parse fetched Amazon.in / Flipkart product pages without opening them",
+      justification: "Parse fetched Amazon / Flipkart product pages without opening them",
     });
   }
 }

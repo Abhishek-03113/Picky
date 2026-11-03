@@ -28,7 +28,8 @@ function ExtensionCard({ extensionUrl, installed, os }: ExtensionCardProps) {
             <CheckIcon size={16} /> The Picky extension is installed
           </h2>
           <span className="subtle">
-            Open any Amazon.in or Flipkart product and click Picky, or right-click → Add to Picky to save it here.
+            Open any Amazon.in, Amazon.com or Flipkart product and click Picky, or right-click → Add to Picky to save it
+            here.
           </span>
         </div>
       </section>

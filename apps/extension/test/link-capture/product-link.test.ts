@@ -18,8 +18,10 @@ describe("titleFromProductUrl", () => {
 });
 
 describe("looksLikeProductLink", () => {
-  test("recognises Amazon.in and Flipkart product paths only", () => {
+  test("recognises Amazon.in, Amazon.com and Flipkart product paths only", () => {
     expect(looksLikeProductLink("https://www.amazon.in/x/dp/B0FQG1YHYR")).toBe(true);
+    expect(looksLikeProductLink("https://www.amazon.com/Echo-Dot/dp/B08N5WRWNW")).toBe(true);
+    expect(looksLikeProductLink("https://www.amazon.co.uk/x/dp/B08N5WRWNW")).toBe(false);
     expect(looksLikeProductLink("https://www.amazon.in/gp/product/B0FQG1YHYR")).toBe(true);
     expect(looksLikeProductLink("https://www.flipkart.com/x/p/itm1")).toBe(true);
     expect(looksLikeProductLink("https://www.amazon.in/s?k=monitor")).toBe(false);

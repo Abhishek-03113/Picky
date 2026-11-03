@@ -3,6 +3,7 @@ import { renderNoticeView } from "./notice-view.ts";
 
 const SUPPORTED_SITES = [
   { name: "Amazon.in", pages: "/dp/… pages" },
+  { name: "Amazon.com", pages: "/dp/… pages" },
   { name: "Flipkart", pages: "/p/… pages" },
 ] as const;
 

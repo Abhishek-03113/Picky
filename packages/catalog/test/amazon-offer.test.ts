@@ -7,19 +7,24 @@ describe("extractAmazonPrice", () => {
     const page = parseHtmlPage(
       `<span class="priceToPay"><span class="a-offscreen"></span><span aria-hidden="true">₹1,24,900</span></span>`,
     );
-    expect(extractAmazonPrice(page)).toEqual({ amount: 124900, currency: "INR" });
+    expect(extractAmazonPrice(page, "INR")).toEqual({ amount: 124900, currency: "INR" });
+  });
+
+  test("reads dollar prices", () => {
+    const page = parseHtmlPage(`<span class="priceToPay"><span class="a-offscreen">$1,249.99</span></span>`);
+    expect(extractAmazonPrice(page, "USD")).toEqual({ amount: 1249.99, currency: "USD" });
   });
 
   test("returns null without a price", () => {
-    expect(extractAmazonPrice(parseHtmlPage("<p></p>"))).toBeNull();
+    expect(extractAmazonPrice(parseHtmlPage("<p></p>"), "INR")).toBeNull();
   });
 });
 
 describe("extractAmazonListPrice", () => {
   test("reads the M.R.P.", () => {
     const page = parseHtmlPage(`<span class="basisPrice"><span class="a-offscreen">₹1,33,399</span></span>`);
-    expect(extractAmazonListPrice(page)).toEqual({ amount: 133399, currency: "INR" });
-    expect(extractAmazonListPrice(parseHtmlPage("<p></p>"))).toBeNull();
+    expect(extractAmazonListPrice(page, "INR")).toEqual({ amount: 133399, currency: "INR" });
+    expect(extractAmazonListPrice(parseHtmlPage("<p></p>"), "INR")).toBeNull();
   });
 });
 

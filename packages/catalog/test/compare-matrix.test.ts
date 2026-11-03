@@ -94,9 +94,13 @@ describe("price and rating cells", () => {
   test("a single price is not flagged", () => {
     expect(buildPriceCells([LG])).toEqual([{ text: "₹29,999", isBest: false }]);
   });
-  test("non-INR currency keeps its code", () => {
+  test("dollar prices read the international way", () => {
     const usd = snapshotWith("X", [], { price: { amount: 1200, currency: "USD" } });
-    expect(buildPriceCells([usd])[0]?.text).toBe("USD 1,200");
+    expect(buildPriceCells([usd])[0]?.text).toBe("$1,200");
+  });
+  test("prices in different currencies are never flagged", () => {
+    const usd = snapshotWith("X", [], { price: { amount: 300, currency: "USD" } });
+    expect(buildPriceCells([LG, usd]).map((cell) => cell.isBest)).toEqual([false, false]);
   });
   test("a whole-number average keeps one decimal, matching the column header", () => {
     const four = snapshotWith("X", [], { rating: { average: 4, count: 46 } });

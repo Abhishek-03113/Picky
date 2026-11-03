@@ -7,7 +7,7 @@ export interface WelcomeHandlers {
 
 const STEPS = [
   { title: "Pin Picky", body: "Click the puzzle icon in Chrome's toolbar, then the pin next to Picky." },
-  { title: "Open any product page", body: "On Amazon.in or Flipkart, click Picky. That's it." },
+  { title: "Open any product page", body: "On Amazon.in, Amazon.com or Flipkart, click Picky. That's it." },
 ] as const;
 
 /**

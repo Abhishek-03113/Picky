@@ -1,11 +1,11 @@
-import { discountPercent, formatMoney, type Money, savingsAmount } from "@picky/catalog";
+import { discountPercent, formatMoney, listPriceLabel, type Money, savingsAmount } from "@picky/catalog";
 
 interface PriceBlockProps {
   price: Money | null;
   listPrice: Money | null;
 }
 
-/** Selling price, with the struck-through M.R.P. and "N% off · save ₹X" chip only when there is a real discount. */
+/** Selling price, with the struck-through M.R.P. (list price) and "N% off · save ₹X" chip only when there is a real discount. */
 export function PriceBlock({ price, listPrice }: PriceBlockProps) {
   if (price === null) return <p className="price-missing">Price not shown on the page</p>;
   const discount = discountPercent(price, listPrice);
@@ -16,7 +16,7 @@ export function PriceBlock({ price, listPrice }: PriceBlockProps) {
       {listPrice !== null && discount !== null && savings !== null && (
         <>
           <span className="list-price">
-            M.R.P. <s>{formatMoney(listPrice)}</s>
+            {listPriceLabel(listPrice)} <s>{formatMoney(listPrice)}</s>
           </span>
           <span className="discount-chip">{`${discount}% off · save ${formatMoney(savings)}`}</span>
         </>

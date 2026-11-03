@@ -14,7 +14,7 @@ export function Hero(): ReactElement {
         </h1>
         <p className="lede">
           Picky saves products as you browse, turns each one into a clean spec sheet, and shows where your shortlist
-          really differs. For Amazon.in and Flipkart.
+          really differs. For Amazon.in, Amazon.com and Flipkart.
         </p>
         <div className="cta-row">
           <Link className="pill pill-large" to={SIGN_IN_PATH} search={{ mode: "signup" }}>

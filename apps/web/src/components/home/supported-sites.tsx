@@ -15,7 +15,7 @@ export function SupportedSites({
           The store is where you buy. Picky is where you decide.
         </h2>
         <p className="sub">
-          Today it reads Amazon.in and Flipkart pages. Comparing across stores is where it's headed.
+          Today it reads Amazon.in, Amazon.com and Flipkart pages. Comparing across stores is where it's headed.
         </p>
       </div>
       <ul className="site-list">

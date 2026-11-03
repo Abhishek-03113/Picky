@@ -1,6 +1,6 @@
 import { type CatalogProduct, pluralize, sourceLabel } from "@picky/catalog";
 
-const LIST_FORMAT = new Intl.ListFormat("en", { type: "conjunction" });
+const LIST_FORMAT = new Intl.ListFormat("en-IN", { type: "conjunction" });
 
 /**
  * Subtitle of the compare page: "4 products · prices from Amazon.in and Flipkart".

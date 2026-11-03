@@ -21,7 +21,7 @@ export interface ExtensionGesture {
 /**
  * The full walk-through, from the store page to a saved product, with keys named for `os`.
  *
- * @example setupSteps("mac")[3]?.hint // "On Amazon.in or Flipkart, click Picky or press ⌥⇧S for its specs. ..."
+ * @example setupSteps("mac")[3]?.hint // "On Amazon.in, Amazon.com or Flipkart, click Picky or press ⌥⇧S for its specs. ..."
  */
 export function setupSteps(os: OperatingSystem): SetupStep[] {
   return [
@@ -39,7 +39,7 @@ export function setupSteps(os: OperatingSystem): SetupStep[] {
     },
     {
       title: "Open a product",
-      hint: `On Amazon.in or Flipkart, click Picky or press ${shortcutText(QUICK_LOOK_SHORTCUT, os)} for its specs. Right-click → Add to Picky saves it.`,
+      hint: `On Amazon.in, Amazon.com or Flipkart, click Picky or press ${shortcutText(QUICK_LOOK_SHORTCUT, os)} for its specs. Right-click → Add to Picky saves it.`,
     },
   ];
 }
@@ -52,7 +52,7 @@ export function setupSteps(os: OperatingSystem): SetupStep[] {
 export function quickSetupSteps(os: OperatingSystem): SetupStep[] {
   return [
     { title: "Install and pin", hint: "Keep it one click away." },
-    { title: "Open a product", hint: "Amazon.in or Flipkart." },
+    { title: "Open a product", hint: "Amazon.in, Amazon.com or Flipkart." },
     { title: "Click Picky", hint: `Or press ${shortcutText(QUICK_LOOK_SHORTCUT, os)}.` },
   ];
 }

@@ -5,7 +5,7 @@
  */
 
 /** Marketplaces Picky can read; each has a SiteExtractor in src/extract/site-extractors.ts. */
-export const PRODUCT_SOURCES = ["amazon.in", "flipkart.com"] as const;
+export const PRODUCT_SOURCES = ["amazon.in", "amazon.com", "flipkart.com"] as const;
 
 export type ProductSource = (typeof PRODUCT_SOURCES)[number];
 

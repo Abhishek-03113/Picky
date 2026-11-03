@@ -58,7 +58,7 @@ export function PrivacyPage() {
 
           <h2>How the browser extension works</h2>
           <ul>
-            <li>It works only on Amazon.in, Flipkart and the Picky website, and nowhere else.</li>
+            <li>It works only on Amazon.in, Amazon.com, Flipkart and the Picky website, and nowhere else.</li>
             <li>It looks at a product page only when you ask it to, for example by clicking the Picky button.</li>
             <li>Viewing a product's specs with Quick Look happens entirely in your browser. Nothing is saved.</li>
             <li>It saves a product to your account only when you choose to save it.</li>
@@ -124,8 +124,8 @@ export function PrivacyPage() {
           <h2 id="product-information">Product information and disclaimer</h2>
           <p>
             Product details shown in Picky, including names, descriptions, specifications, prices, discounts,
-            availability, ratings and images, are taken from the Amazon.in and Flipkart product pages at the time you
-            view or save them, and are shown as they appear there. Picky does not create, edit or verify this
+            availability, ratings and images, are taken from the Amazon.in, Amazon.com and Flipkart product pages at the
+            time you view or save them, and are shown as they appear there. Picky does not create, edit or verify this
             information.
           </p>
           <ul>
@@ -134,8 +134,8 @@ export function PrivacyPage() {
               page when it was saved. Always confirm the details on the seller&apos;s page before you buy.
             </li>
             <li>
-              Purchases are made directly with Amazon.in, Flipkart or their sellers, under their terms. Picky is not a
-              party to any transaction and does not sell, ship or support any product.
+              Purchases are made directly with Amazon.in, Amazon.com, Flipkart or their sellers, under their terms.
+              Picky is not a party to any transaction and does not sell, ship or support any product.
             </li>
             <li>
               Comparisons, including where Picky marks one product as better on a specification, are based only on that
@@ -147,9 +147,9 @@ export function PrivacyPage() {
               arising from your reliance on it, from errors or omissions in it, or from any purchase you make.
             </li>
             <li>
-              Amazon, Amazon.in, Flipkart and their names, logos, product images and content belong to their respective
-              owners. Picky is an independent service and is not affiliated with, endorsed by or sponsored by Amazon or
-              Flipkart.
+              Amazon, Amazon.in, Amazon.com, Flipkart and their names, logos, product images and content belong to their
+              respective owners. Picky is an independent service and is not affiliated with, endorsed by or sponsored by
+              Amazon or Flipkart.
             </li>
           </ul>
 
