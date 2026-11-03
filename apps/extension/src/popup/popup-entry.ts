@@ -13,6 +13,12 @@ declare const __PICKY_CAPTURE_CONFIG__: CaptureConfig;
 const root = document.getElementById("root");
 if (root === null) throw new Error('popup.html has no #root element; expected <div id="root"></div>');
 
+// The worker routes one toolbar click on a page Quick Look cannot open to this popup (openPopupFor). Clearing
+// the override now sends the next click back to Quick Look, wherever the tab goes next.
+void chrome.tabs.query({ active: true, currentWindow: true }).then(([tab]) => {
+  if (tab?.id !== undefined) return chrome.action.setPopup({ tabId: tab.id, popup: "" });
+});
+
 void new PopupController({
   root,
   settings: new SettingsStore(new ChromeKeyValueStorage()),

@@ -3,9 +3,9 @@ import {
   extractProductSnapshot,
   isSupportedProductUrl,
   ProductPageError,
-  ProductSnapshotSchema,
   type CatalogProduct,
 } from "@picky/catalog";
+import { ProductSnapshotSchema } from "@picky/catalog/schema";
 import { parseHtmlPage } from "@picky/catalog/cheerio";
 import type { HtmlFetcher } from "../scraping/html-fetcher.ts";
 import type { ProductRepository } from "./product-repository.ts";

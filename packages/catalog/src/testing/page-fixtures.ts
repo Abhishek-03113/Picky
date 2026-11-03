@@ -2,7 +2,8 @@ import { join } from "node:path";
 import { z } from "zod";
 import { extractProductSnapshot } from "../extract/extract-product.ts";
 import { parseHtmlPage } from "../page/cheerio-page.ts";
-import { ProductSnapshotSchema, type ProductSnapshot } from "../product-snapshot.ts";
+import type { ProductSnapshot } from "../product-snapshot.ts";
+import { ProductSnapshotSchema } from "../product-snapshot-schema.ts";
 import type { FixtureFiles } from "./fixture-files.ts";
 import { stripVolatileMarkup } from "./strip-volatile-markup.ts";
 

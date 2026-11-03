@@ -17,14 +17,20 @@ export class ChromeBrowserPort implements BrowserPort {
   constructor(private readonly captureScriptFile: string) {}
 
   async capturePageInTab(tabId: number): Promise<CaptureResult> {
+    // A page captured before already has the capture function; only inject the bundle the first time.
+    const earlier = await this.runCapture(tabId);
+    if (earlier !== null) return earlier;
     await chrome.scripting.executeScript({ target: { tabId }, files: [this.captureScriptFile] });
+    return (await this.runCapture(tabId)) ?? { ok: false, message: "Picky capture script did not load" };
+  }
+
+  /** Calls the capture function injected into this tab, or returns null when the tab does not have it yet. */
+  private async runCapture(tabId: number): Promise<CaptureResult | null> {
     const [injection] = await chrome.scripting.executeScript({
       target: { tabId },
-      func: () => globalThis.pickyCapturePage?.() ?? { ok: false, message: "Picky capture script did not load" },
+      func: () => globalThis.pickyCapturePage?.() ?? null,
     });
-    return (
-      (injection?.result as CaptureResult | undefined) ?? { ok: false, message: `No capture result from tab ${tabId}` }
-    );
+    return (injection?.result as CaptureResult | null | undefined) ?? null;
   }
 
   async openTab(url: string): Promise<void> {

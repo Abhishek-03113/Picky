@@ -41,6 +41,9 @@ async function buildBundle(bundle: (typeof BUNDLES)[number]): Promise<void> {
     format: bundle.format,
     naming: bundle.name,
     outdir: OUT_DIR,
+    // Smaller scripts parse faster on every page they are injected into. Names are kept, so the code stays
+    // readable for Chrome Web Store review (the store allows minification, not obfuscation).
+    minify: { whitespace: true, syntax: true, identifiers: false },
     define: {
       __PICKY_CAPTURE_CONFIG__: JSON.stringify(config),
       __PICKY_QUICKLOOK_CSS__: JSON.stringify(quickLookCss),

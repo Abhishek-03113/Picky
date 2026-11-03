@@ -6,7 +6,7 @@ import {
 } from "../src/extract/shared/breadcrumb-category.ts";
 import { extractAmazonProduct } from "../src/extract/amazon/amazon-extractor.ts";
 import { parseHtmlPage } from "../src/page/cheerio-page.ts";
-import { ProductSnapshotSchema } from "../src/product-snapshot.ts";
+import { ProductSnapshotSchema } from "../src/product-snapshot-schema.ts";
 
 const AMAZON_TRAIL = `<div id="wayfinding-breadcrumbs_feature_div"><ul>
   <li><span><a>Electronics</a></span></li><li class="a-breadcrumb-divider"><span>›</span></li>

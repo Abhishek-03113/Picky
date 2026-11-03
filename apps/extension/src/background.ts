@@ -26,7 +26,9 @@ import { ChromeToastPort } from "./toast/toast-port.ts";
 
 // Service-worker composition root. The toolbar button (and Alt+Shift+S, _execute_action) fires
 // chrome.action.onClicked and toggles the in-page Quick Look on Specs; Alt+Shift+V (open-comparison) toggles it on Compare; when a tab cannot be scripted the worker
-// switches that tab to popup.html, which asks this worker to capture over a port (the original flow).
+// switches that tab to popup.html, which asks this worker to capture over a port (the original flow), and the
+// popup switches the tab back when it opens. No tabs.onUpdated listener: it would wake this worker on every
+// page load in every tab.
 // Replaced at build time by build.ts (Bun.build `define`).
 declare const __PICKY_CAPTURE_CONFIG__: CaptureConfig;
 const config = __PICKY_CAPTURE_CONFIG__;
@@ -67,9 +69,6 @@ chrome.commands.onCommand.addListener((command, tab) => {
   const view = viewForCommand(command);
   if (view === null) return log("quicklook.unknown_command", { command });
   void toggleQuickLook(tab ?? {}, tabPort, log, view);
-});
-chrome.tabs.onUpdated.addListener((tabId, change) => {
-  if (change.status === "loading") void tabPort.clearPopupFor(tabId).catch(() => undefined);
 });
 
 chrome.runtime.onInstalled.addListener(({ reason }) => {

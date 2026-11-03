@@ -1,7 +1,7 @@
 import { describe, expect, test } from "bun:test";
 import { extractProductSnapshot } from "../src/extract/extract-product.ts";
 import { wrapDomDocument } from "../src/page/dom-page.ts";
-import { ProductSnapshotSchema } from "../src/product-snapshot.ts";
+import { ProductSnapshotSchema } from "../src/product-snapshot-schema.ts";
 import { DirectoryFixtureFiles } from "../src/testing/fixture-files.ts";
 import { PAGE_FIXTURES_DIR, PageFixtureStore, readSnapshotFromHtml } from "../src/testing/page-fixtures.ts";
 import { domFromHtml } from "./support/dom-from-html.ts";

@@ -113,7 +113,8 @@ purposes unrelated to the single purpose, and not used to determine creditworthi
 
 - **Excessive permissions:** no `tabs`, no `<all_urls>`; host access is the two stores plus Picky.
 - **Missing or mismatched privacy policy:** `/privacy` lists exactly the data above.
-- **Remote code / obfuscation:** bundles are plain, readable JavaScript with no `eval`.
+- **Remote code / obfuscation:** bundles are minified (whitespace and syntax only; names are kept, so the
+  code stays readable) and contain no `eval`.
 - **Keyword spam or misleading branding:** the description names the stores once, plainly, and says
   Picky is not affiliated with them.
 - **Broken functionality for reviewers:** Quick Look works without an account. Mention in the

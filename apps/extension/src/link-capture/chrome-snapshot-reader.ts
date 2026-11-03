@@ -1,18 +1,29 @@
 import type { ProductSnapshot } from "@picky/catalog";
 import type { ParseProductRequest, ParseProductResponse } from "./offscreen-protocol.ts";
+import { IdleReleaser } from "./idle-releaser.ts";
 import type { SnapshotReader } from "./snapshot-reader.ts";
+
+// Long enough for a burst of Alt+clicks to share one document, short enough to finish well before Chrome
+// stops an idle service worker (whose timer would then never fire).
+const IDLE_CLOSE_MS = 15_000;
 
 /**
  * SnapshotReader that parses in a lazily created offscreen document (chrome.offscreen, reason DOM_PARSER).
+ * The document is closed again once idle: it is a whole extra page in memory.
  *
  * @example const snapshot = await new ChromeSnapshotReader("offscreen.html").read(html, url)
  */
 export class ChromeSnapshotReader implements SnapshotReader {
   private creating: Promise<void> | null = null;
+  private readonly lifetime = new IdleReleaser(() => chrome.offscreen.closeDocument(), IDLE_CLOSE_MS);
 
   constructor(private readonly offscreenPage: string) {}
 
-  async read(html: string, url: string): Promise<ProductSnapshot> {
+  read(html: string, url: string): Promise<ProductSnapshot> {
+    return this.lifetime.use(() => this.parseInDocument(html, url));
+  }
+
+  private async parseInDocument(html: string, url: string): Promise<ProductSnapshot> {
     await this.ensureDocument();
     const request: ParseProductRequest = { target: "offscreen", type: "parse-product", html, url };
     const response: ParseProductResponse | undefined = await chrome.runtime.sendMessage(request);
