@@ -53,6 +53,7 @@ function setup(options: { page?: typeof THIS_PAGE | null; comparisons?: number; 
     readPage: () => (options.page === undefined ? THIS_PAGE : options.page),
     onClose: () => void (closed.count += 1),
     activeElement: () => root.ownerDocument.activeElement,
+    os: "windows",
   });
   return { root, api, controller, closed, dom };
 }

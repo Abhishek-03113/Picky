@@ -15,6 +15,7 @@ import {
   skipSignInWhenSignedIn,
 } from "./auth/route-guards.ts";
 import { parseSignInSearch } from "./auth/sign-in-search.ts";
+import type { OperatingSystem } from "@picky/catalog";
 import type { AppConfig } from "./config/app-config.ts";
 import { AppLayout } from "./components/app-layout.tsx";
 import { RouteErrorPanel } from "./components/route-error-panel.tsx";
@@ -36,6 +37,8 @@ export interface PickyRouterContext {
   /** Paste-a-link import goes through the Picky extension, which can fetch store pages. */
   extensionBridge: ExtensionBridge;
   config: AppConfig;
+  /** The visitor's OS, so keyboard shortcuts read as their keyboard labels them (⌥ ⇧ on a Mac). */
+  os: OperatingSystem;
 }
 
 const rootRoute = createRootRouteWithContext<PickyRouterContext>()({
@@ -123,7 +126,7 @@ const routeTree = rootRoute.addChildren([
  *
  * `history` defaults to the browser history; tests pass a memory history.
  *
- * @example createPickyRouter({ queryClient, authClient: createAuthClient(fetch, ""), productsClient, comparisonsClient, extensionBridge, config: readAppConfig(import.meta.env) })
+ * @example createPickyRouter({ queryClient, authClient: createAuthClient(fetch, ""), productsClient, comparisonsClient, extensionBridge, config: readAppConfig(import.meta.env), os: "mac" })
  */
 export function createPickyRouter(context: PickyRouterContext, history?: RouterHistory) {
   return createRouter({ routeTree, context, history, defaultPreload: "intent", defaultPreloadStaleTime: 0 });

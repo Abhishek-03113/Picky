@@ -31,9 +31,11 @@ export async function renderAppWithRouter(
 ) {
   const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } });
   const config = { extensionUrl: "https://store.example/picky" };
+  // Windows: the keys most tests expect spelled out ("Alt + Shift + S"); Mac labels are tested on their own.
+  const os = "windows" as const;
   const history = createMemoryHistory({ initialEntries: [path] });
   const router = createPickyRouter(
-    { queryClient, authClient, productsClient, comparisonsClient, extensionBridge, config },
+    { queryClient, authClient, productsClient, comparisonsClient, extensionBridge, config, os },
     history,
   );
   await router.load();

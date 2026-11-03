@@ -1,3 +1,4 @@
+import { COMPARE_SHORTCUT, QUICK_LOOK_SHORTCUT } from "@picky/catalog";
 import { describe, expect, test } from "bun:test";
 import { join } from "node:path";
 
@@ -27,5 +28,12 @@ describe("manifest.json commands", () => {
     const command = (await readManifest()).commands["open-comparison"];
     expect(command?.suggested_key.default).toBe("Alt+Shift+V");
     expect(command?.description).toBe("Quick Look: compare this page");
+  });
+
+  // The web app and the extension label these keys per OS from the shared definitions; they must be the real ones.
+  test("the shared shortcut definitions match the manifest", async () => {
+    const { commands } = await readManifest();
+    expect(commands["_execute_action"]?.suggested_key.default).toBe(QUICK_LOOK_SHORTCUT.join("+"));
+    expect(commands["open-comparison"]?.suggested_key.default).toBe(COMPARE_SHORTCUT.join("+"));
   });
 });

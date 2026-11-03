@@ -1,4 +1,4 @@
-import type { ProductSnapshot } from "@picky/catalog";
+import type { OperatingSystem, ProductSnapshot } from "@picky/catalog";
 import type { QuickLookState } from "../messaging/messages.ts";
 import { Dom } from "../popup/dom.ts";
 import { focusableControls, nextFocusTarget } from "./focus-trap.ts";
@@ -24,6 +24,8 @@ export interface QuickLookControllerDependencies {
   onClose: () => void;
   /** The element focused inside the shadow root (closed roots hide it from outside, so the host passes it). */
   activeElement: () => Element | null;
+  /** Labels the keyboard hints (⌥ ⇧ on a Mac). */
+  os: OperatingSystem;
 }
 
 // INPUT: the spec search box owns Return and the arrow keys for its own caret, so they are not shortcuts there.
@@ -149,7 +151,9 @@ export class QuickLookController implements OverlayActions {
     const { container } = this.deps;
     const focusId = this.deps.activeElement()?.getAttribute("data-focus") ?? null;
     const scrollTop = keepScroll ? (container.querySelector(".body")?.scrollTop ?? 0) : 0;
-    container.replaceChildren(overlayView(this.dom, this.model, this, !this.hasEntered));
+    container.replaceChildren(
+      overlayView(this.dom, this.model, this, { entering: !this.hasEntered, os: this.deps.os }),
+    );
     this.hasEntered = true;
     const body = container.querySelector(".body");
     if (body !== null) body.scrollTop = scrollTop;

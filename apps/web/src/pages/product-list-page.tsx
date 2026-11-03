@@ -18,7 +18,7 @@ interface ScreenProps {
 }
 
 function WelcomeScreen({ autoImportUrl }: ScreenProps) {
-  const { config, extensionBridge } = listRouteApi.useRouteContext();
+  const { config, extensionBridge, os } = listRouteApi.useRouteContext();
   return (
     <>
       <AppBar>
@@ -29,6 +29,7 @@ function WelcomeScreen({ autoImportUrl }: ScreenProps) {
       <WelcomeView
         extensionUrl={config.extensionUrl}
         extensionInstalled={extensionBridge.isAvailable()}
+        os={os}
         autoImportUrl={autoImportUrl}
       />
     </>

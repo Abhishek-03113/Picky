@@ -1,3 +1,4 @@
+import type { OperatingSystem } from "@picky/catalog";
 import { Dom } from "../popup/dom.ts";
 import { footerView } from "./footer-view.ts";
 import { headerView } from "./header-view.ts";
@@ -29,10 +30,16 @@ function errorBanner(dom: Dom, model: QuickLookModel): HTMLElement[] {
  *
  * `entering` adds the open animation. Every model change re-renders the whole dialog, so animating on each
  * render made the card flash twice per "Add" click (busy, then result); only the first render may animate.
+ * `os` labels the keyboard hints.
  *
- * @example container.replaceChildren(overlayView(dom, model, actions, true))
+ * @example container.replaceChildren(overlayView(dom, model, actions, { entering: true, os: "mac" }))
  */
-export function overlayView(dom: Dom, model: QuickLookModel, actions: OverlayActions, entering = false): HTMLElement {
+export function overlayView(
+  dom: Dom,
+  model: QuickLookModel,
+  actions: OverlayActions,
+  { entering, os }: { entering: boolean; os: OperatingSystem },
+): HTMLElement {
   const label =
     model.state?.comparisons.find((comparison) => comparison.id === model.state?.selectedId)?.name ?? "comparison";
   const backdrop = dom.el("div", { className: "backdrop", attrs: { "aria-hidden": "true" } });
@@ -44,7 +51,7 @@ export function overlayView(dom: Dom, model: QuickLookModel, actions: OverlayAct
   const card = dom.el("section", { className: "card", attrs: { ...cardAttrs, "data-focus": "dialog" } }, [
     headerView(dom, model, actions),
     body,
-    footerView(dom, model),
+    footerView(dom, model, os),
   ]);
   return dom.el("div", { className: entering ? "layer entering" : "layer" }, [backdrop, card]);
 }

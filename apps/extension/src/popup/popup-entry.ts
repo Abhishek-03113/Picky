@@ -1,3 +1,4 @@
+import { detectOperatingSystem } from "@picky/catalog";
 import type { CaptureConfig } from "../capture-config.ts";
 import { CAPTURE_PORT_NAME } from "../capture-protocol.ts";
 import { adaptChromePort } from "../chrome-duplex-port.ts";
@@ -25,4 +26,5 @@ void new PopupController({
   tabs: new ChromeActiveTabSource(),
   captureService: new PortCaptureService(() => adaptChromePort(chrome.runtime.connect({ name: CAPTURE_PORT_NAME }))),
   webBaseUrl: __PICKY_CAPTURE_CONFIG__.webBaseUrl,
+  os: detectOperatingSystem(navigator),
 }).start();

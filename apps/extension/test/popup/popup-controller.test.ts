@@ -20,6 +20,7 @@ function createController(storage: FakeKeyValueStorage, service: FakeCaptureServ
     tabs: new FakeActiveTabSource(tab),
     captureService: service,
     webBaseUrl: "http://web",
+    os: "windows",
   });
   return { root, controller };
 }

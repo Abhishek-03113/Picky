@@ -1,3 +1,4 @@
+import type { OperatingSystem } from "@picky/catalog";
 import type { ActiveTab } from "../capture-flow.ts";
 import type { SavedSummary } from "../capture-outcome.ts";
 import type { SettingsStore } from "../settings.ts";
@@ -13,6 +14,7 @@ export interface PopupDependencies {
   tabs: ActiveTabSource;
   captureService: CaptureService;
   webBaseUrl: string;
+  os: OperatingSystem;
 }
 
 /** "www.amazon.in" → "amazon.in"; null for anything that is not a parseable URL. */
@@ -67,6 +69,7 @@ export class PopupController {
   private show(state: PopupState): void {
     const view = renderPopupView(this.dom, state, {
       webBaseUrl: this.deps.webBaseUrl,
+      os: this.deps.os,
       hostLabel: this.hostLabel,
       autoOpen: this.autoOpen,
       onDismissWelcome: () => void this.dismissWelcome(),

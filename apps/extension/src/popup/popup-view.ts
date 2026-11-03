@@ -1,3 +1,4 @@
+import type { OperatingSystem } from "@picky/catalog";
 import { renderCapturingView } from "./capturing-view.ts";
 import type { Dom } from "./dom.ts";
 import { renderErrorView } from "./error-view.ts";
@@ -10,6 +11,8 @@ import { renderWelcomeView } from "./welcome-view.ts";
 
 export interface PopupViewContext {
   webBaseUrl: string;
+  /** Labels keyboard shortcuts (⌥ ⇧ on a Mac). */
+  os: OperatingSystem;
   /** Site being read, e.g. "amazon.in"; shown in the header while capturing. */
   hostLabel: string | null;
   autoOpen: boolean;
@@ -29,7 +32,7 @@ export function renderPopupView(dom: Dom, state: PopupState, context: PopupViewC
   const libraryUrl = `${context.webBaseUrl}/`;
   switch (state.kind) {
     case "welcome":
-      return renderShell(dom, {}, renderWelcomeView(dom, { onDismiss: context.onDismissWelcome }));
+      return renderShell(dom, {}, renderWelcomeView(dom, { onDismiss: context.onDismissWelcome }, context.os));
     case "capturing":
       return renderShell(
         dom,

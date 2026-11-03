@@ -28,3 +28,14 @@ export { countSpecs, filterSpecGroups, specCountLabel, specGroupAnchor } from ".
 export { formatCaptureTime } from "./present/capture-time.ts";
 export { sourceLabel } from "./present/source-label.ts";
 export { ratingCountLabel } from "./present/rating-label.ts";
+export {
+  COMPARE_SHORTCUT,
+  QUICK_LOOK_SHORTCUT,
+  altClickText,
+  detectOperatingSystem,
+  shortcutKeyLabels,
+  shortcutText,
+  type NavigatorLike,
+  type OperatingSystem,
+  type ShortcutKeys,
+} from "./present/os-shortcuts.ts";

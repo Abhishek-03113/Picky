@@ -13,6 +13,8 @@ import { stateWith } from "../support/quicklook-state.ts";
 
 const PAGE = buildSpecSnapshot();
 const KEY = { shiftKey: false };
+/** An already-open dialog on Windows: no entry animation, keys spelled out. */
+const SHOWN = { entering: false, os: "windows" } as const;
 
 function setup(page: ProductSnapshot | null = PAGE) {
   const { root } = createTestDom();
@@ -23,6 +25,7 @@ function setup(page: ProductSnapshot | null = PAGE) {
     api,
     readPage: () => page,
     onClose: () => void (closed.count += 1),
+    os: "windows",
     activeElement: () => root.ownerDocument.activeElement,
   });
   return { root, api, controller, closed };
@@ -177,7 +180,7 @@ describe("overlayView signed out", () => {
 
   test("Compare offers to sign in on the web app, in a new tab", () => {
     const { dom } = createTestDom();
-    const view = overlayView(dom, modelWith({ view: "compare", state: signedOut }), new RecordingActions());
+    const view = overlayView(dom, modelWith({ view: "compare", state: signedOut }), new RecordingActions(), SHOWN);
     const link = view.querySelector<HTMLAnchorElement>('[data-focus="sign-in"]');
     expect(link?.getAttribute("href")).toBe("http://web/login");
     expect(link?.getAttribute("target")).toBe("_blank");
@@ -186,7 +189,7 @@ describe("overlayView signed out", () => {
 
   test("Specs still render this page's sheet", () => {
     const { dom } = createTestDom();
-    const view = overlayView(dom, modelWith({ view: "specs", state: signedOut }), new RecordingActions());
+    const view = overlayView(dom, modelWith({ view: "specs", state: signedOut }), new RecordingActions(), SHOWN);
     expect(view.querySelector(".spec-view")).not.toBeNull();
     expect(view.querySelector('[data-focus="sign-in"]')).toBeNull();
   });
@@ -195,20 +198,25 @@ describe("overlayView signed out", () => {
 describe("overlayView in the specs view", () => {
   test("renders this page's spec sheet inside the scroll body, with sticky tools", () => {
     const { dom } = createTestDom();
-    const view = overlayView(dom, modelWith({ view: "specs" }), new RecordingActions());
+    const view = overlayView(dom, modelWith({ view: "specs" }), new RecordingActions(), SHOWN);
     expect(view.querySelector(".body > .spec-view .spec-sheet-tools")).not.toBeNull();
     expect(labels(view as HTMLElement)).toEqual(["Size", "Type", "Capacity", "Color"]);
   });
 
   test("works while the comparison API is still loading", () => {
     const { dom } = createTestDom();
-    const view = overlayView(dom, modelWith({ view: "specs", status: "loading", state: null }), new RecordingActions());
+    const view = overlayView(
+      dom,
+      modelWith({ view: "specs", status: "loading", state: null }),
+      new RecordingActions(),
+      SHOWN,
+    );
     expect(view.querySelector(".spec-view")).not.toBeNull();
   });
 
   test("no element besides the dialog carries the dialog's .card class", () => {
     const { dom } = createTestDom();
-    const view = overlayView(dom, modelWith({ view: "specs" }), new RecordingActions());
+    const view = overlayView(dom, modelWith({ view: "specs" }), new RecordingActions(), SHOWN);
     expect(view.querySelectorAll(".card").length).toBe(1);
     expect(view.querySelector(".card")?.getAttribute("role")).toBe("dialog");
     expect(view.querySelectorAll(".spec-card").length).toBeGreaterThan(0);
@@ -216,31 +224,42 @@ describe("overlayView in the specs view", () => {
 
   test("footer keeps only the Esc and compare-shortcut hints and no comparison link", () => {
     const { dom } = createTestDom();
-    const footer = footerView(dom, modelWith({ view: "specs" }));
-    expect(footerHints(footer)).toEqual(["Esc close", "Alt+Shift+V compare"]);
+    const footer = footerView(dom, modelWith({ view: "specs" }), "windows");
+    expect(footerHints(footer)).toEqual(["Esc close", "Alt Shift V compare"]);
     expect(footer.querySelector(".open-link")).toBeNull();
   });
 
   test("compare footer ends its hints with the specs shortcut", () => {
     const { dom } = createTestDom();
-    const footer = footerView(dom, modelWith({ view: "compare" }));
+    const footer = footerView(dom, modelWith({ view: "compare" }), "windows");
     expect(footerHints(footer)).toEqual([
+      "Esc close",
+      "Enter add this page",
+      "← → switch comparison",
+      "Alt Shift S specs",
+    ]);
+  });
+
+  test("on a Mac the hints show the Mac keys", () => {
+    const { dom } = createTestDom();
+    expect(footerHints(footerView(dom, modelWith({ view: "specs" }), "mac"))).toEqual(["Esc close", "⌥ ⇧ V compare"]);
+    expect(footerHints(footerView(dom, modelWith({ view: "compare" }), "mac"))).toEqual([
       "Esc close",
       "Return add this page",
       "← → switch comparison",
-      "Alt+Shift+S specs",
+      "⌥ ⇧ S specs",
     ]);
   });
 
   test("a non-product page shows the compare footer even when specs was requested", () => {
     const { dom } = createTestDom();
-    const footer = footerView(dom, modelWith({ view: "specs", pageSnapshot: null }));
-    expect(footerHints(footer)).toContain("Alt+Shift+S specs");
+    const footer = footerView(dom, modelWith({ view: "specs", pageSnapshot: null }), "windows");
+    expect(footerHints(footer)).toContain("Alt Shift S specs");
   });
 
   test("an action-failure banner is not shown over the spec sheet", () => {
     const { dom } = createTestDom();
-    const view = overlayView(dom, modelWith({ view: "specs", message: "boom" }), new RecordingActions());
+    const view = overlayView(dom, modelWith({ view: "specs", message: "boom" }), new RecordingActions(), SHOWN);
     expect(view.querySelector(".banner")).toBeNull();
   });
 });
@@ -296,7 +315,9 @@ describe("overlayView entering", () => {
   test("adds the open-animation class only when asked", () => {
     const { dom } = createTestDom();
     const model = modelWith({ view: "specs" });
-    expect(overlayView(dom, model, new RecordingActions(), true).className).toBe("layer entering");
-    expect(overlayView(dom, model, new RecordingActions()).className).toBe("layer");
+    expect(overlayView(dom, model, new RecordingActions(), { entering: true, os: "windows" }).className).toBe(
+      "layer entering",
+    );
+    expect(overlayView(dom, model, new RecordingActions(), SHOWN).className).toBe("layer");
   });
 });

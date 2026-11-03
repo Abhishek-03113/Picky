@@ -24,6 +24,7 @@ export function createTestContext(): { context: PopupViewContext; clicks: Record
   const clicks: RecordedClicks = { dismissed: 0, retried: 0, autoOpenChanges: [], viewedSpecs: 0, backedToSaved: 0 };
   const context: PopupViewContext = {
     webBaseUrl: "http://web",
+    os: "windows",
     hostLabel: "amazon.in",
     autoOpen: true,
     onDismissWelcome: () => void (clicks.dismissed += 1),

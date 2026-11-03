@@ -1,3 +1,4 @@
+import { detectOperatingSystem } from "@picky/catalog";
 import { MutationCache, QueryCache, QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { RouterProvider } from "@tanstack/react-router";
 import { StrictMode } from "react";
@@ -28,6 +29,7 @@ const router = createPickyRouter({
   comparisonsClient: createComparisonsClient(fetch.bind(window), ""),
   extensionBridge: createWindowExtensionBridge(window, () => crypto.randomUUID()),
   config: readAppConfig(import.meta.env),
+  os: detectOperatingSystem(navigator),
 });
 const onApiError = createSessionExpiryHandler(queryClient, router);
 

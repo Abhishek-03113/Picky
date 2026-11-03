@@ -1,6 +1,7 @@
+import type { OperatingSystem } from "@picky/catalog";
 import { Link } from "@tanstack/react-router";
 import { EXTENSION_PATH } from "../auth/route-guards.ts";
-import { QUICK_SETUP_STEPS } from "../extension/extension-setup.ts";
+import { quickSetupSteps } from "../extension/extension-setup.ts";
 import { CheckIcon, DocumentIcon } from "./icons.tsx";
 import { ImportProductForm } from "./import-product-form.tsx";
 import { SetupSteps } from "./setup-steps.tsx";
@@ -8,10 +9,17 @@ import { SetupSteps } from "./setup-steps.tsx";
 interface WelcomeViewProps {
   extensionUrl: string;
   extensionInstalled: boolean;
+  os: OperatingSystem;
   autoImportUrl?: string | undefined;
 }
 
-function ExtensionCard({ extensionUrl, installed }: { extensionUrl: string; installed: boolean }) {
+interface ExtensionCardProps {
+  extensionUrl: string;
+  installed: boolean;
+  os: OperatingSystem;
+}
+
+function ExtensionCard({ extensionUrl, installed, os }: ExtensionCardProps) {
   if (installed) {
     return (
       <section className="card extension-card" aria-labelledby="extension-title">
@@ -39,13 +47,13 @@ function ExtensionCard({ extensionUrl, installed }: { extensionUrl: string; inst
           Add to Chrome
         </a>
       </div>
-      <SetupSteps steps={QUICK_SETUP_STEPS} />
+      <SetupSteps steps={quickSetupSteps(os)} />
     </section>
   );
 }
 
 /** First-run screen for an empty library: paste a link, or install the extension. */
-export function WelcomeView({ extensionUrl, extensionInstalled, autoImportUrl }: WelcomeViewProps) {
+export function WelcomeView({ extensionUrl, extensionInstalled, os, autoImportUrl }: WelcomeViewProps) {
   return (
     <main className="page narrow welcome">
       <div className="welcome-intro">
@@ -56,7 +64,7 @@ export function WelcomeView({ extensionUrl, extensionInstalled, autoImportUrl }:
         <p>Your library is empty. Add your first product and its spec sheet will show up here.</p>
       </div>
       <ImportProductForm variant="card" autoImportUrl={autoImportUrl} />
-      <ExtensionCard extensionUrl={extensionUrl} installed={extensionInstalled} />
+      <ExtensionCard extensionUrl={extensionUrl} installed={extensionInstalled} os={os} />
     </main>
   );
 }

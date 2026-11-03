@@ -5,6 +5,7 @@ import { ComparePreview } from "../src/components/home/compare-preview.tsx";
 import { Features } from "../src/components/home/features.tsx";
 import { HowItWorks } from "../src/components/home/how-it-works.tsx";
 import { SupportedSites } from "../src/components/home/supported-sites.tsx";
+import { extensionGestures, quickSetupSteps, setupSteps } from "../src/extension/extension-setup.ts";
 import { FakeAuthClient } from "./fakes/fake-auth-client.ts";
 import { FakeComparisonsClient } from "./fakes/fake-comparisons-client.ts";
 import { FakeExtensionBridge } from "./fakes/fake-extension-bridge.ts";
@@ -82,10 +83,25 @@ describe("homepage sections", () => {
     expect(html).toContain("₹28,926");
   });
 
-  test("how it works lists the four steps with the extension's real shortcut", () => {
-    const html = render(<HowItWorks />);
+  test("how it works lists the four steps with the extension's real shortcut, labelled per OS", () => {
+    const html = render(<HowItWorks os="windows" />);
     for (const step of ["Save", "Understand", "Compare", "Decide"]) expect(html).toContain(`<h3>${step}</h3>`);
-    expect(html).toContain("<kbd>S</kbd>");
+    expect(html).toContain("<kbd>Alt</kbd>");
+    const mac = render(<HowItWorks os="mac" />);
+    expect(mac).toContain("<kbd>⌥</kbd>");
+    expect(mac).not.toContain("<kbd>Alt</kbd>");
+  });
+
+  test("the extension guide names keys for the visitor's OS", () => {
+    expect(extensionGestures("mac").map((gesture) => gesture.keys)).toEqual([
+      "⌥⇧S",
+      "⌥⇧V",
+      "Option-click a product link",
+      "Right-click → Add to Picky",
+    ]);
+    expect(extensionGestures("windows")[1]?.keys).toBe("Alt + Shift + V");
+    expect(setupSteps("mac")[3]?.hint).toContain("press ⌥⇧S");
+    expect(quickSetupSteps("linux")[2]?.hint).toBe("Or press Alt + Shift + S.");
   });
 
   test("the comparison marks clear winners and leaves preference rows unmarked", () => {

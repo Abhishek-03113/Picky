@@ -26,6 +26,17 @@ describe("renderPopupView", () => {
     expect(clicks.dismissed).toBe(1);
   });
 
+  test("welcome: the shortcut is labelled for the OS", () => {
+    const { dom } = createTestDom();
+    const { context } = createTestContext();
+    const keys = (os: "mac" | "windows") =>
+      [...renderPopupView(dom, { kind: "welcome" }, { ...context, os }).querySelectorAll(".key")].map(
+        (key) => key.textContent,
+      );
+    expect(keys("mac")).toEqual(["⌥", "⇧", "S"]);
+    expect(keys("windows")).toEqual(["Alt", "Shift", "S"]);
+  });
+
   test("capturing: has a status region and the host label", () => {
     const { dom } = createTestDom();
     const view = renderPopupView(dom, { kind: "capturing", phase: "saving" }, createTestContext().context);

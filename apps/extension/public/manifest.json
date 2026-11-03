@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Picky: Product Spec Sheets & Compare",
   "short_name": "Picky",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "Turn Amazon.in and Flipkart product pages into clean spec sheets, save them to your Picky library, and compare.",
   "minimum_chrome_version": "116",
   "icons": {

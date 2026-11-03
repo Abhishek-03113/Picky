@@ -1,3 +1,4 @@
+import { getRouteApi } from "@tanstack/react-router";
 import type { ReactElement } from "react";
 import { AppBar, BrandLink, PublicNav } from "../components/app-bar.tsx";
 import { BeforeAfter } from "../components/home/before-after.tsx";
@@ -11,8 +12,11 @@ import { SiteFooter } from "../components/home/site-footer.tsx";
 import { SupportedSites } from "../components/home/supported-sites.tsx";
 import { usePageTitle } from "../hooks/use-page-title.ts";
 
+const rootRouteApi = getRouteApi("__root__");
+
 /** What a signed-out visitor sees at "/": what Picky does, then a way in (account, extension). */
 export function HomePage(): ReactElement {
+  const { os } = rootRouteApi.useRouteContext();
   usePageTitle("Stop opening more tabs");
   return (
     <div className="home">
@@ -24,7 +28,7 @@ export function HomePage(): ReactElement {
         <Hero />
         <Problem />
         <BeforeAfter />
-        <HowItWorks />
+        <HowItWorks os={os} />
         <ComparePreview />
         <Features />
         <SupportedSites />

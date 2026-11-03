@@ -1,4 +1,4 @@
-import type { ProductSnapshot } from "@picky/catalog";
+import { detectOperatingSystem, type ProductSnapshot } from "@picky/catalog";
 import { capturePage } from "../capture-page.ts";
 import { ChromeQuickLookApi } from "./chrome-quicklook-api.ts";
 import { QuickLookController } from "./quicklook-controller.ts";
@@ -91,6 +91,7 @@ export class QuickLookOverlay {
       readPage,
       onClose: close,
       activeElement: () => root.activeElement,
+      os: detectOperatingSystem(pageWindow.navigator),
     });
     onKey = keyForwarder(controller);
     pageWindow.addEventListener("keydown", onKey, true);

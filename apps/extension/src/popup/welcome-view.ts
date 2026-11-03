@@ -1,3 +1,4 @@
+import { QUICK_LOOK_SHORTCUT, shortcutKeyLabels, type OperatingSystem } from "@picky/catalog";
 import type { Dom } from "./dom.ts";
 
 export interface WelcomeHandlers {
@@ -9,14 +10,12 @@ const STEPS = [
   { title: "Open any product page", body: "On Amazon.in or Flipkart, click Picky. That's it." },
 ] as const;
 
-const SHORTCUT_KEYS = ["Alt", "Shift", "S"] as const;
-
 /**
- * First-run body: two setup steps, the shortcut and a "Got it" button.
+ * First-run body: two setup steps, the shortcut (labelled for `os`) and a "Got it" button.
  *
- * @example renderWelcomeView(dom, { onDismiss: () => void controller.dismissWelcome() })
+ * @example renderWelcomeView(dom, { onDismiss: () => void controller.dismissWelcome() }, "mac")
  */
-export function renderWelcomeView(dom: Dom, handlers: WelcomeHandlers): HTMLElement {
+export function renderWelcomeView(dom: Dom, handlers: WelcomeHandlers, os: OperatingSystem): HTMLElement {
   const gotIt = dom.el("button", { className: "button button-primary", attrs: { type: "button" }, text: "Got it" });
   gotIt.addEventListener("click", handlers.onDismiss);
   return dom.el("main", { className: "body body-welcome" }, [
@@ -26,7 +25,7 @@ export function renderWelcomeView(dom: Dom, handlers: WelcomeHandlers): HTMLElem
       { className: "steps" },
       STEPS.map((step, index) => renderStep(dom, index + 1, step)),
     ),
-    renderShortcut(dom),
+    renderShortcut(dom, os),
     dom.el("div", { className: "actions" }, [gotIt]),
   ]);
 }
@@ -48,8 +47,8 @@ function renderStep(dom: Dom, position: number, step: (typeof STEPS)[number]): H
   ]);
 }
 
-function renderShortcut(dom: Dom): HTMLElement {
-  const keys = SHORTCUT_KEYS.map((key) => dom.el("kbd", { className: "key", text: key }));
+function renderShortcut(dom: Dom, os: OperatingSystem): HTMLElement {
+  const keys = shortcutKeyLabels(QUICK_LOOK_SHORTCUT, os).map((key) => dom.el("kbd", { className: "key", text: key }));
   return dom.el("div", { className: "shortcut" }, [
     dom.el("span", { text: "Shortcut" }),
     dom.el("span", { className: "keys" }, keys),
