@@ -4,10 +4,10 @@
  * so validation code is not shipped to every page.
  */
 
-/** Marketplaces Picky can read; each has a SiteExtractor in src/extract/site-extractors.ts. */
-export const PRODUCT_SOURCES = ["amazon.in", "amazon.com", "flipkart.com"] as const;
+import type { ProductSource } from "./sites/shopping-sites.ts";
 
-export type ProductSource = (typeof PRODUCT_SOURCES)[number];
+/** Stores Picky can read come from the registry in src/sites/shopping-sites.ts. */
+export { PRODUCT_SOURCES, type ProductSource } from "./sites/shopping-sites.ts";
 
 export interface Money {
   amount: number;

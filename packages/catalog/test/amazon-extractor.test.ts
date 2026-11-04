@@ -1,8 +1,11 @@
 import { describe, expect, test } from "bun:test";
-import { amazonComExtractor, amazonInExtractor, extractAmazonProduct } from "../src/extract/amazon/amazon-extractor.ts";
-import { AMAZON_COM, AMAZON_IN } from "../src/extract/amazon/amazon-marketplace.ts";
+import { createAmazonExtractor, extractAmazonProduct } from "../src/extract/amazon/amazon-extractor.ts";
 import { ProductPageError } from "../src/extract/product-page-error.ts";
 import { parseHtmlPage } from "../src/page/cheerio-page.ts";
+import { shoppingSite } from "../src/sites/shopping-sites.ts";
+
+const AMAZON_IN = shoppingSite("amazon.in");
+const AMAZON_COM = shoppingSite("amazon.com");
 
 const CAPTURED_AT = new Date("2026-10-05T10:00:00Z");
 
@@ -40,18 +43,19 @@ describe("extractAmazonProduct on amazon.com", () => {
 });
 
 describe.each([
-  ["amazon.in", amazonInExtractor, "https://www.amazon.in/s?k=x"],
-  ["amazon.com", amazonComExtractor, "https://www.amazon.com/s?k=x"],
-] as const)("%s extractor", (source, extractor, searchUrl) => {
+  ["amazon.in", AMAZON_IN, "https://www.amazon.in/s?k=x"],
+  ["amazon.com", AMAZON_COM, "https://www.amazon.com/s?k=x"],
+] as const)("%s extractor", (_source, site, searchUrl) => {
+  const extractor = createAmazonExtractor(site);
   test("reads the ASIN from product URLs only", () => {
-    expect(extractor.source).toBe(source);
+    expect(extractor.source).toBe(site.source);
     expect(extractor.productIdFromUrl(extractor.exampleUrl)).not.toBeNull();
     expect(extractor.productIdFromUrl(searchUrl)).toBeNull();
   });
 
   test("refuses to extract a URL it does not own", () => {
     expect(() => extractor.extract(parseHtmlPage(""), "https://example.com", CAPTURED_AT)).toThrow(
-      `"https://example.com" is not an ${source} product URL; expected ${extractor.exampleUrl}`,
+      `"https://example.com" is not an ${site.label} product URL; expected ${site.exampleUrl}`,
     );
   });
 });

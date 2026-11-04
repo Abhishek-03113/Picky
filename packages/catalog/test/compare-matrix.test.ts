@@ -1,6 +1,7 @@
 import { describe, expect, test } from "bun:test";
 import { buildComparisonMatrix } from "../src/compare/build-matrix.ts";
-import { flipkartSearchUrl } from "../src/compare/flipkart-search-url.ts";
+import { searchableSites, storeSearchUrl } from "../src/compare/store-search-url.ts";
+import { shoppingSite } from "../src/sites/shopping-sites.ts";
 import { buildPriceCells, buildRatingCells } from "../src/compare/top-cells.ts";
 import { snapshotWith } from "./compare-support.ts";
 
@@ -114,15 +115,21 @@ describe("price and rating cells", () => {
   });
 });
 
-describe("flipkartSearchUrl", () => {
+const FLIPKART = shoppingSite("flipkart.com");
+
+describe("storeSearchUrl", () => {
   test("uses brand plus leading title words, encoded", () => {
     const monitor = snapshotWith("ProArt PA279CV 27-inch 4K UHD Professional Monitor (Black)", [], { brand: "ASUS" });
-    expect(flipkartSearchUrl(monitor)).toBe(
+    expect(storeSearchUrl(FLIPKART, monitor)).toBe(
       "https://www.flipkart.com/search?q=ASUS%20ProArt%20PA279CV%2027-inch%204K%20UHD",
     );
   });
   test("does not repeat a brand the title already starts with", () => {
     const phone = snapshotWith("Apple iPhone 17, 256 GB", [], { brand: "Apple" });
-    expect(flipkartSearchUrl(phone)).toBe("https://www.flipkart.com/search?q=Apple%20iPhone%2017");
+    expect(storeSearchUrl(FLIPKART, phone)).toBe("https://www.flipkart.com/search?q=Apple%20iPhone%2017");
+  });
+  test("is null for a store without a search page, and only searchable stores are listed", () => {
+    expect(storeSearchUrl(shoppingSite("amazon.in"), snapshotWith("X", []))).toBeNull();
+    expect(searchableSites().map((site) => site.source)).toEqual(["flipkart.com"]);
   });
 });

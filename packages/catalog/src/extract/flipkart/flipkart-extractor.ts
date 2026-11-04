@@ -1,5 +1,6 @@
 import type { PageNode } from "../../page/page-node.ts";
 import type { ProductSnapshot } from "../../product-snapshot.ts";
+import type { SupportedSite } from "../../sites/shopping-sites.ts";
 import { ProductPageError } from "../product-page-error.ts";
 import { categoryFromCrumbs, jsonLdBreadcrumbLabels } from "../shared/breadcrumb-category.ts";
 import { readJsonLdProduct, type JsonLdProduct } from "../shared/json-ld-product.ts";
@@ -13,31 +14,37 @@ import { parseFlipkartProductUrl, type FlipkartProductRef } from "./flipkart-url
  * (stable across redesigns); specs come from the rendered "Specifications" sections.
  * No list price: the struck-through M.R.P. has no hook that tells it apart from other prices.
  *
- * @example flipkartExtractor.extract(parseHtmlPage(html), url, new Date()).specGroups[0]?.title // "General"
+ * @example createFlipkartExtractor(shoppingSite("flipkart.com")).extract(parseHtmlPage(html), url, new Date())
  */
-export const flipkartExtractor: SiteExtractor = {
-  source: "flipkart.com",
-  exampleUrl: "https://www.flipkart.com/apple-iphone-17-white-256-gb/p/itm68ad8410784c7?pid=MOBHQV9YAZYYWY8A",
-  productIdFromUrl: (pageUrl) => parseFlipkartProductUrl(pageUrl)?.productId ?? null,
-  extract: (page, pageUrl, capturedAt) => extractFlipkartProduct(page, requireFlipkartRef(pageUrl), capturedAt),
-};
-
-function requireFlipkartRef(pageUrl: string): FlipkartProductRef {
-  const ref = parseFlipkartProductUrl(pageUrl);
-  if (ref !== null) return ref;
-  throw new ProductPageError(`"${pageUrl}" is not a Flipkart product URL; expected ${flipkartExtractor.exampleUrl}`);
+export function createFlipkartExtractor(site: SupportedSite): SiteExtractor {
+  const requireRef = (pageUrl: string): FlipkartProductRef => {
+    const ref = parseFlipkartProductUrl(pageUrl, site);
+    if (ref !== null) return ref;
+    throw new ProductPageError(`"${pageUrl}" is not a ${site.label} product URL; expected ${site.exampleUrl}`);
+  };
+  return {
+    source: site.source,
+    exampleUrl: site.exampleUrl,
+    productIdFromUrl: (pageUrl) => parseFlipkartProductUrl(pageUrl, site)?.productId ?? null,
+    extract: (page, pageUrl, capturedAt) => extractFlipkartProduct(page, requireRef(pageUrl), capturedAt, site),
+  };
 }
 
 /**
  * Reads a Flipkart product page for an already-parsed URL.
  *
- * @example extractFlipkartProduct(page, parseFlipkartProductUrl(url)!, new Date())
+ * @example extractFlipkartProduct(page, parseFlipkartProductUrl(url, site)!, new Date(), site)
  */
-export function extractFlipkartProduct(page: PageNode, ref: FlipkartProductRef, capturedAt: Date): ProductSnapshot {
+export function extractFlipkartProduct(
+  page: PageNode,
+  ref: FlipkartProductRef,
+  capturedAt: Date,
+  site: SupportedSite,
+): ProductSnapshot {
   const product = requireJsonLdProduct(page, ref);
   const specGroups = extractFlipkartSpecGroups(page);
   return {
-    source: "flipkart.com",
+    source: site.source,
     externalId: product.sku ?? ref.productId,
     url: ref.canonicalUrl,
     title: product.name,

@@ -1,6 +1,9 @@
 import { describe, expect, test } from "bun:test";
-import { AMAZON_COM, AMAZON_IN } from "../src/extract/amazon/amazon-marketplace.ts";
 import { canonicalAmazonUrl, parseAmazonProductUrl } from "../src/extract/amazon/amazon-url.ts";
+import { shoppingSite } from "../src/sites/shopping-sites.ts";
+
+const AMAZON_IN = shoppingSite("amazon.in");
+const AMAZON_COM = shoppingSite("amazon.com");
 
 describe("parseAmazonProductUrl", () => {
   test("reads the ASIN from /dp/ and /gp/product/ paths", () => {
