@@ -5,6 +5,8 @@ Research behind the design: `research/FINDINGS.md`.
 
 - `packages/catalog` — shared `ProductSnapshot` types + page extractors (pure, no I/O). The zod schemas live in
   `@picky/catalog/schema`, for the API only: keep zod out of anything the browser loads.
+  Supported stores are one registry, `@picky/catalog/sites` (`src/sites/shopping-sites.ts`); everything that
+  names or matches a store reads it. Never hard-code a store list. Adding one: `docs/adding-a-site.md`.
 - `packages/ui-tokens` — shared `--ez-*` CSS design tokens (Apple HIG, light + dark) for web and extension popup.
 - `apps/api` — Bun + Hono backend, Postgres storage, stores snapshots the extension parses (Firecrawl import is unused tech debt).
 - `apps/web` — React + TanStack Router/Query frontend: signed-out homepage at `/`, `/extension` install guide, `/privacy`, and the library + spec sheets once signed in.
