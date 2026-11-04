@@ -51,8 +51,8 @@ products, the right-click "Save to Picky" menu, and the web app's product or com
 
 **Description** (paste as is):
 
-> Picky shows every detail of an Amazon.in, Amazon.com or Flipkart product on one clean page, without
-> the offers and ads, and helps you compare the products on your shortlist.
+> Picky shows every detail of an Amazon or Flipkart product on one clean page, without the offers and
+> ads, and helps you compare the products on your shortlist.
 >
 > • See every detail: click the Picky button (or press Alt+Shift+S) on any product page. Full specs, in
 > clear sections you can search. No account needed.
@@ -60,10 +60,10 @@ products, the right-click "Save to Picky" menu, and the web app's product or com
 > without leaving the page.
 > • Compare: put your shortlist side by side (Alt+Shift+V). Details that match fold away, clear wins
 > are marked, and matters of taste are left to you.
-> • Your library on any device: saved products and comparisons live in your free Picky account.
+> • Saved on any device: your products and comparisons live in your free Picky account.
 >
-> Picky works only on Amazon.in, Amazon.com, Flipkart and the Picky website. It reads a page only when
-> you ask, shows no ads and sells nothing. Picky is not affiliated with Amazon or Flipkart.
+> Picky works only on Amazon (amazon.in and amazon.com), Flipkart and the Picky website. It looks at a
+> page only when you ask, shows no ads and sells nothing. Picky is not affiliated with Amazon or Flipkart.
 
 ## 3. Privacy practices tab
 
@@ -115,7 +115,8 @@ purposes unrelated to the single purpose, and not used to determine creditworthi
 - **Missing or mismatched privacy policy:** `/privacy` lists exactly the data above.
 - **Remote code / obfuscation:** bundles are minified (whitespace and syntax only; names are kept, so the
   code stays readable) and contain no `eval`.
-- **Keyword spam or misleading branding:** the description names the stores once, plainly, and says
+- **Keyword spam or misleading branding:** the description names the stores once, plainly (Amazon's two
+  sites by domain), and says
   Picky is not affiliated with them.
 - **Broken functionality for reviewers:** the Picky panel (See details) works without an account. Mention in the
   reviewer notes that saving needs a free account, created at `https://<web domain>/login?mode=signup`.
