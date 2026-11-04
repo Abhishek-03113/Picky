@@ -5,6 +5,7 @@ import { parseUrlOnHosts } from "../shared/parse-site-url.ts";
 // Product pages: /<slug>/p/<item id>?pid=<FSN>&lid=…&srno=… (search tracking we drop).
 const PRODUCT_PATH = /^\/[^/]+\/p\/(itm[a-z0-9]+)\/?$/i;
 
+/** Flipkart's ProductUrlRef: the id is the FSN. */
 export interface FlipkartProductRef {
   /** FSN, Flipkart's product id (e.g. MOBHQV9YAZYYWY8A); falls back to the item id when pid is absent. */
   productId: string;
