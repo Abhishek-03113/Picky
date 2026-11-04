@@ -1,3 +1,4 @@
+import { supportedStoresText } from "@picky/catalog/sites";
 import type { ProductSnapshot } from "@picky/catalog";
 import type { ParseProductRequest, ParseProductResponse } from "./offscreen-protocol.ts";
 import { IdleReleaser } from "./idle-releaser.ts";
@@ -46,7 +47,7 @@ export class ChromeSnapshotReader implements SnapshotReader {
     await chrome.offscreen.createDocument({
       url: this.offscreenPage,
       reasons: [chrome.offscreen.Reason.DOM_PARSER],
-      justification: "Parse fetched Amazon / Flipkart product pages without opening them",
+      justification: `Parse fetched ${supportedStoresText()} product pages without opening them`,
     });
   }
 }

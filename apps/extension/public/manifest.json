@@ -3,7 +3,7 @@
   "name": "Picky: Product Spec Sheets & Compare",
   "short_name": "Picky",
   "version": "1.2.2",
-  "description": "Turn Amazon.in, Amazon.com and Flipkart product pages into clean spec sheets, save them to your Picky library, and compare.",
+  "description": "Turn {stores} product pages into clean spec sheets, save them to your Picky library, and compare.",
   "minimum_chrome_version": "116",
   "icons": {
     "16": "logo-16.png",
@@ -23,7 +23,7 @@
     "type": "module"
   },
   "permissions": ["activeTab", "scripting", "storage", "contextMenus", "offscreen"],
-  "host_permissions": ["https://www.amazon.in/*", "https://www.amazon.com/*", "https://www.flipkart.com/*"],
+  "host_permissions": [],
   "commands": {
     "_execute_action": {
       "suggested_key": {
@@ -40,7 +40,7 @@
   },
   "content_scripts": [
     {
-      "matches": ["https://www.amazon.in/*", "https://www.amazon.com/*", "https://www.flipkart.com/*"],
+      "matches": [],
       "js": ["link-alt-click.js"],
       "run_at": "document_idle"
     }

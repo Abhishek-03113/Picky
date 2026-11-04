@@ -1,13 +1,12 @@
+import { productLinkPatterns } from "@picky/catalog/sites";
+
+// The cheap link check for the always-on content script. It comes from the registry module, not the
+// catalog index, so extractor code and zod stay out of every store page; the worker re-checks with the
+// real extractor before fetching anything.
+export { looksLikeProductLink } from "@picky/catalog/sites";
+
 /** Coarse Chrome match patterns for the context menu; the exact check is isSupportedProductUrl on click. */
-export const PRODUCT_LINK_PATTERNS: readonly string[] = [
-  ...["https://www.amazon.in", "https://www.amazon.com"].flatMap((origin) => [
-    `${origin}/dp/*`,
-    `${origin}/*/dp/*`,
-    `${origin}/gp/product/*`,
-    `${origin}/*/gp/product/*`,
-  ]),
-  "https://www.flipkart.com/*/p/*",
-];
+export const PRODUCT_LINK_PATTERNS: readonly string[] = productLinkPatterns();
 
 /**
  * A readable stand-in for a product's title, taken from the URL slug, for the "Reading …" toast before
@@ -43,18 +42,4 @@ export function productLinkFromClick(
   if (!isSupported(url)) return null;
   const label = (anchor.textContent ?? "").replace(/\s+/g, " ").trim();
   return { url, label: label === "" ? titleFromProductUrl(url) : label };
-}
-
-const PRODUCT_PATH_HINT =
-  /^https:\/\/(?:www\.)?(?:amazon\.(?:in|com)\/(?:.+\/)?(?:dp|gp\/product)\/|flipkart\.com\/[^/]+\/p\/)/;
-
-/**
- * Cheap link test for the always-on content script, which must stay tiny: importing the real
- * isSupportedProductUrl would bundle all of @picky/catalog (zod, extractors) into every Amazon page.
- * The service worker re-checks with the real extractor before fetching anything.
- *
- * @example looksLikeProductLink("https://www.amazon.in/Some-Item/dp/B0FQG1YHYR") // true
- */
-export function looksLikeProductLink(url: string): boolean {
-  return PRODUCT_PATH_HINT.test(url);
 }

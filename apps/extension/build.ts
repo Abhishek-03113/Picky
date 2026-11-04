@@ -3,6 +3,7 @@ import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { buildShadowStylesheet } from "./src/quicklook/shadow-css.ts";
 import { mergeHostPermissions } from "./src/host-permissions.ts";
+import { withSiteFields } from "./src/site-manifest.ts";
 import { apiHostPermission, resolveCaptureConfig, webBridgeContentScript } from "./src/capture-config.ts";
 
 // Builds the unpacked extension into dist/. Load it via chrome://extensions → "Load unpacked".
@@ -65,7 +66,8 @@ async function writePopupStylesheet(): Promise<void> {
 }
 
 async function writeManifest(): Promise<void> {
-  const manifest = await Bun.file(join(import.meta.dir, "public/manifest.json")).json();
+  // Store hosts, the Alt+click script's matches and the description's store list come from the site registry.
+  const manifest = withSiteFields(await Bun.file(join(import.meta.dir, "public/manifest.json")).json());
   manifest.host_permissions = mergeHostPermissions(manifest.host_permissions, apiHostPermission(config));
   // The web app's origin is only known at build time, so its bridge script is added here.
   manifest.content_scripts.push(webBridgeContentScript(config));
