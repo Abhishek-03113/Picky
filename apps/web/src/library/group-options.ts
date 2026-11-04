@@ -13,11 +13,11 @@ export interface GroupOption {
 
 /** Menu entries in display order; a full list so a new GroupKey cannot be left out of the menu. */
 export const GROUP_OPTIONS: readonly GroupOption[] = [
-  { key: "category", label: "Category", hint: "From the store’s breadcrumb, e.g. Monitors" },
+  { key: "category", label: "Category", hint: "The store’s category, e.g. Monitors" },
   { key: "brand", label: "Brand", hint: "LG, Dell, Samsung…" },
   { key: "store", label: "Store", hint: storeBrandsText() },
-  { key: "price", label: "Price band", hint: "Under ₹25k, ₹25–35k, over ₹35k" },
-  { key: "none", label: "None", hint: "One flat list, newest first" },
+  { key: "price", label: "Price range", hint: "Under ₹25k, ₹25–35k, over ₹35k" },
+  { key: "none", label: "Newest first", hint: "Everything in one list" },
 ];
 
 /**
@@ -32,7 +32,7 @@ export function parseGroupKey(candidate: unknown): GroupKey | undefined {
 /**
  * Label of the active grouping, for the menu button.
  *
- * @example groupLabel("price") // "Price band"
+ * @example groupLabel("price") // "Price range"
  */
 export function groupLabel(key: GroupKey): string {
   return GROUP_OPTIONS.find((option) => option.key === key)?.label ?? key;

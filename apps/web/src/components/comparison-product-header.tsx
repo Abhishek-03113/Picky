@@ -28,7 +28,7 @@ export function ComparisonProductHeader({ product, onRemove }: ComparisonProduct
           <CloseIcon size={14} />
         </button>
       </div>
-      <span className="mx-head-brand">{snapshot.brand ?? "Unknown brand"}</span>
+      <span className="mx-head-brand">{snapshot.brand ?? "Brand not listed"}</span>
       <Link
         to="/products/$productId"
         params={{ productId: product.id }}

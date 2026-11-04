@@ -15,7 +15,7 @@ export const ALL_PRODUCTS_GROUP_NAME = "All products";
 // Rupee thresholds from the product brief: <₹25k, ₹25–35k, >₹35k. Products without a price get their own band,
 // and so does each other currency (amazon.com lists in USD), since rupee thresholds mean nothing there.
 const PRICE_BANDS = ["Under ₹25k", "₹25k – ₹35k", "Over ₹35k"] as const;
-const NO_PRICE_BAND = "No price";
+const NO_PRICE_BAND = "Price not shown";
 const LOW_BAND_LIMIT = 25_000;
 const HIGH_BAND_LIMIT = 35_000;
 

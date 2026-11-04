@@ -69,11 +69,11 @@ function linkMenuEntries(comparisons: readonly CatalogComparisonSummary[], lastU
     item(`${COMPARISON_PREFIX}${comparisonId}`, title),
   );
   return [
-    item(QUICKLOOK_ID, "Quick Look"),
+    item(QUICKLOOK_ID, "See details"),
     item("picky:separator:quicklook", "", "separator"),
     ...comparisonItems,
     ...(comparisonItems.length > 0 ? [item("picky:separator:targets", "", "separator")] : []),
-    item(LIBRARY_ID, "Library only"),
+    item(LIBRARY_ID, "Just save it"),
     item(NEW_ID, "New comparison…"),
   ];
 }
@@ -90,10 +90,10 @@ function pageMenuEntries(comparisons: readonly CatalogComparisonSummary[], lastU
     child(`cmp:${comparisonId}`, title),
   );
   return [
-    { id: PAGE_ROOT_ID, title: "Add to Picky", kind: "normal", context: "page" },
+    { id: PAGE_ROOT_ID, title: "Save to Picky", kind: "normal", context: "page" },
     ...comparisonItems,
     ...(comparisonItems.length > 0 ? [child("separator", "", "separator")] : []),
-    child("library", "Library only"),
+    child("library", "Just save it"),
     child("new", "New comparison…"),
   ];
 }

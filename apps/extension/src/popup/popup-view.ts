@@ -52,7 +52,7 @@ export function renderPopupView(dom: Dom, state: PopupState, context: PopupViewC
     case "specs":
       return renderShell(
         dom,
-        { libraryUrl, onBack: context.onBackToSaved, title: "Specifications" },
+        { libraryUrl, onBack: context.onBackToSaved, title: "Details" },
         renderSpecSheetView(dom, state.summary.snapshot),
       );
     case "unsupported":

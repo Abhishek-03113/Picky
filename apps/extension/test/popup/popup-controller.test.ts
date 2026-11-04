@@ -43,7 +43,7 @@ describe("PopupController", () => {
     await new Promise((resolve) => setTimeout(resolve, 0));
     expect((await new SettingsStore(storage).load()).firstRunDismissed).toBe(true);
     expect(service.requestedTabs).toEqual([TAB]);
-    expect(root.textContent).toContain("Saved to your library");
+    expect(root.textContent).toContain("Saved to Picky");
   });
 
   test("later opens capture straight away", async () => {
@@ -51,7 +51,7 @@ describe("PopupController", () => {
     const { root, controller } = createController(new FakeKeyValueStorage(SEEN_BEFORE), service);
     await controller.start();
     expect(service.requestedTabs).toEqual([TAB]);
-    expect(root.textContent).toContain("Saved to your library");
+    expect(root.textContent).toContain("Saved to Picky");
   });
 
   test("shows unsupported and failed states", async () => {
@@ -66,7 +66,8 @@ describe("PopupController", () => {
       new FakeCaptureService(new Error("worker gone")),
     );
     await failed.controller.start();
-    expect(failed.root.textContent).toContain("worker gone");
+    expect(failed.root.textContent).toContain("Reload the page, then try again.");
+    expect(failed.root.textContent).not.toContain("worker gone");
   });
 
   test("an unreadable active tab is treated as not a product page", async () => {
@@ -86,14 +87,14 @@ describe("PopupController", () => {
     expect(await new SettingsStore(storage).isAutoOpenEnabled()).toBe(true);
   });
 
-  test("View specs swaps to the spec sheet and Back returns to the saved card", async () => {
+  test("See details swaps to the spec sheet and Back returns to the saved card", async () => {
     const { root, controller } = createController(new FakeKeyValueStorage(SEEN_BEFORE), new FakeCaptureService(SAVED));
     await controller.start();
     (root.querySelector("button.button-primary") as HTMLButtonElement).click();
     expect(root.querySelector("main.spec-body")).not.toBeNull();
-    expect(root.textContent).not.toContain("Saved to your library");
+    expect(root.textContent).not.toContain("Saved to Picky");
     (root.querySelector("button.back-button") as HTMLButtonElement).click();
-    expect(root.textContent).toContain("Saved to your library");
+    expect(root.textContent).toContain("Saved to Picky");
     expect(root.querySelector("main.spec-body")).toBeNull();
   });
 });

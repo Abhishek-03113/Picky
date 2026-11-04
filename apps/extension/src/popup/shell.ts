@@ -45,6 +45,6 @@ function renderHeaderLead(dom: Dom, options: ShellOptions): Node[] {
 }
 
 function renderLibraryLink(dom: Dom, libraryUrl: string): HTMLElement {
-  const attrs = { href: libraryUrl, target: "_blank", rel: "noopener", "aria-label": "Open library" };
+  const attrs = { href: libraryUrl, target: "_blank", rel: "noopener", "aria-label": "See saved products" };
   return dom.el("a", { className: "icon-button", attrs }, [dom.icon("library", "icon-md")]);
 }

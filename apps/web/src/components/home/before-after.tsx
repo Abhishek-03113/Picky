@@ -41,7 +41,7 @@ function ClutteredPage(): ReactElement {
           <i key={width} style={{ width: `${width}%` }} />
         ))}
       </div>
-      <p className="before-note">Specs are split across four or five tables, below offers, financing and ads.</p>
+      <p className="before-note">The details are split across four or five tables, below offers, financing and ads.</p>
     </figure>
   );
 }
@@ -49,7 +49,7 @@ function ClutteredPage(): ReactElement {
 function SampleSheet(): ReactElement {
   return (
     <figure className="after">
-      <figcaption className="caption caption-accent">Your Picky sheet</figcaption>
+      <figcaption className="caption caption-accent">The same product in Picky</figcaption>
       <div className="after-head">
         <div className="after-image">
           <HeadphonesIcon />
@@ -72,7 +72,7 @@ function SampleSheet(): ReactElement {
           </div>
         ))}
       </dl>
-      <span className="meta">54 specs in 10 groups, searchable</span>
+      <span className="meta">54 details in 10 sections, searchable</span>
     </figure>
   );
 }

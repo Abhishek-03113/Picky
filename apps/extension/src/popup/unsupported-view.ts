@@ -18,7 +18,7 @@ export function renderUnsupportedView(dom: Dom, webBaseUrl: string): HTMLElement
 
 export function renderLibraryButton(dom: Dom, webBaseUrl: string): HTMLElement {
   const attrs = { href: `${webBaseUrl}/`, target: "_blank", rel: "noopener" };
-  return dom.el("a", { className: "button button-secondary", attrs, text: "Open my library" });
+  return dom.el("a", { className: "button button-secondary", attrs, text: "See saved products" });
 }
 
 function renderSupportedSites(dom: Dom): HTMLElement {

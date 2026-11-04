@@ -3,10 +3,10 @@ import { SearchIcon } from "./icons.tsx";
 
 const MODES: readonly { value: RowMode; label: string }[] = [
   { value: "differences", label: "Differences" },
-  { value: "all", label: "All specs" },
+  { value: "all", label: "All details" },
 ];
 
-/** Differences | All specs, the spec filter and the "Mark best values" switch. */
+/** Differences | All details, the detail search and the "Show which is better" switch. */
 export function ComparisonToolbar({ controls }: { controls: MatrixControls }) {
   return (
     <div className="compare-toolbar">
@@ -51,8 +51,8 @@ function SpecFilter({ query, onQueryChange }: SpecFilterProps) {
       <SearchIcon size={15} />
       <input
         type="search"
-        placeholder="Filter specs"
-        aria-label="Filter specs"
+        placeholder="Search details"
+        aria-label="Search details"
         value={query}
         onChange={(event) => onQueryChange(event.target.value)}
       />
@@ -68,7 +68,7 @@ interface MarkBestSwitchProps {
 function MarkBestSwitch({ markBest, onMarkBestChange }: MarkBestSwitchProps) {
   return (
     <label className="switch-row">
-      Mark best values
+      Show which is better
       <input
         type="checkbox"
         role="switch"

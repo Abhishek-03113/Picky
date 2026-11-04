@@ -32,7 +32,7 @@ describe("PriceCard", () => {
     const html = renderToStaticMarkup(<PriceCard snapshot={makeSnapshot()} />);
     expect(html).toContain("availability-dot in-stock");
     expect(html).toContain("<strong>In stock</strong>");
-    expect(html).toContain("Prices change often — capture again to refresh.");
+    expect(html).toContain("Prices change often, so save it again from the store to update.");
   });
 
   test("omits availability when the page had none", () => {
@@ -76,10 +76,10 @@ describe("spec group highlight", () => {
 describe("SpecSheet", () => {
   test("shows the size summary, search box and one card per group", () => {
     const html = renderToStaticMarkup(<SpecSheet groups={[group, { ...group, title: "More" }]} />);
-    expect(html).toContain("2 specs in 2 groups");
+    expect(html).toContain("2 details in 2 sections");
     expect(html).toContain('type="search"');
     expect(html.match(/class="card spec-group"/g)).toHaveLength(2);
-    expect(html).not.toContain("No specs match");
+    expect(html).not.toContain("No details match");
   });
 });
 

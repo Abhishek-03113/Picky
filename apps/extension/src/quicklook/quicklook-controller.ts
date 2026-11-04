@@ -141,6 +141,7 @@ export class QuickLookController implements OverlayActions {
       this.model = { ...this.model, status: "ready", state: await request(), busy: false };
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error);
+      console.warn("picky.quicklook.failed", message);
       this.model = { ...this.model, status: this.model.state === null ? "failed" : "ready", message, busy: false };
     }
     this.render();

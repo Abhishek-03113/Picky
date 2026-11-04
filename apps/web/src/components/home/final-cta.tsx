@@ -18,9 +18,9 @@ export function FinalCta(): ReactElement {
             1
           </span>
           <span className="start-title">Create your account</span>
-          <span className="start-hint">Your library and comparisons live here, on any device.</span>
+          <span className="start-hint">Your saved products and comparisons live here, on any device.</span>
           <Link to={SIGN_IN_PATH} search={{ mode: "signup" }}>
-            Sign up
+            Create account
           </Link>
         </li>
         <li>
@@ -28,7 +28,9 @@ export function FinalCta(): ReactElement {
             2
           </span>
           <span className="start-title">Add the Chrome extension</span>
-          <span className="start-hint">It reads the product page you are on. Pin it to keep it one click away.</span>
+          <span className="start-hint">
+            It works on the product page you're looking at. Pin it to keep it one click away.
+          </span>
           <Link to={EXTENSION_PATH}>Install guide</Link>
         </li>
         <li>
@@ -37,7 +39,7 @@ export function FinalCta(): ReactElement {
           </span>
           <span className="start-title">Save your first product</span>
           <span className="start-hint">
-            {`Open any ${supportedStoresText("or")} product and right-click → Add to Picky.`}
+            {`Open any ${supportedStoresText("or")} product and right-click → Save to Picky.`}
           </span>
         </li>
       </ol>

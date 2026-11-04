@@ -25,9 +25,7 @@ export function ProductComparisonsCard({
       <h2 id="in-comparisons-title">In comparisons</h2>
       <MembershipList productId={productId} allComparisons={allComparisons} memberOf={memberOf} />
       <NewForProduct productId={productId} suggestedName={suggestedName} />
-      <p className="hint">
-        A product can sit in any number of comparisons. Removing it here doesn’t delete it from your library.
-      </p>
+      <p className="hint">A product can sit in any number of comparisons. Removing it here keeps it in Saved.</p>
     </section>
   );
 }

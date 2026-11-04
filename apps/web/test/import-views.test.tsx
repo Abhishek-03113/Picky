@@ -12,23 +12,23 @@ const idle: ImportFieldViewProps = {
 };
 
 describe("import field views", () => {
-  test("pill has the app-bar copy and an Add button", () => {
+  test("pill has the app-bar copy and a Save button", () => {
     const html = renderToStaticMarkup(<ImportPillView {...idle} />);
-    expect(html).toContain("Paste a product link to add it");
-    expect(html).toContain(">Add</button>");
+    expect(html).toContain("Paste a product link to save it");
+    expect(html).toContain(">Save</button>");
   });
 
   test("card has the welcome copy and lists the supported stores", () => {
     const html = renderToStaticMarkup(<ImportCardView {...idle} />);
     expect(html).toContain("Paste a product link");
-    expect(html).toContain("Get specs");
+    expect(html).toContain("Save product");
     expect(html).toContain("Amazon.in, Amazon.com and Flipkart product pages");
   });
 
   test("pending disables the button and an error is announced", () => {
     const html = renderToStaticMarkup(<ImportCardView {...idle} isPending errorMessage="Unsupported product URL" />);
     expect(html).toContain("disabled");
-    expect(html).toContain("Reading page…");
+    expect(html).toContain("Saving…");
     expect(html).toContain('role="alert"');
     expect(html).toContain("Unsupported product URL");
   });

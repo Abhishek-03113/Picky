@@ -29,26 +29,26 @@ function segmentButton(dom: Dom, focusKey: string, label: string, checked: boole
 }
 
 /**
- * Top-level Specs | Compare switch. Its data-focus keys survive the re-render a switch causes, so
+ * Top-level Details | Compare switch. Its data-focus keys survive the re-render a switch causes, so
  * keyboard focus stays on the segment that was just activated.
  */
 function viewControl(dom: Dom, view: QuickLookView, actions: OverlayActions): HTMLElement {
   const attrs = { role: "radiogroup", "aria-label": "View" };
   return dom.el("div", { className: "segmented segmented-view", attrs }, [
-    segmentButton(dom, "view", "Specs", view === "specs", () => actions.setView("specs")),
+    segmentButton(dom, "view", "Details", view === "specs", () => actions.setView("specs")),
     segmentButton(dom, "view", "Compare", view === "compare", () => actions.setView("compare")),
   ]);
 }
 
 function subtitle(model: QuickLookModel): string {
   const saved = model.state?.products.length ?? 0;
-  return thisPageColumn(model) === null ? `${saved} saved` : `${saved} saved · comparing with this page`;
+  return thisPageColumn(model) === null ? `${saved} saved` : `${saved} saved, plus the one you're viewing`;
 }
 
 function comparisonControls(dom: Dom, model: QuickLookModel, actions: OverlayActions): HTMLElement[] {
   const hasComparisons = (model.state?.comparisons.length ?? 0) > 0;
   if (!hasComparisons)
-    return [dom.el("h2", { className: "title", text: "Quick Look" }), dom.el("span", { className: "grow" })];
+    return [dom.el("h2", { className: "title", text: "Picky" }), dom.el("span", { className: "grow" })];
   return [
     comparisonPicker(dom, model, actions),
     dom.el("span", { className: "subtitle", text: subtitle(model) }),
@@ -66,7 +66,7 @@ function comparisonControls(dom: Dom, model: QuickLookModel, actions: OverlayAct
 export function headerView(dom: Dom, model: QuickLookModel, actions: OverlayActions): HTMLElement {
   const close = dom.el(
     "button",
-    { className: "close", attrs: { type: "button", "aria-label": "Close Quick Look", "data-focus": "close" } },
+    { className: "close", attrs: { type: "button", "aria-label": "Close Picky", "data-focus": "close" } },
     [dom.icon("close", "icon-close")],
   );
   close.addEventListener("click", () => actions.close());

@@ -26,8 +26,8 @@ export function ExtensionPage() {
         <div className="page-head-text">
           <h1 className="page-title">Get the Picky extension</h1>
           <p className="subtle">
-            It reads the product page you are on and turns it into a clean spec sheet. Free, for Chrome and other
-            Chromium browsers.
+            It shows every detail of the product you are looking at on one clean page. Free for Chrome, Edge, Brave and
+            Arc.
           </p>
         </div>
         {extensionBridge.isAvailable() ? (
@@ -58,9 +58,10 @@ export function ExtensionPage() {
         <section className="card guide-card" aria-labelledby="access-title">
           <h2 id="access-title">What it can see</h2>
           <ul className="guide-points">
-            <li>{`Only ${supportedStoresText()} pages, and this site. It never runs anywhere else.`}</li>
+            <li>{`It works only on ${supportedStoresText()} and this site. It can't see any other site.`}</li>
             <li>
-              It reads a page when you ask: the toolbar button, a shortcut, {altClickText(os)} or the right-click menu.
+              It looks at a page only when you ask: the Picky button, a shortcut, {altClickText(os)} on a link or the
+              right-click menu.
             </li>
             <li>What you save goes to your Picky account and nowhere else. No ads, no tracking, nothing sold.</li>
           </ul>
@@ -80,11 +81,11 @@ function InstallCard({ extensionUrl }: { extensionUrl: string }) {
         Add to Chrome, it's free
       </a>
       <p className="hint">
-        Installed it already? Picky notices on a fresh page:{" "}
+        Installed it already?{" "}
         <button type="button" className="inline-link-button" onClick={() => window.location.reload()}>
-          reload this page
-        </button>
-        .
+          Reload this page
+        </button>{" "}
+        to check.
       </p>
     </section>
   );
@@ -98,14 +99,14 @@ function InstalledCard({ signedIn }: { signedIn: boolean }) {
       </p>
       {signedIn ? (
         <Link className="primary-button" to="/">
-          Go to your library
+          See saved products
         </Link>
       ) : (
         <>
           <Link className="primary-button" to={SIGN_IN_PATH} search={{ mode: "signup" }}>
             Create your free account
           </Link>
-          <p className="hint">Reading specs works now. An account lets you save and compare.</p>
+          <p className="hint">You can see details now. An account lets you save and compare.</p>
         </>
       )}
     </section>

@@ -31,7 +31,7 @@ function SelectionBarContent({ selectedProducts, comparisons, onClear, onAdded }
   const name = nameForSelection(selectedProducts);
   const deleteProducts = useDeleteProducts();
   const confirmDelete = () => {
-    const message = `Delete ${pluralize(productIds.length, "product")} from your library? They also leave any comparison.`;
+    const message = `Delete ${pluralize(productIds.length, "saved product")}? They also leave any comparison they are in.`;
     if (window.confirm(message)) deleteProducts.mutate(productIds, { onSuccess: onClear });
   };
   const create = () => createComparison.mutate({ name, productIds });

@@ -37,8 +37,8 @@ export function ComparePreview(): ReactElement {
           Only what differs gets your attention.
         </h2>
         <p className="sub">
-          Identical specs stay out of the way. When more battery or less weight is simply better, Picky says so. When it
-          comes down to taste, like screen size, it leaves the call to you.
+          Details that match stay out of the way. When more battery or less weight is simply better, Picky says so. When
+          it comes down to taste, like screen size, it leaves the call to you.
         </p>
       </div>
       <figure className="compare-sheet">

@@ -27,7 +27,7 @@ export function shortProductName(title: string, brand: string | null): string {
  * @example ratingLine({ average: 4.3, count: 2140 }) // "4.3 ★ · 2,140 ratings"
  */
 export function ratingLine(rating: { average: number; count: number } | null): string {
-  if (rating === null) return "No ratings";
+  if (rating === null) return "No ratings yet";
   const count = new Intl.NumberFormat("en-IN").format(rating.count);
   return `${rating.average.toFixed(1)} ★ · ${count} ${rating.count === 1 ? "rating" : "ratings"}`;
 }

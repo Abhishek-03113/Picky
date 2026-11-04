@@ -41,7 +41,7 @@ function LibraryHeader(props: LibraryHeaderProps) {
   return (
     <>
       <div className="page-head-text">
-        <h1 className="page-title">Library</h1>
+        <h1 className="page-title">Saved</h1>
         <span className="subtle">{caption}</span>
       </div>
       <LibraryToolbar {...props} />

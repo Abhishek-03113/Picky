@@ -36,18 +36,18 @@ export function ComparisonMatrixView({
   return (
     <section aria-label="Comparison table" className="matrix-scroll">
       <div className="mx mx-head" style={columnStyle(products.length)}>
-        <div className="mx-corner">Specs of {pluralize(products.length, "product")}</div>
+        <div className="mx-corner">Comparing {pluralize(products.length, "product")}</div>
         {products.map((product) => (
           <ComparisonProductHeader key={product.id} product={product} onRemove={() => onRemove(product.id)} />
         ))}
       </div>
-      <div role="table" aria-label="Specifications" className="mx" style={columnStyle(products.length)}>
+      <div role="table" aria-label="Details" className="mx" style={columnStyle(products.length)}>
         <PriceSection products={products} matrix={matrix} markBest={markBest} />
         {matrix.groups.map((group) => (
           <SpecGroupRows key={group.title} group={group} markBest={markBest} />
         ))}
         {differencesOnly && matrix.groups.every((group) => group.rows.length === 0) && (
-          <p className="mx-note">No differences: every spec matches. Switch to “All specs” to see them.</p>
+          <p className="mx-note">No differences: every detail matches. Switch to “All details” to see them.</p>
         )}
       </div>
     </section>
@@ -62,7 +62,7 @@ function PriceSection({
   return (
     <>
       <div className="mx-group">Price</div>
-      <MatrixRow label="Best price" cells={matrix.prices} markBest={markBest} pill="Lowest" />
+      <MatrixRow label="Price" cells={matrix.prices} markBest={markBest} pill="Lowest" />
       <MatrixRow label="Rating" cells={matrix.ratings} markBest={markBest} pill={null} />
       {searchableSites().map((site) => (
         <div key={site.source} role="row" className="mx-row">
@@ -78,12 +78,12 @@ function PriceSection({
   );
 }
 
-/** "This listing" when the product is from this store, else a search there for the same product. */
+/** "Saved from here" when the product is from this store, else a search there for the same product. */
 function StoreSearchCell({ site, product }: { site: SupportedSite; product: CatalogProduct }) {
   if (product.snapshot.source === site.source) {
     return (
       <div role="cell" className="mx-value none">
-        This listing
+        Saved from here
       </div>
     );
   }
@@ -104,7 +104,7 @@ function SpecGroupRows({ group, markBest }: { group: ComparisonGroup; markBest: 
     <>
       <div className="mx-group">
         {group.title}
-        {group.identicalCount > 0 && <span className="mx-hidden">{group.identicalCount} identical hidden</span>}
+        {group.identicalCount > 0 && <span className="mx-hidden">{group.identicalCount} the same on all, hidden</span>}
       </div>
       {group.rows.map((row) => (
         <MatrixRow key={row.key} label={row.label} cells={row.cells} markBest={markBest} pill="Best" />

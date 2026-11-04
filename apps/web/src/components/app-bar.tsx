@@ -20,14 +20,14 @@ export function BrandLink() {
 
 const rootRouteApi = getRouteApi("__root__");
 
-/** Library and Comparisons links (Comparisons carries the number of saved comparisons), then Sign out. */
+/** Saved and Comparisons links (Comparisons carries the number of saved comparisons), then Sign out. */
 export function MainNav() {
   const { comparisonsClient } = rootRouteApi.useRouteContext();
   const { data: comparisons } = useSuspenseQuery(comparisonListQuery(comparisonsClient));
   return (
     <nav aria-label="Main" className="main-nav">
       <Link to="/" className="nav-link" activeOptions={{ exact: true }} activeProps={{ "aria-current": "page" }}>
-        Library
+        Saved
       </Link>
       <Link to="/comparisons" className="nav-link" activeProps={{ "aria-current": "page" }}>
         Comparisons
@@ -62,7 +62,7 @@ export function PublicNav({ withSections = false }: { withSections?: boolean }) 
         Sign in
       </Link>
       <Link to={SIGN_IN_PATH} search={{ mode: "signup" }} className="pill-button">
-        Get started
+        Get started free
       </Link>
     </nav>
   );

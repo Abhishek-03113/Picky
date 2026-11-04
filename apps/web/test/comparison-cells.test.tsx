@@ -8,7 +8,7 @@ describe("MatrixCell", () => {
     expect(html).toContain('class="mx-value none">—<');
   });
 
-  test("the best value is bold with a pill while 'Mark best values' is on", () => {
+  test("the best value is bold with a pill while 'Highlight the best' is on", () => {
     const html = renderToString(<MatrixCell cell={{ text: "96 W", isBest: true }} markBest pill="Best" />);
     expect(html).toContain('class="mx-value best"');
     expect(html).toContain('<span class="best-pill">Best</span>');

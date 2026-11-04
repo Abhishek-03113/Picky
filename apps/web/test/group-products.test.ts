@@ -31,7 +31,7 @@ describe("groupProducts", () => {
   });
 
   test("price: cheapest band first, unpriced last", () => {
-    expect(names("price")).toEqual(["Under ₹25k", "₹25k – ₹35k", "Over ₹35k", "No price"]);
+    expect(names("price")).toEqual(["Under ₹25k", "₹25k – ₹35k", "Over ₹35k", "Price not shown"]);
   });
 
   test("none: one flat group; an empty library has no groups", () => {
@@ -47,7 +47,7 @@ describe("priceBandName", () => {
     expect(priceBandName(inr(25000))).toBe("₹25k – ₹35k");
     expect(priceBandName(inr(35000))).toBe("₹25k – ₹35k");
     expect(priceBandName(inr(35001))).toBe("Over ₹35k");
-    expect(priceBandName(null)).toBe("No price");
+    expect(priceBandName(null)).toBe("Price not shown");
   });
 
   test("other currencies get their own band, between rupee bands and unpriced", () => {
@@ -61,7 +61,7 @@ describe("priceBandName", () => {
       "₹25k – ₹35k",
       "Over ₹35k",
       "Priced in USD",
-      "No price",
+      "Price not shown",
     ]);
   });
 });

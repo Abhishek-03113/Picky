@@ -28,8 +28,8 @@ export function LibrarySearchBox({ query, onQueryCommit }: LibrarySearchBoxProps
       <input
         ref={inputRef}
         type="search"
-        placeholder="Search name, brand or spec"
-        aria-label="Search library"
+        placeholder="Search name, brand or detail"
+        aria-label="Search saved products"
         value={text}
         onChange={(event) => setText(event.target.value)}
       />

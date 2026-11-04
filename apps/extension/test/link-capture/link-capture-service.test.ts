@@ -173,7 +173,7 @@ describe("LinkCaptureService", () => {
     expect(none.client.calls).toContain("create New comparison [p-new]");
   });
 
-  test("Library only saves without touching comparisons and offers no undo", async () => {
+  test("Just save it saves without touching comparisons and offers no undo", async () => {
     const { service, client, toasts } = setup();
     await service.add(job({ kind: "library" }));
     expect(client.calls).toEqual([]);

@@ -17,7 +17,7 @@ export function GroupByMenu({ selected, onSelect }: GroupByMenuProps) {
     </>
   );
   return (
-    <MenuPopover label="Group by" triggerClassName="toolbar-button" trigger={trigger}>
+    <MenuPopover label="Arrange by" triggerClassName="toolbar-button" trigger={trigger}>
       {(close) =>
         GROUP_OPTIONS.map((option) => (
           <GroupOptionItem

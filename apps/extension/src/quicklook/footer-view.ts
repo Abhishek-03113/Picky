@@ -27,9 +27,9 @@ export function footerView(dom: Dom, model: QuickLookModel, os: OperatingSystem)
   const state = model.state;
   const hints = [
     hint(dom, ["Esc"], "close"),
-    hint(dom, shortcutKeyLabels(["Enter"], os), "add this page"),
+    hint(dom, shortcutKeyLabels(["Enter"], os), "add this product"),
     hint(dom, ["←", "→"], "switch comparison"),
-    hint(dom, shortcutKeyLabels(QUICK_LOOK_SHORTCUT, os), "specs"),
+    hint(dom, shortcutKeyLabels(QUICK_LOOK_SHORTCUT, os), "details"),
   ];
   if (state?.selectedId === null || state === null) return dom.el("footer", { className: "footer" }, hints);
   const href = `${state.webBaseUrl}/comparisons/${encodeURIComponent(state.selectedId)}`;

@@ -44,7 +44,7 @@ describe("/extension install guide", () => {
     const { html } = await renderSignedOut("/extension");
     expect(html).toContain("Get the Picky extension");
     expect(html).toContain('href="https://store.example/picky"');
-    expect(html).toContain("reload this page");
+    expect(html).toContain("Reload this page");
     expect(html).toContain("Alt + Shift + S");
   });
 
@@ -57,7 +57,7 @@ describe("/extension install guide", () => {
 
   test("signed in with the extension, the next step is the library", async () => {
     const { html } = await renderAppWithRouter("/extension", new FakeProductsClient());
-    expect(html).toContain("Go to your library");
+    expect(html).toContain("See saved products");
     expect(html).toContain("Sign out");
   });
 });
@@ -97,7 +97,7 @@ describe("homepage sections", () => {
       "⌥⇧S",
       "⌥⇧V",
       "Option-click a product link",
-      "Right-click → Add to Picky",
+      "Right-click → Save to Picky",
     ]);
     expect(extensionGestures("windows")[1]?.keys).toBe("Alt + Shift + V");
     expect(setupSteps("mac")[3]?.hint).toContain("press ⌥⇧S");

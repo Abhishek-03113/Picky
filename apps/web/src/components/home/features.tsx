@@ -7,14 +7,14 @@ interface Principle {
 
 const PRINCIPLES: readonly Principle[] = [
   { title: "Neutral", body: "Picky works for the buyer. It never nudges you toward a product." },
-  { title: "Honest", body: "If a page doesn't say, the sheet doesn't guess. Unknown stays unknown." },
+  { title: "Honest", body: "If a page doesn't say, Picky doesn't guess. Missing stays missing." },
   {
-    title: "A library you own",
-    body: "Research doesn't vanish when a tab closes. Search any spec, and capture a product again to refresh it.",
+    title: "Yours to keep",
+    body: "Your research doesn't vanish when a tab closes. Search any detail, and save a product again to update it.",
   },
   {
-    title: "Specs without an account",
-    body: "Quick Look in the extension reads any product page's specs, no sign-in needed. An account just keeps them.",
+    title: "Look without an account",
+    body: "The extension shows any product's details without signing in. An account lets you keep them.",
   },
 ];
 

@@ -35,8 +35,8 @@ export function PrivacyPage() {
             <Link to={EXTENSION_PATH}>Picky browser extension</Link>.
           </p>
           <p>
-            In short: Picky collects only what it needs to give you your library and comparisons, uses it only for that,
-            and never sells it.
+            In short: Picky collects only what it needs to give you your saved products and comparisons, uses it only
+            for that, and never sells it.
           </p>
 
           <h2>Information we collect</h2>
@@ -64,7 +64,7 @@ export function PrivacyPage() {
           <ul>
             <li>{`It works only on ${STORES_AND_PICKY}, and nowhere else.`}</li>
             <li>It looks at a product page only when you ask it to, for example by clicking the Picky button.</li>
-            <li>Viewing a product's specs with Quick Look happens entirely in your browser. Nothing is saved.</li>
+            <li>Seeing a product's details without saving it happens entirely in your browser. Nothing is stored.</li>
             <li>It saves a product to your account only when you choose to save it.</li>
             <li>It does not track the sites you visit or collect your browsing history.</li>
           </ul>
@@ -94,8 +94,8 @@ export function PrivacyPage() {
 
           <h2>How long we keep it</h2>
           <p>
-            We keep your information for as long as you have a Picky account. Anything you delete from your library is
-            removed. If you ask us to delete your account, we delete it and everything in it within 30 days.
+            We keep your information for as long as you have a Picky account. Anything you delete from Picky is removed.
+            If you ask us to delete your account, we delete it and everything in it within 30 days.
           </p>
 
           <h2>Keeping it safe</h2>
@@ -107,7 +107,7 @@ export function PrivacyPage() {
 
           <h2>Your choices</h2>
           <ul>
-            <li>Remove any saved product or comparison from your library at any time.</li>
+            <li>Remove any saved product or comparison at any time.</li>
             <li>Uninstall the extension at any time. Its preferences are removed with it.</li>
             <li>
               Ask for a copy of the information Picky holds about you, ask us to correct it, or ask us to delete your
@@ -134,7 +134,7 @@ export function PrivacyPage() {
           </p>
           <ul>
             <li>
-              Prices, offers, stock and other details can change at any time. Information in your library reflects the
+              Prices, offers, stock and other details can change at any time. Saved product information reflects the
               page when it was saved. Always confirm the details on the seller&apos;s page before you buy.
             </li>
             <li>

@@ -32,7 +32,7 @@ describe("ratingLine", () => {
   test("formats average and Indian-grouped count", () => {
     expect(ratingLine({ average: 4.3, count: 214000 })).toBe("4.3 ★ · 2,14,000 ratings");
     expect(ratingLine({ average: 5, count: 1 })).toBe("5.0 ★ · 1 rating");
-    expect(ratingLine(null)).toBe("No ratings");
+    expect(ratingLine(null)).toBe("No ratings yet");
   });
 });
 

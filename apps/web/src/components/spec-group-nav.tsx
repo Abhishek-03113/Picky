@@ -13,7 +13,7 @@ interface SpecGroupNavProps {
 export function SpecGroupNav({ groups, activeAnchor = null, onSelect }: SpecGroupNavProps) {
   if (groups.length === 0) return null;
   return (
-    <nav aria-label="Spec groups" className="group-chips">
+    <nav aria-label="Sections" className="group-chips">
       {groups.map((group) => {
         const anchor = specGroupAnchor(group.title);
         const select = (event: MouseEvent) => {

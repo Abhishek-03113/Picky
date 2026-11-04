@@ -29,7 +29,7 @@ function ExtensionCard({ extensionUrl, installed, os }: ExtensionCardProps) {
             <CheckIcon size={16} /> The Picky extension is installed
           </h2>
           <span className="subtle">
-            {`Open any ${supportedStoresText("or")} product and click Picky, or right-click → Add to Picky to save it here.`}
+            {`Open any ${supportedStoresText("or")} product and click Picky, or right-click → Save to Picky to keep it here.`}
           </span>
         </div>
       </section>
@@ -41,7 +41,7 @@ function ExtensionCard({ extensionUrl, installed, os }: ExtensionCardProps) {
         <div className="extension-card-text">
           <h2 id="extension-title">Faster: use the Chrome extension</h2>
           <span className="subtle">
-            One click on the product page you're already on. <Link to={EXTENSION_PATH}>Setup guide</Link>
+            One click on the product page you're already on. <Link to={EXTENSION_PATH}>Install guide</Link>
           </span>
         </div>
         <a className="soft-button" href={extensionUrl} target="_blank" rel="noreferrer">
@@ -62,7 +62,7 @@ export function WelcomeView({ extensionUrl, extensionInstalled, os, autoImportUr
           <DocumentIcon size={36} />
         </span>
         <h1>Welcome to Picky</h1>
-        <p>Your library is empty. Add your first product and its spec sheet will show up here.</p>
+        <p>Nothing saved yet. Save your first product and all its details will show up here.</p>
       </div>
       <ImportProductForm variant="card" autoImportUrl={autoImportUrl} />
       <ExtensionCard extensionUrl={extensionUrl} installed={extensionInstalled} os={os} />

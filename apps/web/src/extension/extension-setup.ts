@@ -40,7 +40,7 @@ export function setupSteps(os: OperatingSystem): SetupStep[] {
     },
     {
       title: "Open a product",
-      hint: `On ${supportedStoresText("or")}, click Picky or press ${shortcutText(QUICK_LOOK_SHORTCUT, os)} for its specs. Right-click → Add to Picky saves it.`,
+      hint: `On ${supportedStoresText("or")}, click Picky or press ${shortcutText(QUICK_LOOK_SHORTCUT, os)} to see every detail. Right-click → Save to Picky keeps it.`,
     },
   ];
 }
@@ -65,9 +65,9 @@ export function quickSetupSteps(os: OperatingSystem): SetupStep[] {
  */
 export function extensionGestures(os: OperatingSystem): ExtensionGesture[] {
   return [
-    { keys: shortcutText(QUICK_LOOK_SHORTCUT, os), action: "Quick Look: the specs of the page you are on" },
-    { keys: shortcutText(COMPARE_SHORTCUT, os), action: "Compare this page with a saved comparison" },
-    { keys: `${altClickText(os)} a product link`, action: "Save that product without opening it" },
-    { keys: "Right-click → Add to Picky", action: "Save this page, or a link, to your library or a comparison" },
+    { keys: shortcutText(QUICK_LOOK_SHORTCUT, os), action: "See every detail of the product you are on" },
+    { keys: shortcutText(COMPARE_SHORTCUT, os), action: "Compare this product with a saved comparison" },
+    { keys: `${altClickText(os)} a product link`, action: "Saves that product without opening it" },
+    { keys: "Right-click → Save to Picky", action: "Saves this product, or a linked one, to Picky or a comparison" },
   ];
 }
