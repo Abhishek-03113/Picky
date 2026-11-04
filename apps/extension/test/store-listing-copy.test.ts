@@ -4,7 +4,7 @@ import { join } from "node:path";
 
 // Store copy the build cannot fill in from the site registry. When a store is added, these must be
 // updated by hand (docs/adding-a-site.md, step 4); this test is the reminder.
-const HAND_WRITTEN_COPY = ["../../../docs/chrome-web-store.md", "../store/promo.html"] as const;
+const HAND_WRITTEN_COPY: string[] = ["../../../docs/chrome-web-store.md", "../store/promo.html"];
 
 describe.each(HAND_WRITTEN_COPY)("%s", (path) => {
   test("names every supported store", async () => {
