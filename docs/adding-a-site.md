@@ -49,13 +49,14 @@ until the new source has a reader. Pick the cheapest one that works:
    The fixture test expects one per source. Until you have one, list the source in
    `SOURCES_WITHOUT_FIXTURES` in `packages/catalog/test/page-fixtures.test.ts`.
 3. Load the unpacked extension (`bun run build:extension`), open a product page and check Quick Look,
-   right-click → Add to Picky and Alt+click on a product link.
+   right-click → Save to Picky and Alt+click on a product link.
 
 ## 4. Release
 
 - Hand-written store copy the build cannot fill: the Chrome Web Store listing in
   [`chrome-web-store.md`](chrome-web-store.md) and `apps/extension/store/promo.html` (re-render the
-  promo PNGs). A test fails until both name the new store.
+  promo PNGs). A test fails until the listing names the new store and the promo tile names its brand
+  (the tile says "Amazon", not each Amazon store).
 - Bump `version` in `apps/extension/public/manifest.json`. A new host permission makes Chrome disable
   the extension for existing users until they accept it, so say why in the release notes.
 - Update `LAST_UPDATED` on the privacy page: its store list changed.
