@@ -1,3 +1,4 @@
+import { formatList, SHOPPING_SITES, storeBrandsText, supportedStoresText } from "@picky/catalog/sites";
 import { Link } from "@tanstack/react-router";
 import { EXTENSION_PATH } from "../auth/route-guards.ts";
 import { AppBar, BrandLink, SiteNav } from "../components/app-bar.tsx";
@@ -6,6 +7,9 @@ import { usePageTitle } from "../hooks/use-page-title.ts";
 /** Where privacy questions and deletion requests go; also linked from the Chrome Web Store listing. */
 export const PRIVACY_CONTACT_URL = "https://github.com/Abhishek-03113/Picky/issues";
 const LAST_UPDATED = "2 November 2026";
+const STORES_AND_PICKY = formatList([...SHOPPING_SITES.map((site) => site.label), "the Picky website"], "and");
+// Every company and store name that belongs to someone else: "Amazon, Amazon.in, Amazon.com and Flipkart".
+const STORE_MARKS = formatList([...new Set(SHOPPING_SITES.flatMap((site) => [site.brand, site.label]))], "and");
 
 /**
  * Privacy policy for the web app and the Chrome extension, in plain language for users. The Chrome Web
@@ -58,7 +62,7 @@ export function PrivacyPage() {
 
           <h2>How the browser extension works</h2>
           <ul>
-            <li>It works only on Amazon.in, Amazon.com, Flipkart and the Picky website, and nowhere else.</li>
+            <li>{`It works only on ${STORES_AND_PICKY}, and nowhere else.`}</li>
             <li>It looks at a product page only when you ask it to, for example by clicking the Picky button.</li>
             <li>Viewing a product's specs with Quick Look happens entirely in your browser. Nothing is saved.</li>
             <li>It saves a product to your account only when you choose to save it.</li>
@@ -124,8 +128,8 @@ export function PrivacyPage() {
           <h2 id="product-information">Product information and disclaimer</h2>
           <p>
             Product details shown in Picky, including names, descriptions, specifications, prices, discounts,
-            availability, ratings and images, are taken from the Amazon.in, Amazon.com and Flipkart product pages at the
-            time you view or save them, and are shown as they appear there. Picky does not create, edit or verify this
+            availability, ratings and images, are taken from the {supportedStoresText()} product pages at the time you
+            view or save them, and are shown as they appear there. Picky does not create, edit or verify this
             information.
           </p>
           <ul>
@@ -134,7 +138,7 @@ export function PrivacyPage() {
               page when it was saved. Always confirm the details on the seller&apos;s page before you buy.
             </li>
             <li>
-              Purchases are made directly with Amazon.in, Amazon.com, Flipkart or their sellers, under their terms.
+              {`Purchases are made directly with ${supportedStoresText("or")} or their sellers, under their terms.`}
               Picky is not a party to any transaction and does not sell, ship or support any product.
             </li>
             <li>
@@ -147,9 +151,7 @@ export function PrivacyPage() {
               arising from your reliance on it, from errors or omissions in it, or from any purchase you make.
             </li>
             <li>
-              Amazon, Amazon.in, Amazon.com, Flipkart and their names, logos, product images and content belong to their
-              respective owners. Picky is an independent service and is not affiliated with, endorsed by or sponsored by
-              Amazon or Flipkart.
+              {`${STORE_MARKS} and their names, logos, product images and content belong to their respective owners. Picky is an independent service and is not affiliated with, endorsed by or sponsored by ${storeBrandsText("or")}.`}
             </li>
           </ul>
 

@@ -1,6 +1,4 @@
-import { type CatalogProduct, pluralize, sourceLabel } from "@picky/catalog";
-
-const LIST_FORMAT = new Intl.ListFormat("en-IN", { type: "conjunction" });
+import { type CatalogProduct, formatList, pluralize, sourceLabel } from "@picky/catalog";
 
 /**
  * Subtitle of the compare page: "4 products · prices from Amazon.in and Flipkart".
@@ -10,7 +8,7 @@ const LIST_FORMAT = new Intl.ListFormat("en-IN", { type: "conjunction" });
 export function comparisonSubtitle(products: readonly CatalogProduct[]): string {
   const count = pluralize(products.length, "product");
   const stores = [...new Set(products.map((product) => sourceLabel(product.snapshot.source)))];
-  return stores.length === 0 ? count : `${count} · prices from ${LIST_FORMAT.format(stores)}`;
+  return stores.length === 0 ? count : `${count} · prices from ${formatList(stores, "and")}`;
 }
 
 /**

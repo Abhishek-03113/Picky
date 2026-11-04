@@ -1,3 +1,4 @@
+import { supportedStoresText } from "@picky/catalog/sites";
 import type { ReactElement } from "react";
 import { TickIcon } from "./home-icons.tsx";
 import { SUPPORTED_SITES, type SupportedSite } from "./supported-sites-list.ts";
@@ -15,7 +16,7 @@ export function SupportedSites({
           The store is where you buy. Picky is where you decide.
         </h2>
         <p className="sub">
-          Today it reads Amazon.in, Amazon.com and Flipkart pages. Comparing across stores is where it's headed.
+          {`Today it reads ${supportedStoresText()} pages. Comparing across stores is where it's headed.`}
         </p>
       </div>
       <ul className="site-list">

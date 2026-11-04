@@ -2,6 +2,7 @@ import react from "@vitejs/plugin-react";
 import { defineConfig, type Plugin } from "vite";
 import { robotsTxt, sitemapXml } from "./crawl-files.ts";
 import { siteOrigin, withSocialUrls } from "./social-urls.ts";
+import { withStoreNames } from "./store-names-html.ts";
 
 const origin = siteOrigin(process.env);
 
@@ -22,6 +23,7 @@ export default defineConfig({
   plugins: [
     react(),
     { name: "picky-social-urls", transformIndexHtml: (html) => withSocialUrls(html, origin) },
+    { name: "picky-store-names", transformIndexHtml: withStoreNames },
     crawlFiles(),
   ],
   server: {

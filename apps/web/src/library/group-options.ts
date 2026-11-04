@@ -1,3 +1,4 @@
+import { storeBrandsText } from "@picky/catalog/sites";
 /** How the library can be sectioned. */
 export const GROUP_KEYS = ["category", "brand", "store", "price", "none"] as const;
 export type GroupKey = (typeof GROUP_KEYS)[number];
@@ -14,7 +15,7 @@ export interface GroupOption {
 export const GROUP_OPTIONS: readonly GroupOption[] = [
   { key: "category", label: "Category", hint: "From the store’s breadcrumb, e.g. Monitors" },
   { key: "brand", label: "Brand", hint: "LG, Dell, Samsung…" },
-  { key: "store", label: "Store", hint: "Amazon, Flipkart" },
+  { key: "store", label: "Store", hint: storeBrandsText() },
   { key: "price", label: "Price band", hint: "Under ₹25k, ₹25–35k, over ₹35k" },
   { key: "none", label: "None", hint: "One flat list, newest first" },
 ];

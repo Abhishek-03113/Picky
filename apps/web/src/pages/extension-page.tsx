@@ -1,4 +1,4 @@
-import { altClickText } from "@picky/catalog";
+import { altClickText, supportedStoresText } from "@picky/catalog";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { Link, getRouteApi } from "@tanstack/react-router";
 import { currentUserQuery } from "../api/auth-queries.ts";
@@ -58,7 +58,7 @@ export function ExtensionPage() {
         <section className="card guide-card" aria-labelledby="access-title">
           <h2 id="access-title">What it can see</h2>
           <ul className="guide-points">
-            <li>Only Amazon.in, Amazon.com and Flipkart pages, and this site. It never runs anywhere else.</li>
+            <li>{`Only ${supportedStoresText()} pages, and this site. It never runs anywhere else.`}</li>
             <li>
               It reads a page when you ask: the toolbar button, a shortcut, {altClickText(os)} or the right-click menu.
             </li>

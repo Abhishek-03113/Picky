@@ -1,3 +1,4 @@
+import { supportedStoresText } from "@picky/catalog/sites";
 import { Link } from "@tanstack/react-router";
 import type { ReactElement } from "react";
 import { EXTENSION_PATH, PRIVACY_PATH, SIGN_IN_PATH } from "../../auth/route-guards.ts";
@@ -8,8 +9,7 @@ export function SiteFooter(): ReactElement {
     <footer className="footer">
       <div className="footer-inner">
         <span>
-          Product details are shown as listed on Amazon.in, Amazon.com and Flipkart. Picky is not affiliated with any of
-          them.{" "}
+          {`Product details are shown as listed on ${supportedStoresText()}. Picky is not affiliated with any of them.`}{" "}
           <Link to={PRIVACY_PATH} hash="product-information">
             Disclaimer
           </Link>

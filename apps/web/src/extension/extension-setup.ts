@@ -1,4 +1,5 @@
 import {
+  supportedStoresText,
   COMPARE_SHORTCUT,
   QUICK_LOOK_SHORTCUT,
   altClickText,
@@ -39,7 +40,7 @@ export function setupSteps(os: OperatingSystem): SetupStep[] {
     },
     {
       title: "Open a product",
-      hint: `On Amazon.in, Amazon.com or Flipkart, click Picky or press ${shortcutText(QUICK_LOOK_SHORTCUT, os)} for its specs. Right-click → Add to Picky saves it.`,
+      hint: `On ${supportedStoresText("or")}, click Picky or press ${shortcutText(QUICK_LOOK_SHORTCUT, os)} for its specs. Right-click → Add to Picky saves it.`,
     },
   ];
 }
@@ -52,7 +53,7 @@ export function setupSteps(os: OperatingSystem): SetupStep[] {
 export function quickSetupSteps(os: OperatingSystem): SetupStep[] {
   return [
     { title: "Install and pin", hint: "Keep it one click away." },
-    { title: "Open a product", hint: "Amazon.in, Amazon.com or Flipkart." },
+    { title: "Open a product", hint: `${supportedStoresText("or")}.` },
     { title: "Click Picky", hint: `Or press ${shortcutText(QUICK_LOOK_SHORTCUT, os)}.` },
   ];
 }
