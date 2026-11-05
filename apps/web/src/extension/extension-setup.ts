@@ -22,7 +22,7 @@ export interface ExtensionGesture {
 /**
  * The full walk-through, from the store page to a saved product, with keys named for `os`.
  *
- * @example setupSteps("mac")[3]?.hint // "On Amazon.in, Amazon.com or Flipkart, click Picky or press ⌥⇧S for its specs. ..."
+ * @example setupSteps("mac")[3]?.hint // "On Amazon or Flipkart, click Picky or press ⌥⇧S to see every detail. ..."
  */
 export function setupSteps(os: OperatingSystem): SetupStep[] {
   return [

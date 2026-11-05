@@ -46,7 +46,7 @@ Regenerate the promo tiles after a brand change with `bun run --cwd apps/extensi
 (source: `apps/extension/store/promo.html`).
 
 **Screenshots** have to show the extension itself, so take them by hand on real pages at a
-1280×800 window: the Picky panel's Details view on an Amazon.in product, the Compare view with two
+1280×800 window: the Picky panel's Details view on an Amazon product, the Compare view with two
 products, the right-click "Save to Picky" menu, and the web app's product or comparison page.
 
 **Description** (paste as is):
@@ -69,8 +69,8 @@ products, the right-click "Save to Picky" menu, and the web app's product or com
 
 **Single purpose:**
 
-> Picky shows every detail of a product page on Amazon.in, Amazon.com and Flipkart on one clean page,
-> which the user can save to their Picky account and compare.
+> Picky shows every detail of a product page on Amazon (amazon.in and amazon.com) and Flipkart on one
+> clean page, which the user can save to their Picky account and compare.
 
 **Permission justifications** (the same text as `PERMISSION_JUSTIFICATIONS`):
 
@@ -79,7 +79,7 @@ products, the right-click "Save to Picky" menu, and the web app's product or com
 | `activeTab`        | Reads the product page in the current tab only when the user clicks the toolbar button, presses the shortcut or uses the context menu.             |
 | `scripting`        | Injects the Picky panel and the page reader into that tab, after one of those user actions, to show the product's details.                         |
 | `storage`          | Keeps a few preferences on the device, such as the comparison the user picked last.                                                                 |
-| `contextMenus`     | Adds "Save to Picky" and "See details" to the right-click menu on Amazon.in, Amazon.com and Flipkart.                                              |
+| `contextMenus`     | Adds "Save to Picky" and "See details" to the right-click menu on Amazon (amazon.in and amazon.com) and Flipkart.                                         |
 | `offscreen`        | Parses a product page downloaded from a link (Alt+click or right-click) in an offscreen document, because the service worker has no DOM.           |
 | Host permissions   | amazon.in, amazon.com and flipkart.com: download a product link the user Alt+clicked or right-clicked, in their browser. The Picky web domain: save products to the user's account and read their comparisons. |
 | Content scripts    | On amazon.in, amazon.com and flipkart.com, a small listener that only reacts to Alt+click on a product link. On the Picky web domain, a bridge so the web app's "paste a link" field can ask the extension to read that link. |

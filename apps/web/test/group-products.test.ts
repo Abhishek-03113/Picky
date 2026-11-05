@@ -27,7 +27,7 @@ describe("groupProducts", () => {
   });
 
   test("store: uses the store's display name", () => {
-    expect(names("store")).toEqual(["Amazon.in", "Flipkart"]);
+    expect(names("store")).toEqual(["Amazon", "Flipkart"]);
   });
 
   test("price: cheapest band first, unpriced last", () => {

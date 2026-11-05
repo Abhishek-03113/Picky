@@ -19,7 +19,7 @@ export function SupportedSites({
       </div>
       <ul className="site-list">
         {sites.map((site) => (
-          <li key={site.host}>
+          <li key={site.name}>
             <TickIcon />
             {site.name}
           </li>

@@ -1,4 +1,10 @@
-import { formatList, SHOPPING_SITES, storeBrandsText, supportedStoresText } from "@picky/catalog/sites";
+import {
+  formatList,
+  SHOPPING_SITES,
+  storeBrandsText,
+  storeNamesWithDomains,
+  supportedStoresText,
+} from "@picky/catalog/sites";
 import { Link } from "@tanstack/react-router";
 import { EXTENSION_PATH } from "../auth/route-guards.ts";
 import { AppBar, BrandLink, SiteNav } from "../components/app-bar.tsx";
@@ -7,8 +13,9 @@ import { usePageTitle } from "../hooks/use-page-title.ts";
 /** Where privacy questions and deletion requests go; also linked from the Chrome Web Store listing. */
 export const PRIVACY_CONTACT_URL = "https://github.com/Abhishek-03113/Picky/issues";
 const LAST_UPDATED = "2 November 2026";
-const STORES_AND_PICKY = formatList([...SHOPPING_SITES.map((site) => site.label), "the Picky website"], "and");
-// Every company and store name that belongs to someone else: "Amazon, Amazon.in, Amazon.com and Flipkart".
+// "Amazon (amazon.in and amazon.com), Flipkart and the Picky website": exactly where the extension works.
+const STORES_AND_PICKY = formatList([...storeNamesWithDomains(), "the Picky website"], "and");
+// Every company and store name that belongs to someone else: "Amazon and Flipkart".
 const STORE_MARKS = formatList([...new Set(SHOPPING_SITES.flatMap((site) => [site.brand, site.label]))], "and");
 
 /**

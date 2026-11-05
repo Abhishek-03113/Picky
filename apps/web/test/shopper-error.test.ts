@@ -18,7 +18,7 @@ describe("routeErrorMessage", () => {
 describe("importErrorMessage", () => {
   test("a link that is not a product page names the stores to paste from", () => {
     expect(importErrorMessage("https://example.com/")).toBe(
-      "That link isn't a product. Paste a link to one product on Amazon.in, Amazon.com or Flipkart.",
+      "That link isn't a product. Paste a link to one product on Amazon or Flipkart.",
     );
   });
 

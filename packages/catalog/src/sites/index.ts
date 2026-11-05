@@ -6,7 +6,24 @@ export {
   SHOPPING_SITES,
   shoppingSite,
   type ProductSource,
+  type SiteReader,
   type SupportedSite,
 } from "./shopping-sites.ts";
-export { formatList, storeBrandsText, supportedStoresText, type ListJoin } from "./site-copy.ts";
-export { looksLikeProductLink, productLinkPatterns, siteForUrl, siteHostPermissions, siteHosts } from "./site-urls.ts";
+export { shoppingStores, type ShoppingStore } from "./shopping-stores.ts";
+export {
+  formatList,
+  storeBrandsText,
+  storeNameWithDomains,
+  storeNamesWithDomains,
+  supportedDomainsText,
+  supportedStoresText,
+  type ListJoin,
+} from "./site-copy.ts";
+export {
+  looksLikeProductLink,
+  productLinkPatterns,
+  siteDomain,
+  siteForUrl,
+  siteHostPermissions,
+  siteHosts,
+} from "./site-urls.ts";

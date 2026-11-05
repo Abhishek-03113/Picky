@@ -34,7 +34,7 @@ describe("renderSpecSheetView", () => {
   test("summary shows brand, store chip, title, rating and the first image", () => {
     const { view } = mount();
     expect(view.querySelector(".summary-brand")?.textContent).toBe("Apple");
-    expect(view.querySelector(".summary .chip")?.textContent).toBe("Amazon.in");
+    expect(view.querySelector(".summary .chip")?.textContent).toBe("Amazon");
     expect(view.querySelector("h1")?.textContent).toBe("Apple iPhone 17");
     expect(view.querySelector(".rating-note")?.textContent).toContain("4.4out of 5 · 17,240 ratings");
     expect(view.querySelector(".gallery-main img")?.getAttribute("src")).toBe("https://img.test/a.jpg");

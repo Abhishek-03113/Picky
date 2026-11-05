@@ -122,10 +122,10 @@ describe("SourceLink", () => {
 
 describe("StoreFilterControl", () => {
   test("marks only the selected segment as pressed", () => {
-    const html = renderToStaticMarkup(<StoreFilterControl selected="flipkart.com" onSelect={noop} />);
+    const html = renderToStaticMarkup(<StoreFilterControl selected="Flipkart" onSelect={noop} />);
     expect(html).toContain('aria-pressed="true">Flipkart</button>');
     expect(html).toContain('aria-pressed="false">All</button>');
-    expect(html).toContain('aria-pressed="false">Amazon.in</button>');
+    expect(html).toContain('aria-pressed="false">Amazon</button>');
   });
 });
 

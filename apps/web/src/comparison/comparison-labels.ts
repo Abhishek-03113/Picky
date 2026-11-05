@@ -1,9 +1,9 @@
 import { type CatalogProduct, formatList, pluralize, sourceLabel } from "@picky/catalog";
 
 /**
- * Subtitle of the compare page: "4 products · prices from Amazon.in and Flipkart".
+ * Subtitle of the compare page: "4 products · prices from Amazon and Flipkart".
  *
- * @example comparisonSubtitle(products) // "2 products · prices from Amazon.in"
+ * @example comparisonSubtitle(products) // "2 products · prices from Amazon"
  */
 export function comparisonSubtitle(products: readonly CatalogProduct[]): string {
   const count = pluralize(products.length, "product");

@@ -8,6 +8,7 @@ const SHOP: SupportedSite = {
   source: "flipkart.com",
   label: "Shop",
   brand: "Shop",
+  reader: "flipkart",
   host: "www.shop.test",
   productPaths: ["/item/*"],
   productPagesHint: "/item/… pages",

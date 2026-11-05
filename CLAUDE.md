@@ -1,6 +1,6 @@
 # Picky
 
-Turns Amazon.in product pages into a clean, structured spec sheet.
+Turns Amazon and Flipkart product pages into one clean, structured page of details.
 Research behind the design: `research/FINDINGS.md`.
 
 - `packages/catalog` — shared `ProductSnapshot` types + page extractors (pure, no I/O). The zod schemas live in

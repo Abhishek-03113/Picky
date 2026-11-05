@@ -113,8 +113,6 @@ describe("homepage sections", () => {
   test("principles and supported sites", () => {
     expect(render(<Features />).match(/<dt>/g)).toHaveLength(4);
     const sites = render(<SupportedSites />);
-    expect(sites).toContain("Amazon.in");
-    expect(sites).toContain("Amazon.com");
-    expect(sites).toContain("Flipkart");
+    expect(sites.match(/<li>.*?<\/li>/g)?.map((item) => item.replace(/<[^>]+>/g, ""))).toEqual(["Amazon", "Flipkart"]);
   });
 });

@@ -40,7 +40,7 @@ describe("library route", () => {
     const html = await renderAppAt("/", populated());
     expect(html).toContain("2 products in 1 group");
     expect(html).toContain('aria-pressed="true">All</button>');
-    expect(html).toContain("Amazon.in");
+    expect(html).toContain('aria-pressed="false">Amazon</button>');
     expect(html).toContain("Flipkart");
     expect(html).toContain("Apple iPhone 17");
     expect(html).toContain("Paste a product link to save it");
@@ -97,7 +97,7 @@ describe("product route", () => {
   test("renders back link, source pill, price card and specs", async () => {
     const html = await renderAppAt("/products/p1", populated());
     expect(html).toContain("Saved");
-    expect(html).toContain("View on Amazon.in");
+    expect(html).toContain("View on Amazon");
     expect(html).toContain("17% off · save ₹6,064");
     expect(html).toContain("2 details in 2 sections");
   });

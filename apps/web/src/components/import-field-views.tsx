@@ -1,4 +1,4 @@
-import { PRODUCT_SOURCES, sourceLabel } from "@picky/catalog";
+import { supportedStoresText } from "@picky/catalog/sites";
 import type { FormEvent } from "react";
 import { LinkIcon } from "./icons.tsx";
 
@@ -14,7 +14,7 @@ export interface ImportFieldViewProps {
 
 const UNAVAILABLE_NOTE = "Adding by link needs the Picky extension. Install it, then reload this page.";
 
-const SUPPORTED_STORES = new Intl.ListFormat("en-IN", { type: "conjunction" }).format(PRODUCT_SOURCES.map(sourceLabel));
+const SUPPORTED_STORES = supportedStoresText();
 
 function ErrorLine({ message }: { message: string | null }) {
   if (message === null) return null;

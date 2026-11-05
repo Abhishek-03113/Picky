@@ -1,15 +1,15 @@
-import { PRODUCT_SOURCES, shoppingSite, type ProductSource } from "../sites/shopping-sites.ts";
+import { SHOPPING_SITES, type SiteReader, type SupportedSite } from "../sites/shopping-sites.ts";
 import { createAmazonExtractor } from "./amazon/amazon-extractor.ts";
 import { createFlipkartExtractor } from "./flipkart/flipkart-extractor.ts";
 import type { SiteExtractor } from "./site-extractor.ts";
 
-// The page reader for every registered store. A Record, so a site added to the registry without a reader
-// is a type error here rather than a silent "unsupported URL" at runtime.
-const EXTRACTORS_BY_SOURCE: Record<ProductSource, SiteExtractor> = {
-  "amazon.in": createAmazonExtractor(shoppingSite("amazon.in")),
-  "amazon.com": createAmazonExtractor(shoppingSite("amazon.com")),
-  "flipkart.com": createFlipkartExtractor(shoppingSite("flipkart.com")),
+// The page reader behind each registry `reader`. A Record, so a site registered with a new reader that has
+// no factory here is a type error rather than a silent "unsupported URL" at runtime. Every Amazon
+// storefront shares one reader, built per storefront for its host and currency.
+const READERS: Record<SiteReader, (site: SupportedSite) => SiteExtractor> = {
+  amazon: createAmazonExtractor,
+  flipkart: createFlipkartExtractor,
 };
 
-/** Every marketplace Picky reads, in registry order. Each owns a disjoint set of hosts. */
-export const SITE_EXTRACTORS: readonly SiteExtractor[] = PRODUCT_SOURCES.map((source) => EXTRACTORS_BY_SOURCE[source]);
+/** A reader for every registered storefront, in registry order. Each owns a disjoint set of hosts. */
+export const SITE_EXTRACTORS: readonly SiteExtractor[] = SHOPPING_SITES.map((site) => READERS[site.reader](site));

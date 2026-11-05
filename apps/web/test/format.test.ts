@@ -22,12 +22,11 @@ describe("formatCapturedLabel", () => {
 });
 
 describe("source labels", () => {
-  test("map sources to display names and build the store filter from PRODUCT_SOURCES", () => {
+  test("build the store filter from the stores, one segment for every Amazon storefront", () => {
     expect(storeFilterOptions()).toEqual([
       { value: "all", label: "All" },
-      { value: "amazon.in", label: "Amazon.in" },
-      { value: "amazon.com", label: "Amazon.com" },
-      { value: "flipkart.com", label: "Flipkart" },
+      { value: "Amazon", label: "Amazon" },
+      { value: "Flipkart", label: "Flipkart" },
     ]);
   });
 });

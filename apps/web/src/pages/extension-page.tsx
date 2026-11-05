@@ -1,4 +1,5 @@
-import { altClickText, supportedStoresText } from "@picky/catalog";
+import { altClickText } from "@picky/catalog";
+import { supportedDomainsText } from "@picky/catalog/sites";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { Link, getRouteApi } from "@tanstack/react-router";
 import { currentUserQuery } from "../api/auth-queries.ts";
@@ -58,7 +59,7 @@ export function ExtensionPage() {
         <section className="card guide-card" aria-labelledby="access-title">
           <h2 id="access-title">What it can see</h2>
           <ul className="guide-points">
-            <li>{`It works only on ${supportedStoresText()} and this site. It can't see any other site.`}</li>
+            <li>{`It works only on ${supportedDomainsText()} and this site. It can't see any other site.`}</li>
             <li>
               It looks at a page only when you ask: the Picky button, a shortcut, {altClickText(os)} on a link or the
               right-click menu.

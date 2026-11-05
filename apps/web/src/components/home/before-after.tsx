@@ -55,7 +55,7 @@ function SampleSheet(): ReactElement {
           <HeadphonesIcon />
         </div>
         <div className="after-title">
-          <span className="meta">Sony · Amazon.in</span>
+          <span className="meta">Sony · Amazon</span>
           <span className="product-name">Sony WH-1000XM5 Wireless Noise Cancelling Headphones</span>
           <span className="price-row">
             <span className="sample-price">₹28,926</span>
