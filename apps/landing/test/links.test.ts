@@ -2,7 +2,7 @@ import { describe, expect, test } from "bun:test";
 import { appHomeUrl, buildLandingLinks, DEFAULT_EXTENSION_URL, DEFAULT_WEB_URL } from "../src/lib/links.ts";
 
 describe("buildLandingLinks", () => {
-  test("falls back to local web app and the in-page #how anchor", () => {
+  test("falls back to local web app and the Chrome Web Store listing", () => {
     expect(buildLandingLinks({})).toEqual({ webUrl: DEFAULT_WEB_URL, extensionUrl: DEFAULT_EXTENSION_URL });
   });
 

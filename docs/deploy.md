@@ -56,9 +56,9 @@ Environment variables:
 | --------------- | -------------------------- | ---------------------------------------------- |
 | `picky-api`     | `DATABASE_URL`             | From the Neon integration                      |
 | `picky-api`     | `WEB_ORIGIN`               | `https://<web domain>`                         |
-| `picky-web`     | `VITE_PICKY_EXTENSION_URL` | Chrome Web Store listing                       |
+| `picky-web`     | `VITE_PICKY_EXTENSION_URL` | Optional; defaults to the store listing        |
 | `picky-landing` | `VITE_PICKY_WEB_URL`       | `https://<web domain>` (defaults to localhost) |
-| `picky-landing` | `VITE_PICKY_EXTENSION_URL` | Chrome Web Store listing (defaults to `#how`)  |
+| `picky-landing` | `VITE_PICKY_EXTENSION_URL` | Optional; defaults to the store listing        |
 
 Never put a secret in a `VITE_*` variable: those are bundled into public JavaScript.
 
@@ -116,8 +116,6 @@ GitHub setup, in the `production` environment (only `feat/vercel-deploy` may dep
 - **Landing page:**
   - The hero's paste-a-link form opens the web app with `?import=`. Without the extension the web
     app ignores the link, so hide or reword the form for visitors who have not installed it.
-  - "Add to Chrome" points to `#how` until `VITE_PICKY_EXTENSION_URL` is set, which needs the store
-    listing.
   - "Open app" silently falls back to `http://localhost:5173` if `VITE_PICKY_WEB_URL` is missing.
   - The page has no favicon and no `og:` or `twitter:` preview tags.
 - **Bun 1.4.x is in beta on Vercel.** If something breaks, set `bunVersion` to `"1.x"` (Bun 1.3).

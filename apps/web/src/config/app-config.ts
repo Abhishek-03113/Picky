@@ -1,11 +1,12 @@
 /** Deployment-time settings, read once at the composition root and injected through router context. */
 export interface AppConfig {
-  /** Where "Add to Chrome" points: the Chrome Web Store listing once published. */
+  /** Where "Add to Chrome" points: the Chrome Web Store listing. */
   extensionUrl: string;
 }
 
-/** Used until a store listing exists, so the link always lands somewhere useful. */
-export const DEFAULT_EXTENSION_URL = "https://chromewebstore.google.com/search/picky";
+/** The published Chrome Web Store listing, used unless an env var overrides it. */
+export const DEFAULT_EXTENSION_URL =
+  "https://chromewebstore.google.com/detail/picky-product-spec-sheets/dbeedkjlgkkdlhfcmdaanhbicdelfenc";
 
 /**
  * Builds the app config from Vite's env; a blank or missing value falls back to the default.
