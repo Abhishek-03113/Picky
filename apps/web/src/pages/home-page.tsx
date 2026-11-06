@@ -11,13 +11,14 @@ import { Problem } from "../components/home/problem.tsx";
 import { SiteFooter } from "../components/home/site-footer.tsx";
 import { SupportedSites } from "../components/home/supported-sites.tsx";
 import { usePageTitle } from "../hooks/use-page-title.ts";
+import { publicPage } from "../seo/public-pages.ts";
 
 const rootRouteApi = getRouteApi("__root__");
 
 /** What a signed-out visitor sees at "/": what Picky does, then a way in (account, extension). */
 export function HomePage(): ReactElement {
   const { os } = rootRouteApi.useRouteContext();
-  usePageTitle("Stop opening more tabs");
+  usePageTitle(publicPage("/").name);
   return (
     <div className="home">
       <AppBar sticky>

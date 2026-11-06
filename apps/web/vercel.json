@@ -13,7 +13,7 @@
       ]
     },
     {
-      "source": "/(.*)\\.(png|webp|ico|svg)",
+      "source": "/((?!assets/).*)\\.(png|webp|ico|svg)",
       "headers": [
         { "key": "Cache-Control", "value": "public, max-age=86400, stale-while-revalidate=604800" },
         { "key": "Vercel-Cache-Tag", "value": "picky-web,picky-web-images" }
@@ -27,6 +27,8 @@
   ],
   "rewrites": [
     { "source": "/api/:path*", "destination": "https://picky-api.vercel.app/api/:path*" },
-    { "source": "/(.*)", "destination": "/index.html" }
+    { "source": "/extension", "destination": "/extension.html" },
+    { "source": "/privacy", "destination": "/privacy.html" },
+    { "source": "/((?!assets/).*)", "destination": "/app.html" }
   ]
 }
