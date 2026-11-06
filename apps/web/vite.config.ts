@@ -26,6 +26,15 @@ export default defineConfig({
     { name: "picky-store-names", transformIndexHtml: withStoreNames },
     crawlFiles(),
   ],
+  build: {
+    rolldownOptions: {
+      output: {
+        // Libraries change far less often than app code. In their own chunk they keep their content hash across
+        // deploys, so a returning visitor's browser reuses its cached copy and downloads only the app code.
+        codeSplitting: { groups: [{ name: "vendor", test: /node_modules/ }] },
+      },
+    },
+  },
   server: {
     port: 5173,
     strictPort: true,

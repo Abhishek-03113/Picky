@@ -1,5 +1,11 @@
 import type { QueryClient } from "@tanstack/react-query";
-import { createRootRouteWithContext, createRoute, createRouter, type RouterHistory } from "@tanstack/react-router";
+import {
+  createRootRouteWithContext,
+  createRoute,
+  createRouter,
+  lazyRouteComponent,
+  type RouterHistory,
+} from "@tanstack/react-router";
 import type { AuthClient } from "./api/auth-client.ts";
 import { comparisonDetailQuery, comparisonListQuery, productComparisonsQuery } from "./api/comparison-queries.ts";
 import type { ComparisonsClient } from "./api/comparisons-client.ts";
@@ -20,13 +26,19 @@ import type { AppConfig } from "./config/app-config.ts";
 import { AppLayout } from "./components/app-layout.tsx";
 import { RouteErrorPanel } from "./components/route-error-panel.tsx";
 import { parseLibrarySearch } from "./library/library-search.ts";
-import { ComparisonPage } from "./pages/comparison-page.tsx";
-import { ComparisonsIndexPage } from "./pages/comparisons-index-page.tsx";
-import { ProductDetailPage } from "./pages/product-detail-page.tsx";
-import { ExtensionPage } from "./pages/extension-page.tsx";
-import { HomeRoutePage } from "./pages/home-route-page.tsx";
-import { PrivacyPage } from "./pages/privacy-page.tsx";
-import { SignInPage } from "./pages/sign-in-page.tsx";
+import { HomeRoutePage, preloadHomeRoutePage } from "./pages/home-route-page.tsx";
+
+// Each page is its own chunk, so a visitor downloads only the page they open (and the next one on hover,
+// through `defaultPreload: "intent"`). The router fetches a route's chunk alongside its loader.
+const ComparisonPage = lazyRouteComponent(() => import("./pages/comparison-page.tsx"), "ComparisonPage");
+const ComparisonsIndexPage = lazyRouteComponent(
+  () => import("./pages/comparisons-index-page.tsx"),
+  "ComparisonsIndexPage",
+);
+const ProductDetailPage = lazyRouteComponent(() => import("./pages/product-detail-page.tsx"), "ProductDetailPage");
+const ExtensionPage = lazyRouteComponent(() => import("./pages/extension-page.tsx"), "ExtensionPage");
+const PrivacyPage = lazyRouteComponent(() => import("./pages/privacy-page.tsx"), "PrivacyPage");
+const SignInPage = lazyRouteComponent(() => import("./pages/sign-in-page.tsx"), "SignInPage");
 
 /** Dependencies handed to every route through router context, instead of module-level singletons. */
 export interface PickyRouterContext {
@@ -59,8 +71,10 @@ const productListRoute = createRoute({
   loaderDeps: ({ search }) => ({ query: search.q ?? "" }),
   // Signed out, "/" is the homepage, which needs no library.
   loader: async ({ context, deps }) => {
-    if (!(await isSignedIn(context))) return;
-    await context.queryClient.ensureQueryData(productListQuery(context.productsClient, deps.query));
+    const signedIn = await isSignedIn(context);
+    const page = preloadHomeRoutePage(signedIn);
+    if (signedIn) await context.queryClient.ensureQueryData(productListQuery(context.productsClient, deps.query));
+    await page;
   },
   component: HomeRoutePage,
 });

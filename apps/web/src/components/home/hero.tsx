@@ -1,6 +1,7 @@
 import { supportedStoresText } from "@picky/catalog/sites";
 import { Link } from "@tanstack/react-router";
 import type { ReactElement } from "react";
+import mascotUrl from "../../assets/mascot.webp";
 import { EXTENSION_PATH, SIGN_IN_PATH } from "../../auth/route-guards.ts";
 import { DownloadIcon } from "./home-icons.tsx";
 
@@ -37,7 +38,8 @@ export function Hero(): ReactElement {
       </div>
       <img
         className="hero-mascot"
-        src="/mascot.png"
+        src={mascotUrl}
+        fetchPriority="high"
         width={640}
         height={640}
         alt="Picky, a cream bean wearing teal headphones"
