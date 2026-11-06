@@ -62,7 +62,7 @@ Environment variables:
 | --------------- | -------------------------- | ---------------------------------------------- |
 | `picky-api`     | `DATABASE_URL`             | From the Neon integration                      |
 | `picky-api`     | `WEB_ORIGIN`               | `https://<web domain>`                         |
-| `picky-web`     | `VITE_PICKY_EXTENSION_URL` | Chrome Web Store listing                       |
+| `picky-web`     | `VITE_PICKY_EXTENSION_URL` | Optional; defaults to the store listing        |
 | `picky-web`     | `PICKY_SITE_URL`           | Optional; public origin for link previews      |
 | `picky-landing` | `VITE_PICKY_WEB_URL`       | `https://<web domain>` (defaults to localhost) |
 
@@ -138,8 +138,6 @@ GitHub setup, in the `production` environment (only `feat/vercel-deploy` may dep
 
 ## Before launch
 
-- **Store listing:** until `VITE_PICKY_EXTENSION_URL` is set, "Add to Chrome" opens a Chrome Web Store
-  search for "picky". Set it to the listing once it is approved.
 - **Privacy contact:** `/privacy` sends deletion requests to the GitHub issues page. Swap in a support
   email (`PRIVACY_CONTACT_URL` in `apps/web/src/pages/privacy-page.tsx`) if you'd rather not take them
   in public.
