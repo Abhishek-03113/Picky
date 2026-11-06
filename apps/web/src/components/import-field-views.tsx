@@ -14,7 +14,7 @@ export interface ImportFieldViewProps {
 
 const UNAVAILABLE_NOTE = "Adding by link needs the Picky extension. Install it, then reload this page.";
 
-const SUPPORTED_STORES = new Intl.ListFormat("en", { type: "conjunction" }).format(PRODUCT_SOURCES.map(sourceLabel));
+const SUPPORTED_STORES = new Intl.ListFormat("en-IN", { type: "conjunction" }).format(PRODUCT_SOURCES.map(sourceLabel));
 
 function ErrorLine({ message }: { message: string | null }) {
   if (message === null) return null;

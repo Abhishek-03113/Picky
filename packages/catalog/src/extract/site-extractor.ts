@@ -2,10 +2,11 @@ import type { PageNode } from "../page/page-node.ts";
 import type { ProductSnapshot, ProductSource } from "../product-snapshot.ts";
 
 /**
- * Everything Picky knows about reading one marketplace. Add a site by implementing this and
- * listing it in SITE_EXTRACTORS; nothing else in the API, web app or extension changes.
+ * How Picky reads one marketplace's product pages. Add a site by giving it an entry in
+ * src/sites/shopping-sites.ts and a reader in site-extractors.ts (docs/adding-a-site.md); the API,
+ * web app and extension pick it up from there.
  *
- * @example flipkartExtractor.productIdFromUrl("https://www.flipkart.com/x/p/itm1?pid=MOB1") // "MOB1"
+ * @example SITE_EXTRACTORS[2]?.productIdFromUrl("https://www.flipkart.com/x/p/itm1?pid=MOB1") // "MOB1"
  */
 export interface SiteExtractor {
   readonly source: ProductSource;

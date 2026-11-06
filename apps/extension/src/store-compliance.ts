@@ -3,6 +3,7 @@
  * Each rule mirrors a store requirement or a common rejection reason; docs/chrome-web-store.md has the
  * listing answers that go with them.
  */
+import { supportedStoresText } from "@picky/catalog/sites";
 
 /** The manifest fields these checks read; the real manifest has more. */
 export interface StoreManifest {
@@ -36,7 +37,7 @@ export const PERMISSION_JUSTIFICATIONS: Readonly<Record<string, string>> = {
   scripting:
     "Injects the Quick Look panel and the page reader into that tab, after one of those user actions, to turn the page into a spec sheet.",
   storage: "Keeps a few preferences on the device, such as the comparison the user picked last.",
-  contextMenus: 'Adds "Add to Picky" and "Quick Look" to the right-click menu on Amazon.in and Flipkart.',
+  contextMenus: `Adds "Add to Picky" and "Quick Look" to the right-click menu on ${supportedStoresText()}.`,
   offscreen:
     "Parses a product page downloaded from a link (Alt+click or right-click) in an offscreen document, because the service worker has no DOM.",
 };

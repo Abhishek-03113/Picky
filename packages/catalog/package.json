@@ -2,9 +2,11 @@
   "name": "@picky/catalog",
   "private": true,
   "type": "module",
+  "sideEffects": false,
   "exports": {
     ".": "./src/index.ts",
     "./schema": "./src/product-snapshot-schema.ts",
+    "./sites": "./src/sites/index.ts",
     "./cheerio": "./src/page/cheerio-page.ts",
     "./dom": "./src/page/dom-page.ts",
     "./testing": "./src/testing/index.ts",

@@ -51,8 +51,8 @@ the right-click "Add to Picky" menu, and the web app's spec sheet or comparison 
 
 **Description** (paste as is):
 
-> Picky turns cluttered Amazon.in and Flipkart product pages into one clean, consistent spec sheet,
-> and helps you compare the products you are choosing between.
+> Picky turns cluttered Amazon.in, Amazon.com and Flipkart product pages into one clean, consistent
+> spec sheet, and helps you compare the products you are choosing between.
 >
 > • Quick Look: click the Picky button (or press Alt+Shift+S) on any product page to see its specs,
 > grouped and searchable, without offers, ads and financing in the way. No account needed.
@@ -62,15 +62,15 @@ the right-click "Add to Picky" menu, and the web app's spec sheet or comparison 
 > marked, and matters of taste are left to you.
 > • Your library on any device: saved products and comparisons live in your free Picky account.
 >
-> Picky works only on Amazon.in, Flipkart and the Picky website. It reads a page only when you ask,
-> shows no ads and sells nothing. Picky is not affiliated with Amazon or Flipkart.
+> Picky works only on Amazon.in, Amazon.com, Flipkart and the Picky website. It reads a page only when
+> you ask, shows no ads and sells nothing. Picky is not affiliated with Amazon or Flipkart.
 
 ## 3. Privacy practices tab
 
 **Single purpose:**
 
-> Picky turns product pages on Amazon.in and Flipkart into clean spec sheets that the user can save
-> to their Picky library and compare.
+> Picky turns product pages on Amazon.in, Amazon.com and Flipkart into clean spec sheets that the user
+> can save to their Picky library and compare.
 
 **Permission justifications** (the same text as `PERMISSION_JUSTIFICATIONS`):
 
@@ -79,10 +79,10 @@ the right-click "Add to Picky" menu, and the web app's spec sheet or comparison 
 | `activeTab`        | Reads the product page in the current tab only when the user clicks the toolbar button, presses the shortcut or uses the context menu.             |
 | `scripting`        | Injects the Quick Look panel and the page reader into that tab, after one of those user actions, to turn the page into a spec sheet.               |
 | `storage`          | Keeps a few preferences on the device, such as the comparison the user picked last.                                                                 |
-| `contextMenus`     | Adds "Add to Picky" and "Quick Look" to the right-click menu on Amazon.in and Flipkart.                                                             |
+| `contextMenus`     | Adds "Add to Picky" and "Quick Look" to the right-click menu on Amazon.in, Amazon.com and Flipkart.                                                 |
 | `offscreen`        | Parses a product page downloaded from a link (Alt+click or right-click) in an offscreen document, because the service worker has no DOM.           |
-| Host permissions   | amazon.in and flipkart.com: download a product link the user Alt+clicked or right-clicked, in their browser. The Picky web domain: save products to the user's account and read their comparisons. |
-| Content scripts    | On amazon.in and flipkart.com, a small listener that only reacts to Alt+click on a product link. On the Picky web domain, a bridge so the web app's "paste a link" field can ask the extension to read that link. |
+| Host permissions   | amazon.in, amazon.com and flipkart.com: download a product link the user Alt+clicked or right-clicked, in their browser. The Picky web domain: save products to the user's account and read their comparisons. |
+| Content scripts    | On amazon.in, amazon.com and flipkart.com, a small listener that only reacts to Alt+click on a product link. On the Picky web domain, a bridge so the web app's "paste a link" field can ask the extension to read that link. |
 
 **Remote code:** No, I am not using remote code. (All scripts ship in the package; the extension only
 exchanges JSON with the Picky API.)
@@ -111,7 +111,7 @@ purposes unrelated to the single purpose, and not used to determine creditworthi
 
 ## Common rejection reasons this setup avoids
 
-- **Excessive permissions:** no `tabs`, no `<all_urls>`; host access is the two stores plus Picky.
+- **Excessive permissions:** no `tabs`, no `<all_urls>`; host access is the three stores plus Picky.
 - **Missing or mismatched privacy policy:** `/privacy` lists exactly the data above.
 - **Remote code / obfuscation:** bundles are minified (whitespace and syntax only; names are kept, so the
   code stays readable) and contain no `eval`.

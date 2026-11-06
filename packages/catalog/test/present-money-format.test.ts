@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { discountPercent, formatMoney, savingsAmount } from "../src/present/money-format.ts";
+import { discountPercent, formatMoney, listPriceLabel, savingsAmount } from "../src/present/money-format.ts";
 
 const inr = (amount: number) => ({ amount, currency: "INR" });
 
@@ -7,6 +7,18 @@ describe("formatMoney", () => {
   test("uses Indian grouping and drops .00 for whole amounts", () => {
     expect(formatMoney(inr(124900))).toBe("₹1,24,900");
     expect(formatMoney(inr(99.5))).toBe("₹99.50");
+  });
+
+  test("uses international grouping for other currencies", () => {
+    expect(formatMoney({ amount: 124900, currency: "USD" })).toBe("$124,900");
+    expect(formatMoney({ amount: 1249.99, currency: "USD" })).toBe("$1,249.99");
+  });
+});
+
+describe("listPriceLabel", () => {
+  test("is M.R.P. for rupees and List price elsewhere", () => {
+    expect(listPriceLabel(inr(100))).toBe("M.R.P.");
+    expect(listPriceLabel({ amount: 100, currency: "USD" })).toBe("List price");
   });
 });
 

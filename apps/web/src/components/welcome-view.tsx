@@ -1,4 +1,5 @@
 import type { OperatingSystem } from "@picky/catalog";
+import { supportedStoresText } from "@picky/catalog/sites";
 import { Link } from "@tanstack/react-router";
 import { EXTENSION_PATH } from "../auth/route-guards.ts";
 import { quickSetupSteps } from "../extension/extension-setup.ts";
@@ -28,7 +29,7 @@ function ExtensionCard({ extensionUrl, installed, os }: ExtensionCardProps) {
             <CheckIcon size={16} /> The Picky extension is installed
           </h2>
           <span className="subtle">
-            Open any Amazon.in or Flipkart product and click Picky, or right-click → Add to Picky to save it here.
+            {`Open any ${supportedStoresText("or")} product and click Picky, or right-click → Add to Picky to save it here.`}
           </span>
         </div>
       </section>

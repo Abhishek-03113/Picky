@@ -1,3 +1,4 @@
+import { supportedStoresText } from "@picky/catalog/sites";
 import { Dom } from "../popup/dom.ts";
 import type { OverlayActions } from "./overlay-actions.ts";
 import { thisPageColumn, type QuickLookModel } from "./quicklook-model.ts";
@@ -69,7 +70,7 @@ export function emptyView(dom: Dom, model: QuickLookModel, actions: OverlayActio
     return notice(
       dom,
       "No comparisons yet",
-      "Open a product page on Amazon.in or Flipkart and press Quick Look to start one.",
+      `Open a product page on ${supportedStoresText("or")} and press Quick Look to start one.`,
       null,
     );
   }

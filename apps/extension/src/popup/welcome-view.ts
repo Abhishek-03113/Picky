@@ -1,4 +1,4 @@
-import { QUICK_LOOK_SHORTCUT, shortcutKeyLabels, type OperatingSystem } from "@picky/catalog";
+import { QUICK_LOOK_SHORTCUT, shortcutKeyLabels, supportedStoresText, type OperatingSystem } from "@picky/catalog";
 import type { Dom } from "./dom.ts";
 
 export interface WelcomeHandlers {
@@ -7,7 +7,7 @@ export interface WelcomeHandlers {
 
 const STEPS = [
   { title: "Pin Picky", body: "Click the puzzle icon in Chrome's toolbar, then the pin next to Picky." },
-  { title: "Open any product page", body: "On Amazon.in or Flipkart, click Picky. That's it." },
+  { title: "Open any product page", body: `On ${supportedStoresText("or")}, click Picky. That's it.` },
 ] as const;
 
 /**

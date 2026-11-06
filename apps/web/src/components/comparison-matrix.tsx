@@ -2,8 +2,10 @@ import {
   type CatalogProduct,
   type ComparisonGroup,
   type ComparisonMatrix,
-  flipkartSearchUrl,
   pluralize,
+  searchableSites,
+  storeSearchUrl,
+  type SupportedSite,
 } from "@picky/catalog";
 import type { CSSProperties } from "react";
 import { ExternalLinkIcon } from "./icons.tsx";
@@ -62,30 +64,35 @@ function PriceSection({
       <div className="mx-group">Price</div>
       <MatrixRow label="Best price" cells={matrix.prices} markBest={markBest} pill="Lowest" />
       <MatrixRow label="Rating" cells={matrix.ratings} markBest={markBest} pill={null} />
-      <div role="row" className="mx-row">
-        <div role="rowheader" className="mx-label">
-          Flipkart
+      {searchableSites().map((site) => (
+        <div key={site.source} role="row" className="mx-row">
+          <div role="rowheader" className="mx-label">
+            {site.label}
+          </div>
+          {products.map((product) => (
+            <StoreSearchCell key={product.id} site={site} product={product} />
+          ))}
         </div>
-        {products.map((product) => (
-          <FlipkartCell key={product.id} product={product} />
-        ))}
-      </div>
+      ))}
     </>
   );
 }
 
-function FlipkartCell({ product }: { product: CatalogProduct }) {
-  if (product.snapshot.source === "flipkart.com") {
+/** "This listing" when the product is from this store, else a search there for the same product. */
+function StoreSearchCell({ site, product }: { site: SupportedSite; product: CatalogProduct }) {
+  if (product.snapshot.source === site.source) {
     return (
       <div role="cell" className="mx-value none">
         This listing
       </div>
     );
   }
+  const searchUrl = storeSearchUrl(site, product.snapshot);
+  if (searchUrl === null) return <div role="cell" className="mx-value none" />;
   return (
     <div role="cell" className="mx-value">
-      <a href={flipkartSearchUrl(product.snapshot)} target="_blank" rel="noreferrer" className="mx-link">
-        Search Flipkart <ExternalLinkIcon size={12} />
+      <a href={searchUrl} target="_blank" rel="noreferrer" className="mx-link">
+        {`Search ${site.label}`} <ExternalLinkIcon size={12} />
       </a>
     </div>
   );

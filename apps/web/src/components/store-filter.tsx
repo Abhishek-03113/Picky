@@ -5,7 +5,7 @@ interface StoreFilterControlProps {
   onSelect: (store: StoreFilter) => void;
 }
 
-/** Segmented All / Amazon.in / Flipkart control; each segment is a toggle button. */
+/** Segmented All / Amazon / Flipkart control; each segment is a toggle button. */
 export function StoreFilterControl({ selected, onSelect }: StoreFilterControlProps) {
   return (
     <div role="group" aria-label="Filter by store" className="segmented">

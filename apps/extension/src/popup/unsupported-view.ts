@@ -1,10 +1,6 @@
+import { SHOPPING_SITES } from "@picky/catalog/sites";
 import type { Dom } from "./dom.ts";
 import { renderNoticeView } from "./notice-view.ts";
-
-const SUPPORTED_SITES = [
-  { name: "Amazon.in", pages: "/dp/… pages" },
-  { name: "Flipkart", pages: "/p/… pages" },
-] as const;
 
 /**
  * "No product on this page" board with the supported sites and a library link.
@@ -26,11 +22,11 @@ export function renderLibraryButton(dom: Dom, webBaseUrl: string): HTMLElement {
 }
 
 function renderSupportedSites(dom: Dom): HTMLElement {
-  const rows = SUPPORTED_SITES.map((site) =>
+  const rows = SHOPPING_SITES.map((site) =>
     dom.el("li", { className: "site-row" }, [
       dom.icon("check", "icon-xs icon-done"),
-      dom.el("span", { className: "site-name", text: site.name }),
-      dom.el("span", { className: "muted-sm site-pages", text: site.pages }),
+      dom.el("span", { className: "site-name", text: site.label }),
+      dom.el("span", { className: "muted-sm site-pages", text: site.productPagesHint }),
     ]),
   );
   return dom.el("ul", { className: "sites" }, rows);

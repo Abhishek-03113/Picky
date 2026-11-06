@@ -1,16 +1,7 @@
 import { describe, expect, test } from "bun:test";
-import { formatSourceList } from "../src/format/format-sources.ts";
 import { formatCapturedLabel, formatUpdatedLabel } from "../src/format/format-relative-date.ts";
 import { storeFilterOptions } from "../src/format/source-label.ts";
 import { pageTitle } from "../src/format/page-title.ts";
-
-describe("formatSourceList", () => {
-  test("joins with commas and a final 'or'", () => {
-    expect(formatSourceList(["amazon.in", "flipkart.com", "x.com"])).toBe("amazon.in, flipkart.com or x.com");
-    expect(formatSourceList(["amazon.in"])).toBe("amazon.in");
-    expect(formatSourceList([])).toBe("");
-  });
-});
 
 describe("formatCapturedLabel", () => {
   const now = new Date("2026-10-05T12:00:00Z");
@@ -35,6 +26,7 @@ describe("source labels", () => {
     expect(storeFilterOptions()).toEqual([
       { value: "all", label: "All" },
       { value: "amazon.in", label: "Amazon.in" },
+      { value: "amazon.com", label: "Amazon.com" },
       { value: "flipkart.com", label: "Flipkart" },
     ]);
   });

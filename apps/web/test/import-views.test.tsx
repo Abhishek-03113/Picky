@@ -22,7 +22,7 @@ describe("import field views", () => {
     const html = renderToStaticMarkup(<ImportCardView {...idle} />);
     expect(html).toContain("Paste a product link");
     expect(html).toContain("Get specs");
-    expect(html).toContain("Amazon.in and Flipkart product pages");
+    expect(html).toContain("Amazon.in, Amazon.com and Flipkart product pages");
   });
 
   test("pending disables the button and an error is announced", () => {
@@ -39,7 +39,7 @@ describe("import field views", () => {
     expect(html).toMatch(/<input[^>]*disabled/);
     expect(html).toMatch(/<button[^>]*disabled/);
     expect(html).toContain("Adding by link needs the Picky extension");
-    expect(html).not.toContain("Amazon.in and Flipkart product pages");
+    expect(html).not.toContain("Amazon.in, Amazon.com and Flipkart product pages");
   });
 
   test("unavailable pill disables the field and explains why on hover", () => {

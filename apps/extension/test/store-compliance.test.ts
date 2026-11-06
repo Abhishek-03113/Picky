@@ -1,5 +1,6 @@
 import { describe, expect, test } from "bun:test";
 import { join } from "node:path";
+import { withSiteFields } from "../src/site-manifest.ts";
 import { storeComplianceProblems, type PackageFile, type StoreManifest } from "../src/store-compliance.ts";
 
 const ICONS = { "16": "logo-16.png", "32": "logo-32.png", "48": "logo-48.png", "128": "logo-128.png" };
@@ -96,7 +97,8 @@ describe("storeComplianceProblems", () => {
   });
 
   test("the checked-in manifest passes the listing and permission checks", async () => {
-    const manifest = (await Bun.file(join(import.meta.dir, "../public/manifest.json")).json()) as StoreManifest;
+    const template = (await Bun.file(join(import.meta.dir, "../public/manifest.json")).json()) as StoreManifest;
+    const manifest = withSiteFields(template);
     const shipped: PackageFile[] = [
       ...Object.values(manifest.icons ?? {}).map((path) => ({ path })),
       { path: manifest.background?.service_worker ?? "" },

@@ -49,4 +49,19 @@ describe("priceBandName", () => {
     expect(priceBandName(inr(35001))).toBe("Over ₹35k");
     expect(priceBandName(null)).toBe("No price");
   });
+
+  test("other currencies get their own band, between rupee bands and unpriced", () => {
+    expect(priceBandName({ amount: 299, currency: "USD" })).toBe("Priced in USD");
+    const mixed = [
+      ...library,
+      makeSummary({ id: "u1", source: "amazon.com", price: { amount: 49.99, currency: "USD" } }),
+    ];
+    expect(groupProducts(mixed, "price").map((group) => group.name)).toEqual([
+      "Under ₹25k",
+      "₹25k – ₹35k",
+      "Over ₹35k",
+      "Priced in USD",
+      "No price",
+    ]);
+  });
 });

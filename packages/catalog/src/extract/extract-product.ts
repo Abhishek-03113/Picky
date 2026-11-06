@@ -1,5 +1,6 @@
 import type { PageNode } from "../page/page-node.ts";
 import type { ProductSnapshot } from "../product-snapshot.ts";
+import { formatList } from "../sites/site-copy.ts";
 import { ProductPageError } from "./product-page-error.ts";
 import type { SiteExtractor } from "./site-extractor.ts";
 import { SITE_EXTRACTORS } from "./site-extractors.ts";
@@ -35,7 +36,7 @@ export function isSupportedProductUrl(
  */
 export function describeSupportedProductUrls(extractors: readonly SiteExtractor[] = SITE_EXTRACTORS): string {
   const sites = extractors.map((extractor) => `${extractor.source} (e.g. ${extractor.exampleUrl})`);
-  return `a product page on ${sites.join(" or ")}`;
+  return `a product page on ${formatList(sites, "or")}`;
 }
 
 /**

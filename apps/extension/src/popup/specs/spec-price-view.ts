@@ -3,6 +3,7 @@ import {
   discountPercent,
   formatCaptureTime,
   formatMoney,
+  listPriceLabel,
   savingsAmount,
   type Money,
   type ProductSnapshot,
@@ -27,7 +28,7 @@ export function renderSpecPriceView(dom: Dom, snapshot: PriceSnapshot): HTMLElem
   return card;
 }
 
-/** Selling price, with the struck M.R.P. and "N% off · save ₹X" chip only when there is a real discount. */
+/** Selling price, with the struck M.R.P. (list price) and "N% off · save ₹X" chip only when there is a real discount. */
 function renderPriceBlock(dom: Dom, price: Money | null, listPrice: Money | null): HTMLElement {
   if (price === null) return dom.el("p", { className: "price-missing", text: "Price not shown on the page" });
   const block = dom.el("span", { className: "price-block" }, [
@@ -37,7 +38,10 @@ function renderPriceBlock(dom: Dom, price: Money | null, listPrice: Money | null
   const savings = savingsAmount(price, listPrice);
   if (listPrice === null || discount === null || savings === null) return block;
   block.append(
-    dom.el("span", { className: "list-price" }, ["M.R.P. ", dom.el("s", { text: formatMoney(listPrice) })]),
+    dom.el("span", { className: "list-price" }, [
+      `${listPriceLabel(listPrice)} `,
+      dom.el("s", { text: formatMoney(listPrice) }),
+    ]),
     dom.el("span", { className: "discount-chip", text: `${discount}% off · save ${formatMoney(savings)}` }),
   );
   return block;

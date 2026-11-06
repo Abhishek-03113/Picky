@@ -21,6 +21,7 @@ describe("findSiteExtractor", () => {
 
   test("knows the real sites by default", () => {
     expect(isSupportedProductUrl("https://www.amazon.in/dp/B0FQG1YHYR")).toBe(true);
+    expect(isSupportedProductUrl("https://www.amazon.com/Echo-Dot/dp/B08N5WRWNW")).toBe(true);
     expect(isSupportedProductUrl("https://www.flipkart.com/x/p/itm1a2b?pid=MOB1")).toBe(true);
     expect(isSupportedProductUrl("https://www.amazon.in/s?k=x")).toBe(false);
   });

@@ -10,7 +10,7 @@ export interface StoreFilterOption {
 /**
  * Segments for the library's store filter: "All" first, then one per supported source.
  *
- * @example storeFilterOptions().map((option) => option.label) // ["All", "Amazon.in", "Flipkart"]
+ * @example storeFilterOptions().map((option) => option.label) // ["All", "Amazon.in", "Amazon.com", "Flipkart"]
  */
 export function storeFilterOptions(): StoreFilterOption[] {
   return [

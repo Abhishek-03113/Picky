@@ -1,9 +1,13 @@
 import { describe, expect, test } from "bun:test";
-import { extractFlipkartProduct, flipkartExtractor } from "../src/extract/flipkart/flipkart-extractor.ts";
+import { createFlipkartExtractor, extractFlipkartProduct } from "../src/extract/flipkart/flipkart-extractor.ts";
 import { extractFlipkartSpecGroups } from "../src/extract/flipkart/flipkart-specs.ts";
 import { parseFlipkartProductUrl } from "../src/extract/flipkart/flipkart-url.ts";
 import { ProductPageError } from "../src/extract/product-page-error.ts";
 import { parseHtmlPage } from "../src/page/cheerio-page.ts";
+import { shoppingSite } from "../src/sites/shopping-sites.ts";
+
+const FLIPKART = shoppingSite("flipkart.com");
+const flipkartExtractor = createFlipkartExtractor(FLIPKART);
 
 const section = (title: string, rows: [string, string][]) =>
   `<div class="grid-formation grid-column-1"><div><div font="default-fk-font-l">${title}</div>${rows
@@ -16,16 +20,18 @@ const productLd = `<script type="application/ld+json">[{"@type":"Product","name"
 
 describe("parseFlipkartProductUrl", () => {
   test("keeps slug, item id and pid; drops tracking", () => {
-    expect(parseFlipkartProductUrl("https://www.flipkart.com/phone-x/p/itm68ad?pid=MOB1&lid=L&srno=s_1")).toEqual({
+    expect(
+      parseFlipkartProductUrl("https://www.flipkart.com/phone-x/p/itm68ad?pid=MOB1&lid=L&srno=s_1", FLIPKART),
+    ).toEqual({
       productId: "MOB1",
       canonicalUrl: "https://www.flipkart.com/phone-x/p/itm68ad?pid=MOB1",
     });
   });
 
   test("falls back to the item id without pid, and rejects non-product pages", () => {
-    expect(parseFlipkartProductUrl("https://flipkart.com/phone-x/p/itm68ad")?.productId).toBe("itm68ad");
-    expect(parseFlipkartProductUrl("https://www.flipkart.com/search?q=phone")).toBeNull();
-    expect(parseFlipkartProductUrl("https://www.amazon.in/phone-x/p/itm68ad")).toBeNull();
+    expect(parseFlipkartProductUrl("https://flipkart.com/phone-x/p/itm68ad", FLIPKART)?.productId).toBe("itm68ad");
+    expect(parseFlipkartProductUrl("https://www.flipkart.com/search?q=phone", FLIPKART)).toBeNull();
+    expect(parseFlipkartProductUrl("https://www.amazon.in/phone-x/p/itm68ad", FLIPKART)).toBeNull();
   });
 });
 
@@ -46,6 +52,7 @@ describe("extractFlipkartProduct", () => {
       parseHtmlPage(productLd + section("General", [["Brand", "Acme"]])),
       ref,
       new Date(0),
+      FLIPKART,
     );
     expect(snapshot).toMatchObject({
       source: "flipkart.com",
@@ -58,7 +65,7 @@ describe("extractFlipkartProduct", () => {
   });
 
   test("throws when the page has no JSON-LD product", () => {
-    expect(() => extractFlipkartProduct(parseHtmlPage("<p>captcha</p>"), ref, new Date(0))).toThrow(
+    expect(() => extractFlipkartProduct(parseHtmlPage("<p>captcha</p>"), ref, new Date(0), FLIPKART)).toThrow(
       new ProductPageError(
         "Flipkart page for MOB1 has no schema.org Product with a name in its JSON-LD; expected a product detail page",
       ),

@@ -1,4 +1,5 @@
 export * from "./product-snapshot.ts";
+export * from "./sites/index.ts";
 export type { CatalogComparisonDetail, CatalogComparisonSummary } from "./comparison-types.ts";
 export type { CatalogUser } from "./user-types.ts";
 export {
@@ -13,7 +14,7 @@ export { ProductPageError } from "./extract/product-page-error.ts";
 export type { PageNode } from "./page/page-node.ts";
 export { parseMoney } from "./money/parse-money.ts";
 export { buildComparisonMatrix } from "./compare/build-matrix.ts";
-export { flipkartSearchUrl } from "./compare/flipkart-search-url.ts";
+export { searchableSites, storeSearchUrl } from "./compare/store-search-url.ts";
 export type {
   ComparisonCell,
   ComparisonGroup,
@@ -22,7 +23,7 @@ export type {
   ComparisonRow,
 } from "./compare/types.ts";
 export { availabilityTone, type AvailabilityTone } from "./present/availability-tone.ts";
-export { discountPercent, formatMoney, savingsAmount } from "./present/money-format.ts";
+export { discountPercent, formatMoney, listPriceLabel, savingsAmount } from "./present/money-format.ts";
 export { pluralize } from "./present/pluralize.ts";
 export { countSpecs, filterSpecGroups, specCountLabel, specGroupAnchor } from "./present/spec-search.ts";
 export { formatCaptureTime } from "./present/capture-time.ts";
