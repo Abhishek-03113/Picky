@@ -1,4 +1,5 @@
 import type { ColorOption, ProductSnapshot } from "@picky/catalog";
+import { withColorPageDetails } from "./color-page-reader.ts";
 import type { HtmlFetcher } from "./html-fetcher.ts";
 import type { SnapshotReader } from "./snapshot-reader.ts";
 
@@ -38,7 +39,7 @@ export class ColorOptionsReader {
   private async readOption(option: ColorOption): Promise<ColorOption> {
     try {
       const page = await withTimeout(this.readPage(option.url), this.deps.timeoutMs ?? READ_TIMEOUT_MS, option.url);
-      return { ...option, price: page.price, availability: page.availability, image: page.images[0] ?? null };
+      return withColorPageDetails(option, page);
     } catch (error) {
       const reason = error instanceof Error ? error.message : String(error);
       this.deps.log("color_options.read_failed", { url: option.url, reason });

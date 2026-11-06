@@ -9,7 +9,8 @@ import { showsSpecs, thisPageColumn, type QuickLookModel } from "./quicklook-mod
 
 function bodyContent(dom: Dom, model: QuickLookModel, actions: OverlayActions): HTMLElement {
   // The page snapshot is already in the model, so specs render without waiting for the comparison API.
-  if (model.pageSnapshot !== null && showsSpecs(model)) return renderSpecSheetContent(dom, model.pageSnapshot);
+  if (model.pageSnapshot !== null && showsSpecs(model))
+    return renderSpecSheetContent(dom, model.pageSnapshot, actions.readColor);
   if (model.status === "loading") return loadingView(dom);
   if (model.status === "failed") return failedView(dom, model.message ?? "unknown error", actions);
   const state = model.state;

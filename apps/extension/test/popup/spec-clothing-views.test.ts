@@ -77,17 +77,72 @@ describe("size chart card", () => {
 });
 
 describe("colours card", () => {
-  test("lists each colour linking to its listing, with read price or a prompt", () => {
-    const view = mount([], COLORS);
-    const links = [...view.querySelectorAll<HTMLAnchorElement>(".color-option")];
-    expect(links.map((link) => link.getAttribute("href"))).toEqual([
-      "https://www.amazon.in/dp/B1",
-      "https://www.amazon.in/dp/B2",
-    ]);
-    expect(cellTexts(view, ".color-option-name")).toEqual(["White", "Blue"]);
-    expect(cellTexts(view, ".color-option-price")).toEqual(["₹582", "Open to see price"]);
-    expect(links[0]?.getAttribute("aria-current")).toBe("page");
-    expect(links[1]?.querySelector("img")?.getAttribute("src")).toBe("https://img.test/b-swatch.jpg");
+  const blueRead: ColorOption = {
+    ...(COLORS[1] as ColorOption),
+    price: { amount: 604, currency: "INR" },
+    availability: "In stock",
+    image: "https://img.test/b.jpg",
+  };
+  const swatches = (view: HTMLElement) => [...view.querySelectorAll<HTMLButtonElement>(".color-swatch")];
+  const preview = (view: HTMLElement, part: string) => view.querySelector(`.color-preview-${part}`)?.textContent;
+  const settle = () => new Promise((resolve) => setTimeout(resolve, 0));
+
+  function mountColors(readColor: ((option: ColorOption) => Promise<ColorOption>) | null): HTMLElement {
+    const { dom, root } = createTestDom();
+    const view = renderSpecSheetView(dom, buildSpecSnapshot({ colorOptions: COLORS }), readColor);
+    root.append(view);
+    return view;
+  }
+
+  test("opens on this page's colour and never links away (no new tabs)", () => {
+    const view = mountColors(null);
+    expect(view.querySelectorAll(".color-options a")).toHaveLength(0);
+    expect(preview(view, "name")).toBe("White");
+    expect(preview(view, "price")).toBe("₹582");
+    expect(swatches(view).map((swatch) => swatch.getAttribute("aria-label"))).toEqual(["White", "Blue"]);
+    expect(swatches(view)[0]?.getAttribute("aria-pressed")).toBe("true");
     expect(view.querySelector(".color-options-head .subtle")?.textContent).toBe("2 colours");
+  });
+
+  test("picking an unread colour reads its page in place, once, and shows its price and photo", async () => {
+    const asked: string[] = [];
+    const view = mountColors(async (option) => {
+      asked.push(option.externalId);
+      return blueRead;
+    });
+    swatches(view)[1]?.click();
+    expect(preview(view, "price")).toBe("Reading this colour…");
+    expect(swatches(view)[1]?.getAttribute("aria-pressed")).toBe("true");
+    await settle();
+    expect(preview(view, "name")).toBe("Blue");
+    expect(preview(view, "price")).toBe("₹604");
+    expect(view.querySelector(".color-preview-photo img")?.getAttribute("src")).toBe("https://img.test/b.jpg");
+
+    swatches(view)[0]?.click();
+    swatches(view)[1]?.click();
+    await settle();
+    expect(asked).toEqual(["B2"]);
+  });
+
+  test("a colour whose page fails says so, and a slow answer never overwrites a newer pick", async () => {
+    let fail: (error: Error) => void = () => {};
+    const view = mountColors(() => new Promise((_, reject) => (fail = reject)));
+    swatches(view)[1]?.click();
+    swatches(view)[0]?.click();
+    fail(new Error("HTTP 503"));
+    await settle();
+    expect(preview(view, "name")).toBe("White");
+
+    swatches(view)[1]?.click();
+    fail(new Error("HTTP 503"));
+    await settle();
+    expect(preview(view, "price")).toBe("Couldn’t read this colour’s price");
+  });
+
+  test("without a reader an unread colour shows its swatch and no price", () => {
+    const view = mountColors(null);
+    swatches(view)[1]?.click();
+    expect(preview(view, "price")).toBe("Price not shown for this colour");
+    expect(view.querySelector(".color-preview-photo img")?.getAttribute("src")).toBe("https://img.test/b-swatch.jpg");
   });
 });

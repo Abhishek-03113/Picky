@@ -26,6 +26,7 @@ export function createTestContext(): { context: PopupViewContext; clicks: Record
     webBaseUrl: "http://web",
     hostLabel: "amazon.in",
     autoOpen: true,
+    readColor: null,
     onDismissWelcome: () => void (clicks.dismissed += 1),
     onRetry: () => void (clicks.retried += 1),
     onAutoOpenChange: (checked) => void clicks.autoOpenChanges.push(checked),

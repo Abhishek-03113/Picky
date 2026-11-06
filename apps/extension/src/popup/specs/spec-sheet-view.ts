@@ -1,4 +1,5 @@
 import { filterSpecGroups, specCountLabel, type ProductSnapshot, type SpecGroup } from "@picky/catalog";
+import type { ReadColorOption } from "../../link-capture/color-page-reader.ts";
 import type { Dom } from "../dom.ts";
 import { renderSpecColorOptionsView } from "./spec-color-options-view.ts";
 import { renderSpecHighlightsView } from "./spec-highlights-view.ts";
@@ -17,12 +18,16 @@ import { renderSpecSummaryView } from "./spec-summary-view.ts";
  *
  * @example overlayBody.append(renderSpecSheetContent(dom, snapshot))
  */
-export function renderSpecSheetContent(dom: Dom, snapshot: ProductSnapshot): HTMLElement {
+export function renderSpecSheetContent(
+  dom: Dom,
+  snapshot: ProductSnapshot,
+  readColor: ReadColorOption | null = null,
+): HTMLElement {
   const content = dom.el("div", { className: "spec-content" }, [
     renderSpecSummaryView(dom, snapshot),
     renderSpecPriceView(dom, snapshot),
     ...renderSpecHighlightsView(dom, snapshot.highlights),
-    ...renderSpecColorOptionsView(dom, snapshot.colorOptions),
+    ...renderSpecColorOptionsView(dom, snapshot.colorOptions, readColor),
     ...renderSpecSizeChartsView(dom, snapshot.sizeCharts),
     renderSpecSheet(dom, snapshot.specGroups),
   ]);
@@ -34,8 +39,12 @@ export function renderSpecSheetContent(dom: Dom, snapshot: ProductSnapshot): HTM
  *
  * @example root.replaceChildren(renderShell(dom, { onBack, title: "Specifications" }, renderSpecSheetView(dom, snapshot)))
  */
-export function renderSpecSheetView(dom: Dom, snapshot: ProductSnapshot): HTMLElement {
-  return dom.el("main", { className: "body spec-body" }, [renderSpecSheetContent(dom, snapshot)]);
+export function renderSpecSheetView(
+  dom: Dom,
+  snapshot: ProductSnapshot,
+  readColor: ReadColorOption | null = null,
+): HTMLElement {
+  return dom.el("main", { className: "body spec-body" }, [renderSpecSheetContent(dom, snapshot, readColor)]);
 }
 
 interface SheetSlots {
