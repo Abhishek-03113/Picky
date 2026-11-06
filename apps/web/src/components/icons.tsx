@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import logoUrl from "../assets/logo-128.webp";
 
 interface IconProps {
   size?: number;
@@ -29,7 +30,7 @@ function StrokeIcon({ size = 16, strokeWidth, children }: StrokeIconProps) {
 
 /** The Picky mascot, shared with the homepage and extension. */
 export function LogoMark() {
-  return <img className="logo-mark" src="/logo-128.png" width={28} height={28} alt="" />;
+  return <img className="logo-mark" src={logoUrl} width={28} height={28} alt="" />;
 }
 
 /** Light bulb: lit while the theme is light. */

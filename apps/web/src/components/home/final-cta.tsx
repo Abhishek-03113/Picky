@@ -1,13 +1,14 @@
 import { supportedStoresText } from "@picky/catalog/sites";
 import { Link } from "@tanstack/react-router";
 import type { ReactElement } from "react";
+import logoUrl from "../../assets/logo-128.webp";
 import { EXTENSION_PATH, SIGN_IN_PATH } from "../../auth/route-guards.ts";
 
 /** The way in, in order: an account holds the library, the extension fills it. */
 export function FinalCta(): ReactElement {
   return (
     <section id="start" className="section final-cta" aria-labelledby="final-title">
-      <img src="/logo-128.png" width={72} height={72} alt="" className="final-mark" />
+      <img src={logoUrl} loading="lazy" width={72} height={72} alt="" className="final-mark" />
       <h2 id="final-title" className="h2 h2-large">
         Decide with confidence.
       </h2>
