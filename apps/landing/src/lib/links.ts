@@ -11,7 +11,9 @@ export interface LandingEnv {
 }
 
 export const DEFAULT_WEB_URL = "http://localhost:5173";
-export const DEFAULT_EXTENSION_URL = "#how";
+/** The published Chrome Web Store listing. */
+export const DEFAULT_EXTENSION_URL =
+  "https://chromewebstore.google.com/detail/picky-product-spec-sheets/dbeedkjlgkkdlhfcmdaanhbicdelfenc";
 
 function stripTrailingSlashes(url: string): string {
   return url.replace(/\/+$/, "");
