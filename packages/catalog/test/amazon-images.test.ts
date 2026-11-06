@@ -21,6 +21,11 @@ describe("extractAmazonImages", () => {
     ]);
     expect(extractAmazonImages(parseHtmlPage("<p></p>"))).toEqual([]);
   });
+
+  test("enlarges a landing src that is only a thumbnail (clothing pages leave data-old-hires empty)", () => {
+    const page = parseHtmlPage(`<img id="landingImage" data-old-hires="" src="${BASE}/a._SX342_SY445_QL70_ML2_.jpg">`);
+    expect(extractAmazonImages(page)).toEqual([`${BASE}/a._SL1000_.jpg`]);
+  });
 });
 
 describe("enlargeAmazonImageUrl", () => {

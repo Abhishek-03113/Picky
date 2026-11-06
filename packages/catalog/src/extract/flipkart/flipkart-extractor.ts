@@ -50,6 +50,8 @@ export function extractFlipkartProduct(page: PageNode, ref: FlipkartProductRef, 
     images: product.images,
     highlights: [],
     specGroups,
+    sizeCharts: [],
+    colorOptions: [],
     capturedAt: capturedAt.toISOString(),
   };
 }

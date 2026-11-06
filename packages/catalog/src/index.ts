@@ -27,3 +27,11 @@ export { countSpecs, filterSpecGroups, specCountLabel, specGroupAnchor } from ".
 export { formatCaptureTime } from "./present/capture-time.ts";
 export { sourceLabel } from "./present/source-label.ts";
 export { ratingCountLabel } from "./present/rating-label.ts";
+export {
+  LENGTH_UNITS,
+  convertLength,
+  measurementColumn,
+  sizeChartInUnit,
+  sizeChartUnit,
+  type LengthUnit,
+} from "./present/size-chart-units.ts";

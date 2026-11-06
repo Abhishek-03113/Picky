@@ -413,3 +413,170 @@
   font-weight: 500;
   overflow-wrap: anywhere;
 }
+
+/* Colours: one tile per listing, linking to it. Auto-fill keeps the grid fluid from popup to Quick Look. */
+.spec-view .color-options,
+.spec-view .size-charts {
+  padding: var(--ez-space-16);
+  display: flex;
+  flex-direction: column;
+  gap: var(--ez-space-12);
+}
+.spec-view .color-options-head,
+.spec-view .size-charts-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ez-space-8);
+}
+.spec-view .color-options h2,
+.spec-view .size-charts h2 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+}
+.spec-view .color-option-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: var(--ez-space-8);
+}
+.spec-view .color-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 100%;
+  padding: var(--ez-space-8);
+  border: 2px solid transparent;
+  border-radius: var(--ez-radius-control);
+  background: var(--ez-surface-grouped);
+  color: inherit;
+  text-decoration: none;
+}
+.spec-view .color-option:hover {
+  background: var(--ez-fill);
+}
+.spec-view .color-option[aria-current="page"] {
+  border-color: var(--ez-blue);
+}
+.spec-view .color-option-photo {
+  flex: 0 0 48px;
+  width: 48px;
+  height: 48px;
+  border-radius: 8px;
+  background: var(--ez-surface-raised);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.spec-view .color-option-photo img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+.spec-view .color-option-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  min-width: 0;
+}
+.spec-view .color-option-name {
+  font-size: 13px;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+.spec-view .color-option-price {
+  font-size: 13px;
+  color: var(--ez-label-strong-secondary);
+}
+.spec-view .color-option-stock {
+  font-size: 12px;
+  color: var(--ez-label-secondary);
+}
+
+/* Size chart: a fluid card. Wide tables scroll sideways inside it; chart images scale to its width. */
+.spec-view .unit-switch {
+  display: inline-flex;
+  padding: 2px;
+  border-radius: var(--ez-radius-full);
+  background: var(--ez-fill);
+}
+.spec-view .unit-switch button {
+  min-width: 44px;
+  height: 28px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: var(--ez-radius-full);
+  background: transparent;
+  color: var(--ez-label-strong-secondary);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.spec-view .unit-switch button[aria-pressed="true"] {
+  background: var(--ez-surface-raised);
+  color: var(--ez-label);
+  box-shadow: var(--ez-shadow-card);
+}
+.spec-view .size-chart-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ez-space-16);
+  min-width: 0;
+}
+.spec-view .size-chart {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--ez-space-8);
+  min-width: 0;
+}
+.spec-view .size-chart figcaption {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ez-label-strong-secondary);
+}
+.spec-view .size-chart-scroll {
+  max-width: 100%;
+  overflow-x: auto;
+  border-radius: var(--ez-radius-control);
+  border: 1px solid var(--ez-separator);
+}
+.spec-view .size-chart table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+}
+.spec-view .size-chart th,
+.spec-view .size-chart td {
+  padding: 8px 10px;
+  text-align: left;
+  white-space: nowrap;
+  border-bottom: 1px solid var(--ez-separator);
+}
+.spec-view .size-chart thead th {
+  background: var(--ez-surface-grouped);
+  font-weight: 600;
+  color: var(--ez-label-strong-secondary);
+}
+.spec-view .size-chart tbody tr:last-child > * {
+  border-bottom: 0;
+}
+.spec-view .size-chart tbody th {
+  font-weight: 600;
+}
+.spec-view .size-chart-image {
+  display: block;
+}
+.spec-view .size-chart-image img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--ez-radius-control);
+}

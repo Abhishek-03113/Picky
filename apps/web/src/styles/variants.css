@@ -1,0 +1,170 @@
+/* Colours and size chart: the two clothing cards between the summary and the spec groups. */
+.color-options,
+.size-charts {
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--ez-space-16);
+  min-width: 0;
+}
+.color-options-head,
+.size-charts-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ez-space-12);
+  flex-wrap: wrap;
+}
+.color-options h2,
+.size-charts h2 {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 600;
+}
+
+/* One tile per listing; auto-fill keeps the grid fluid from phone to desktop. */
+.color-option-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: var(--ez-space-12);
+}
+.color-option {
+  display: flex;
+  align-items: center;
+  gap: var(--ez-space-12);
+  height: 100%;
+  padding: 10px;
+  border: 2px solid transparent;
+  border-radius: var(--ez-radius-control);
+  background: var(--ez-surface-grouped);
+  color: inherit;
+  text-decoration: none;
+}
+.color-option:hover {
+  background: var(--ez-fill);
+}
+.color-option[aria-current="page"] {
+  border-color: var(--ez-blue);
+}
+.color-option-photo {
+  flex: 0 0 64px;
+  width: 64px;
+  height: 64px;
+  border-radius: 10px;
+  background: var(--ez-photo-backdrop);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.color-option-photo img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+.color-option-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 3px;
+  min-width: 0;
+}
+.color-option-name {
+  font-size: 15px;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+.color-option-price {
+  font-size: 15px;
+  color: var(--ez-label-strong-secondary);
+}
+.color-option-stock {
+  font-size: 13px;
+  color: var(--ez-label-secondary);
+}
+
+/* Size chart: a fluid card. Wide tables scroll sideways inside it; chart images scale to its width. */
+.unit-switch {
+  display: inline-flex;
+  padding: 2px;
+  border-radius: var(--ez-radius-full);
+  background: var(--ez-fill);
+}
+.unit-switch button {
+  min-width: 52px;
+  height: 32px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: var(--ez-radius-full);
+  background: transparent;
+  color: var(--ez-label-strong-secondary);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.unit-switch button[aria-pressed="true"] {
+  background: var(--ez-surface-raised);
+  color: var(--ez-label);
+  box-shadow: var(--ez-shadow-card);
+}
+.size-chart-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ez-space-20);
+  min-width: 0;
+}
+.size-chart {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--ez-space-8);
+  min-width: 0;
+}
+.size-chart figcaption {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ez-label-strong-secondary);
+}
+.size-chart-scroll {
+  max-width: 100%;
+  overflow-x: auto;
+  border: 1px solid var(--ez-separator);
+  border-radius: var(--ez-radius-control);
+}
+.size-chart table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 15px;
+  font-variant-numeric: tabular-nums;
+}
+.size-chart th,
+.size-chart td {
+  padding: 10px 14px;
+  text-align: left;
+  white-space: nowrap;
+  border-bottom: 1px solid var(--ez-separator);
+}
+.size-chart thead th {
+  background: var(--ez-surface-grouped);
+  font-weight: 600;
+  color: var(--ez-label-strong-secondary);
+}
+.size-chart tbody tr:last-child > * {
+  border-bottom: 0;
+}
+.size-chart tbody th {
+  font-weight: 600;
+}
+.size-chart-image {
+  display: block;
+}
+.size-chart-image img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--ez-radius-control);
+}

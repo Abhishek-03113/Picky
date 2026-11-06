@@ -9,6 +9,14 @@ const TWO_CELL_ROWS = { row: "tr", label: "td:first-child", value: "td:last-chil
 // Order here is the order Picky shows them in: the overview first, as the at-a-glance summary.
 const AMAZON_SPEC_SOURCES: readonly SpecGroupSource[] = [
   { kind: "fixed", title: "At a glance", ...TWO_CELL_ROWS, row: "#productOverview_feature_div tr" },
+  {
+    // Clothing layout: "Product facts" grid (material, fit, sleeve type…), seen on Van Heusen polo B076CKF1GB.
+    kind: "fixed",
+    title: "Product facts",
+    row: "#productFactsDesktopExpander .product-facts-detail",
+    label: ".a-col-left",
+    value: ".a-col-right",
+  },
   // Brand-supplied spec sheet (seen on iPhone 17, B0FQG1YHYR). Excludes the prodDetTable
   // tables, which some layouts nest under #tech and which are read below.
   { kind: "fixed", title: "Technical details", ...TWO_CELL_ROWS, row: "#tech table:not(.prodDetTable) tr" },

@@ -16,6 +16,8 @@ export function buildSampleSnapshot(overrides: Partial<ProductSnapshot> = {}): P
     images: ["https://m.media-amazon.com/images/I/61NBcHAmCpL._SL1500_.jpg"],
     highlights: [{ heading: "iOS", text: "Liquid Glass" }],
     specGroups: [{ title: "At a glance", specs: [{ label: "Brand", value: "Apple" }] }],
+    sizeCharts: [],
+    colorOptions: [],
     capturedAt: "2026-10-05T10:00:00.000Z",
     ...overrides,
   };

@@ -1,5 +1,7 @@
 import { describe, expect, test } from "bun:test";
+import type { SizeChartTable } from "@picky/catalog";
 import { renderToStaticMarkup } from "react-dom/server";
+import { ColorOptionsCard } from "../src/components/color-options-card.tsx";
 import { CreditFooter } from "../src/components/credit-footer.tsx";
 import { HighlightList } from "../src/components/highlight-list.tsx";
 import { ImageGallery } from "../src/components/image-gallery.tsx";
@@ -7,6 +9,7 @@ import { PriceBlock } from "../src/components/price-block.tsx";
 import { PriceCard } from "../src/components/price-card.tsx";
 import { ProductSummary } from "../src/components/product-summary.tsx";
 import { RatingNote } from "../src/components/rating-note.tsx";
+import { SizeChartCard } from "../src/components/size-chart-card.tsx";
 import { SourceLink } from "../src/components/source-link.tsx";
 import { SpecGroupCard } from "../src/components/spec-group-card.tsx";
 import { SpecGroupNav } from "../src/components/spec-group-nav.tsx";
@@ -156,5 +159,60 @@ describe("CreditFooter", () => {
     expect(html).toContain('href="https://abhishek-3113.vercel.app/"');
     expect(html).toContain(">AP3X</a>");
     expect(html).toContain('href="https://github.com/Abhishek-03113"');
+  });
+});
+
+describe("SizeChartCard", () => {
+  const chart: SizeChartTable = {
+    kind: "table",
+    title: "IN Regular",
+    columns: ["Brand Size", "Chest (in)"],
+    rows: [["S", "36.5"]],
+  };
+
+  test("shows the chart in its printed unit with an in/cm switch", () => {
+    const html = renderToStaticMarkup(<SizeChartCard charts={[chart]} />);
+    expect(html).toContain("<figcaption>IN Regular</figcaption>");
+    expect(html).toContain('<th scope="col">Chest (in)</th>');
+    expect(html).toContain("<td>36.5</td>");
+    expect(html).toContain('<button type="button" aria-pressed="true">in</button>');
+    expect(html).toContain('<button type="button" aria-pressed="false">cm</button>');
+  });
+
+  test("shows an uploaded chart image without a unit switch, and nothing for no charts", () => {
+    const html = renderToStaticMarkup(
+      <SizeChartCard charts={[{ kind: "image", title: null, imageUrl: "https://img/c.jpg" }]} />,
+    );
+    expect(html).toContain('src="https://img/c.jpg"');
+    expect(html).not.toContain("unit-switch");
+    expect(renderToStaticMarkup(<SizeChartCard charts={[]} />)).toBe("");
+  });
+});
+
+describe("ColorOptionsCard", () => {
+  const base = { swatchImage: "https://img/s.jpg", availability: null, image: null, price: null, selected: false };
+
+  test("links each colour to its listing with its read price, marking the current one", () => {
+    const html = renderToStaticMarkup(
+      <ColorOptionsCard
+        options={[
+          {
+            ...base,
+            name: "White",
+            externalId: "B1",
+            url: "https://www.amazon.in/dp/B1",
+            selected: true,
+            price: inr(582),
+          },
+          { ...base, name: "Blue", externalId: "B2", url: "https://www.amazon.in/dp/B2" },
+        ]}
+      />,
+    );
+    expect(html).toContain('href="https://www.amazon.in/dp/B1"');
+    expect(html).toContain('aria-current="page"');
+    expect(html).toContain("₹582");
+    expect(html).toContain("Open to see price");
+    expect(html).toContain("2 colours");
+    expect(renderToStaticMarkup(<ColorOptionsCard options={[]} />)).toBe("");
   });
 });

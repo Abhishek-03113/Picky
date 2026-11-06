@@ -8,6 +8,12 @@ describe("extractAmazonHighlights", () => {
       <li>By clicking on Add to Cart/Buy Now, you authorize Amazon…</li><li> </li><li>iOS — Liquid Glass</li></ul></div>`);
     expect(extractAmazonHighlights(page)).toEqual([{ heading: "iOS", text: "Liquid Glass" }]);
   });
+
+  test("reads clothing pages' bullets under Product facts", () => {
+    const page = parseHtmlPage(`<div id="productFactsDesktopExpander"><h3>About this item</h3>
+      <ul><li><span>Fit :Regular Fit</span></li></ul></div>`);
+    expect(extractAmazonHighlights(page)).toEqual([{ heading: null, text: "Fit :Regular Fit" }]);
+  });
 });
 
 describe("splitHighlight", () => {
