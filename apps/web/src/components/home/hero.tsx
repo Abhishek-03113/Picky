@@ -11,12 +11,11 @@ export function Hero(): ReactElement {
     <section id="top" className="hero" aria-labelledby="hero-title">
       <div className="hero-copy">
         <h1 id="hero-title">
-          Stop shopping by opening more tabs.
-          <span className="hero-turn">Start making better decisions.</span>
+          {`Compare ${supportedStoresText()} products without opening more tabs.`}
+          <span className="hero-turn">Every detail, on one clean page.</span>
         </h1>
         <p className="lede">
-          Picky saves products as you browse, shows every detail on one clean page, and points out where your shortlist
-          really differs. For {supportedStoresText()}.
+          Picky saves products as you browse, puts your shortlist side by side, and points out where it really differs.
         </p>
         <div className="cta-row">
           <Link className="pill pill-large" to={SIGN_IN_PATH} search={{ mode: "signup" }}>

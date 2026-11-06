@@ -8,6 +8,7 @@ import { createComparisonsClient } from "./api/comparisons-client.ts";
 import { createWindowExtensionBridge } from "./api/extension-bridge.ts";
 import { createProductsClient } from "./api/products-client.ts";
 import { createSessionExpiryHandler } from "./auth/session-expiry.ts";
+import { rememberSignedIn } from "./auth/signed-in-hint.ts";
 import { readAppConfig } from "./config/app-config.ts";
 import { createPickyRouter } from "./router.tsx";
 import "@picky/ui-tokens/tokens.css";
@@ -24,7 +25,7 @@ const queryClient = new QueryClient({
 });
 const router = createPickyRouter({
   queryClient,
-  authClient: createAuthClient(fetch.bind(window), ""),
+  authClient: rememberSignedIn(createAuthClient(fetch.bind(window), ""), window.localStorage),
   productsClient: createProductsClient(fetch.bind(window), ""),
   comparisonsClient: createComparisonsClient(fetch.bind(window), ""),
   extensionBridge: createWindowExtensionBridge(window, () => crypto.randomUUID()),
@@ -36,10 +37,14 @@ const onApiError = createSessionExpiryHandler(queryClient, router);
 const rootElement = document.getElementById("root");
 if (rootElement === null) throw new Error('Missing <div id="root"> in index.html; expected the Vite entry markup');
 
-createRoot(rootElement).render(
-  <StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
-    </QueryClientProvider>
-  </StrictMode>,
+// Public pages arrive prerendered (prerender.ts). Rendering only once the first route has loaded means React's
+// first paint is the finished page, so the prerendered copy stays on screen until then instead of blanking.
+void router.load().finally(() =>
+  createRoot(rootElement).render(
+    <StrictMode>
+      <QueryClientProvider client={queryClient}>
+        <RouterProvider router={router} />
+      </QueryClientProvider>
+    </StrictMode>,
+  ),
 );

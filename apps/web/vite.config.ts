@@ -1,8 +1,8 @@
 import react from "@vitejs/plugin-react";
 import { defineConfig, type Plugin } from "vite";
 import { robotsTxt, sitemapXml } from "./crawl-files.ts";
-import { siteOrigin, withSocialUrls } from "./social-urls.ts";
-import { withStoreNames } from "./store-names-html.ts";
+import { HEAD_MARKER, SHELL_HEAD } from "./prerender-html.ts";
+import { siteOrigin } from "./social-urls.ts";
 
 const origin = siteOrigin(process.env);
 
@@ -22,8 +22,8 @@ function crawlFiles(): Plugin {
 export default defineConfig({
   plugins: [
     react(),
-    { name: "picky-social-urls", transformIndexHtml: (html) => withSocialUrls(html, origin) },
-    { name: "picky-store-names", transformIndexHtml: withStoreNames },
+    // The dev server has no prerender step (prerender.ts), so it serves the app shell's head.
+    { name: "picky-dev-head", apply: "serve", transformIndexHtml: (html) => html.replace(HEAD_MARKER, SHELL_HEAD) },
     crawlFiles(),
   ],
   build: {

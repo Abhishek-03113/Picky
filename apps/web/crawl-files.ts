@@ -2,9 +2,10 @@
  * robots.txt and sitemap.xml for search engines, generated at build time because a sitemap must list
  * absolute URLs and the production origin is only known then (see siteOrigin in social-urls.ts).
  */
+import { PUBLIC_PAGES } from "./src/seo/public-pages.ts";
 
-/** The pages worth indexing: the public ones (route-guards.ts). Sign-in and every signed-in page are left out. */
-export const INDEXED_PATHS: readonly string[] = ["/", "/extension", "/privacy"];
+/** The pages worth indexing: the public ones. Sign-in and every signed-in page are left out. */
+export const INDEXED_PATHS: readonly string[] = PUBLIC_PAGES.map((page) => page.path);
 
 /** Signed-in pages and the API: a crawler only ever sees a redirect to sign-in there. */
 const PRIVATE_PATH_PREFIXES: readonly string[] = ["/api/", "/products/", "/comparisons", "/login"];

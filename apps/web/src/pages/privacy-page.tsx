@@ -6,9 +6,10 @@ import {
   supportedStoresText,
 } from "@picky/catalog/sites";
 import { Link } from "@tanstack/react-router";
-import { EXTENSION_PATH } from "../auth/route-guards.ts";
+import { EXTENSION_PATH, PRIVACY_PATH } from "../auth/route-guards.ts";
 import { AppBar, BrandLink, SiteNav } from "../components/app-bar.tsx";
 import { usePageTitle } from "../hooks/use-page-title.ts";
+import { publicPage } from "../seo/public-pages.ts";
 
 /** Where privacy questions and deletion requests go; also linked from the Chrome Web Store listing. */
 export const PRIVACY_CONTACT_URL = "https://github.com/Abhishek-03113/Picky/issues";
@@ -23,7 +24,7 @@ const STORE_MARKS = formatList([...new Set(SHOPPING_SITES.flatMap((site) => [sit
  * Store requires one, and its "Privacy practices" answers must match it (docs/chrome-web-store.md).
  */
 export function PrivacyPage() {
-  usePageTitle("Privacy");
+  usePageTitle(publicPage(PRIVACY_PATH).name);
   return (
     <>
       <AppBar>

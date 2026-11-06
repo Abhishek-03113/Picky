@@ -2,25 +2,13 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <script>try{if(localStorage.getItem("picky-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+    <script>try{if(localStorage.getItem("picky-theme")==="dark")document.documentElement.dataset.theme="dark";if(localStorage.getItem("picky-signed-in")==="1")document.documentElement.dataset.signedIn=""}catch(e){}</script>
+    <style>html[data-signed-in] [data-prerendered]{visibility:hidden}</style>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Picky: stop opening more tabs</title>
-    <meta
-      name="description"
-      content="Picky saves products as you browse __PICKY_STORES__, shows every detail on one clean page, and points out where your shortlist really differs."
-    />
+    <!-- picky:head -->
     <link rel="icon" type="image/png" href="/logo-128.png" />
     <link rel="apple-touch-icon" href="/logo-128.png" />
     <meta name="theme-color" content="#0d5563" />
-    <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="Picky" />
-    <meta property="og:title" content="Picky: stop opening more tabs" />
-    <meta
-      property="og:description"
-      content="Save products as you browse, see every detail on one clean page, and compare your shortlist side by side."
-    />
-    <meta name="twitter:card" content="summary" />
-    <!-- picky:social-urls (og:url and og:image need absolute URLs; vite.config.ts fills them in) -->
   </head>
   <body>
     <div id="root"></div>

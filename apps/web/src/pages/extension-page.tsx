@@ -3,18 +3,19 @@ import { supportedDomainsText } from "@picky/catalog/sites";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { Link, getRouteApi } from "@tanstack/react-router";
 import { currentUserQuery } from "../api/auth-queries.ts";
-import { PRIVACY_PATH, SIGN_IN_PATH } from "../auth/route-guards.ts";
+import { EXTENSION_PATH, PRIVACY_PATH, SIGN_IN_PATH } from "../auth/route-guards.ts";
 import { AppBar, BrandLink, SiteNav } from "../components/app-bar.tsx";
 import { CheckIcon } from "../components/icons.tsx";
 import { SetupSteps } from "../components/setup-steps.tsx";
 import { extensionGestures, setupSteps } from "../extension/extension-setup.ts";
 import { usePageTitle } from "../hooks/use-page-title.ts";
+import { publicPage } from "../seo/public-pages.ts";
 
 const extensionRouteApi = getRouteApi("/extension");
 
 /** Install guide for the Chrome extension: store link, setup steps, shortcuts and what it can see. */
 export function ExtensionPage() {
-  usePageTitle("Chrome extension");
+  usePageTitle(publicPage(EXTENSION_PATH).name);
   const { config, extensionBridge, authClient, os } = extensionRouteApi.useRouteContext();
   const { data: user } = useSuspenseQuery(currentUserQuery(authClient));
   return (
