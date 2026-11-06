@@ -53,7 +53,7 @@ describe("search metadata for public pages", () => {
 describe("prerendered HTML", () => {
   test("every public page renders its content as a signed-out visitor", async () => {
     const headings = {
-      "/": "Stop shopping by opening more tabs.",
+      "/": "products without opening more tabs.",
       "/extension": "Get the Picky extension",
       "/privacy": "Privacy policy",
     };

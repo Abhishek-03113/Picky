@@ -1,3 +1,4 @@
+import { supportedStoresText } from "@picky/catalog/sites";
 import { describe, expect, test } from "bun:test";
 import { renderToStaticMarkup } from "react-dom/server";
 import { BeforeAfter } from "../src/components/home/before-after.tsx";
@@ -24,7 +25,7 @@ describe("homepage at / for a signed-out visitor", () => {
   test("explains the product before asking for an account", async () => {
     const { html, router } = await renderSignedOut("/");
     expect(router.state.location.pathname).toBe("/");
-    expect(html).toContain("Stop shopping by opening more tabs.");
+    expect(html).toContain(`Compare ${supportedStoresText()} products without opening more tabs.`);
     expect(html).toContain("Sign in");
     expect(html).not.toContain("Welcome to Picky");
     expect(html).not.toContain("Sign out");

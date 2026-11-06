@@ -135,8 +135,10 @@
     align-items: flex-start;
     gap: var(--ez-space-24);
   }
+  /* The headline names the stores and what Picky does (it's what people search for), so it runs longer
+     than a slogan: sized to stay within four lines beside the mascot and keep the buttons in view. */
   .hero h1 {
-    font-size: clamp(40px, 5.6vw, 64px);
+    font-size: clamp(32px, 4.2vw, 52px);
     line-height: 1.05;
     font-weight: 700;
     letter-spacing: -0.03em;
