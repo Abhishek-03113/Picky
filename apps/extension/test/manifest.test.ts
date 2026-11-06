@@ -6,6 +6,7 @@ interface ManifestCommand {
   description: string;
 }
 interface Manifest {
+  description: string;
   action: { default_title: string };
   commands: Record<string, ManifestCommand>;
 }
@@ -27,5 +28,14 @@ describe("manifest.json commands", () => {
     const command = (await readManifest()).commands["open-comparison"];
     expect(command?.suggested_key.default).toBe("Alt+Shift+V");
     expect(command?.description).toBe("Quick Look: compare this page");
+  });
+});
+
+describe("manifest.json description", () => {
+  // Chrome refuses to load an extension whose description is longer than this.
+  const CHROME_DESCRIPTION_LIMIT = 132;
+
+  test("fits Chrome's limit", async () => {
+    expect((await readManifest()).description.length).toBeLessThanOrEqual(CHROME_DESCRIPTION_LIMIT);
   });
 });
