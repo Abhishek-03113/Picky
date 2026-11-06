@@ -14,7 +14,7 @@ export function Hero(): ReactElement {
           <span className="hero-turn">Start making better decisions.</span>
         </h1>
         <p className="lede">
-          Picky saves products as you browse, turns each one into a clean spec sheet, and shows where your shortlist
+          Picky saves products as you browse, shows every detail on one clean page, and points out where your shortlist
           really differs. For {supportedStoresText()}.
         </p>
         <div className="cta-row">
@@ -32,7 +32,7 @@ export function Hero(): ReactElement {
             Sign in
           </Link>
           {" · "}
-          <a href="#sample">See a sample sheet</a>
+          <a href="#sample">See an example</a>
         </p>
       </div>
       <img

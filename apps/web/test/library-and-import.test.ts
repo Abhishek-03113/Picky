@@ -6,15 +6,23 @@ import { filterProductsByStore } from "../src/library/filter-products.ts";
 import { makeSummary } from "./fakes/product-fixtures.ts";
 
 describe("filterProductsByStore", () => {
-  const products = [makeSummary({ id: "a" }), makeSummary({ id: "f", source: "flipkart.com" })];
+  const products = [
+    makeSummary({ id: "a" }),
+    makeSummary({ id: "c", source: "amazon.com" }),
+    makeSummary({ id: "f", source: "flipkart.com" }),
+  ];
 
   test("keeps everything for 'all'", () => {
-    expect(filterProductsByStore(products, "all")).toHaveLength(2);
+    expect(filterProductsByStore(products, "all")).toHaveLength(3);
   });
 
   test("keeps only the chosen store, possibly none", () => {
-    expect(filterProductsByStore(products, "flipkart.com").map((product) => product.id)).toEqual(["f"]);
-    expect(filterProductsByStore([products[0]!], "flipkart.com")).toEqual([]);
+    expect(filterProductsByStore(products, "Flipkart").map((product) => product.id)).toEqual(["f"]);
+    expect(filterProductsByStore([products[0]!], "Flipkart")).toEqual([]);
+  });
+
+  test("Amazon keeps every Amazon storefront", () => {
+    expect(filterProductsByStore(products, "Amazon").map((product) => product.id)).toEqual(["a", "c"]);
   });
 });
 

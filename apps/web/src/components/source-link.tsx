@@ -1,7 +1,7 @@
 import { type ProductSource, sourceLabel } from "@picky/catalog";
 import { ExternalLinkIcon } from "./icons.tsx";
 
-/** "View on Amazon.in" pill that opens the original product page. */
+/** "View on Amazon" pill that opens the original product page. */
 export function SourceLink({ source, url }: { source: ProductSource; url: string }) {
   return (
     <a className="pill-link" href={url} target="_blank" rel="noreferrer">

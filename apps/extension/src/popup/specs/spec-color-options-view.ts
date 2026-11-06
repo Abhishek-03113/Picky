@@ -88,13 +88,13 @@ function paintPreview(dom: Dom, preview: HTMLElement, state: ColorState): void {
   if (state.kind === "ready" && option.availability !== null) {
     text.append(dom.el("span", { className: "color-preview-stock", text: option.availability }));
   }
-  if (option.selected) text.append(dom.el("span", { className: "chip", text: "This page" }));
+  if (option.selected) text.append(dom.el("span", { className: "chip", text: "The one you’re viewing" }));
   preview.setAttribute("aria-busy", String(state.kind === "loading"));
   preview.replaceChildren(photo, text);
 }
 
 function priceLabel(state: ColorState): string {
-  if (state.kind === "loading") return "Reading this colour…";
-  if (state.kind === "failed") return "Couldn’t read this colour’s price";
+  if (state.kind === "loading") return "Getting this colour’s details…";
+  if (state.kind === "failed") return "Couldn’t get this colour’s details. Tap it again to try once more.";
   return state.option.price === null ? "Price not shown for this colour" : formatMoney(state.option.price);
 }

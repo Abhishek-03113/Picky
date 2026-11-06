@@ -7,27 +7,26 @@ describe("formatCapturedLabel", () => {
   const now = new Date("2026-10-05T12:00:00Z");
 
   test("says today and yesterday by calendar day", () => {
-    expect(formatCapturedLabel("2026-10-05T01:00:00Z", now, "UTC")).toBe("Captured today");
-    expect(formatCapturedLabel("2026-10-04T23:59:00Z", now, "UTC")).toBe("Captured yesterday");
+    expect(formatCapturedLabel("2026-10-05T01:00:00Z", now, "UTC")).toBe("Saved today");
+    expect(formatCapturedLabel("2026-10-04T23:59:00Z", now, "UTC")).toBe("Saved yesterday");
   });
 
   test("uses the day and month for older captures, adding the year across years", () => {
-    expect(formatCapturedLabel("2026-10-03T08:00:00Z", now, "UTC")).toBe("Captured 3 Oct");
-    expect(formatCapturedLabel("2025-12-31T08:00:00Z", now, "UTC")).toBe("Captured 31 Dec 2025");
+    expect(formatCapturedLabel("2026-10-03T08:00:00Z", now, "UTC")).toBe("Saved 3 Oct");
+    expect(formatCapturedLabel("2025-12-31T08:00:00Z", now, "UTC")).toBe("Saved 31 Dec 2025");
   });
 
   test("respects the time zone when deciding which day it was", () => {
-    expect(formatCapturedLabel("2026-10-04T20:00:00Z", now, "Asia/Kolkata")).toBe("Captured today");
+    expect(formatCapturedLabel("2026-10-04T20:00:00Z", now, "Asia/Kolkata")).toBe("Saved today");
   });
 });
 
 describe("source labels", () => {
-  test("map sources to display names and build the store filter from PRODUCT_SOURCES", () => {
+  test("build the store filter from the stores, one segment for every Amazon storefront", () => {
     expect(storeFilterOptions()).toEqual([
       { value: "all", label: "All" },
-      { value: "amazon.in", label: "Amazon.in" },
-      { value: "amazon.com", label: "Amazon.com" },
-      { value: "flipkart.com", label: "Flipkart" },
+      { value: "Amazon", label: "Amazon" },
+      { value: "Flipkart", label: "Flipkart" },
     ]);
   });
 });

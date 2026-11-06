@@ -1,3 +1,4 @@
+import { failureHint } from "../failure-hint.ts";
 import { Dom } from "../popup/dom.ts";
 import { addedDetail, type ToastMessage } from "./toast-message.ts";
 
@@ -30,10 +31,10 @@ function badge(dom: Dom, kind: "spin" | "ok" | "fail"): HTMLElement {
 
 function addedToast(dom: Dom, message: Extract<ToastMessage, { kind: "added" }>, actions: ToastActions): HTMLElement[] {
   const { undo } = message;
-  const buttons = [linkButton(dom, "Quick Look", () => actions.openQuickLook())];
+  const buttons = [linkButton(dom, "See details", () => actions.openQuickLook())];
   if (undo !== null) buttons.push(linkButton(dom, "Undo", () => actions.undo(undo.comparisonId, undo.productId)));
   const row = dom.el("div", { className: "toast-actions" }, buttons);
-  return [badge(dom, "ok"), lines(dom, `Added ${message.title}`, addedDetail(message), [row])];
+  return [badge(dom, "ok"), lines(dom, `Saved ${message.title}`, addedDetail(message), [row])];
 }
 
 /**
@@ -51,9 +52,7 @@ export function toastView(dom: Dom, message: ToastMessage, actions: ToastActions
 
 function toastContent(dom: Dom, message: ToastMessage, actions: ToastActions): Node[] {
   if (message.kind === "added") return addedToast(dom, message, actions);
-  if (message.kind === "failed") return [badge(dom, "fail"), lines(dom, "Could not add that product", message.reason)];
-  return [
-    badge(dom, "spin"),
-    lines(dom, `Reading ${message.title}…`, `Into ${message.destination} · stay on this page`),
-  ];
+  if (message.kind === "failed")
+    return [badge(dom, "fail"), lines(dom, "Couldn't save that product", failureHint(message.reason))];
+  return [badge(dom, "spin"), lines(dom, `Saving ${message.title}…`, `To ${message.destination}. Keep browsing.`)];
 }

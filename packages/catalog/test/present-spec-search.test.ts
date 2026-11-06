@@ -42,13 +42,13 @@ describe("countSpecs", () => {
 
 describe("specCountLabel", () => {
   test("describes the full sheet without a query", () => {
-    expect(specCountLabel(groups, groups, "")).toBe("3 specs in 2 groups");
-    expect(specCountLabel([groups[1]!], [groups[1]!], " ")).toBe("1 spec in 1 group");
+    expect(specCountLabel(groups, groups, "")).toBe("3 details in 2 sections");
+    expect(specCountLabel([groups[1]!], [groups[1]!], " ")).toBe("1 detail in 1 section");
   });
 
   test("counts matching specs with a query", () => {
-    expect(specCountLabel(groups, [groups[1]!], "battery")).toBe("1 matching spec");
-    expect(specCountLabel(groups, groups, "a")).toBe("3 matching specs");
+    expect(specCountLabel(groups, [groups[1]!], "battery")).toBe("1 matching detail");
+    expect(specCountLabel(groups, groups, "a")).toBe("3 matching details");
   });
 });
 

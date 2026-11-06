@@ -31,7 +31,7 @@ interface ComparisonBodyProps {
 function ComparisonBody({ products, onRemove }: ComparisonBodyProps) {
   const controls = useMatrixControls();
   if (products.length === 0) {
-    return <p className="card empty-state">No products yet. Use “Add product”, or select products in the library.</p>;
+    return <p className="card empty-state">No products yet. Use “Add product”, or select products in Saved.</p>;
   }
   const differencesOnly = controls.mode === "differences";
   const snapshots = products.map((product) => product.snapshot);
@@ -59,7 +59,7 @@ function ComparisonHeading({ comparison, onAdd }: ComparisonHeadingProps) {
   const rename = useRenameComparison();
   const remove = useDeleteComparison();
   const confirmDelete = () => {
-    if (window.confirm(`Delete “${comparison.name}”? Its products stay in your library.`)) remove.mutate(comparison.id);
+    if (window.confirm(`Delete “${comparison.name}”? Its products stay saved.`)) remove.mutate(comparison.id);
   };
   return (
     <div className="compare-heading">

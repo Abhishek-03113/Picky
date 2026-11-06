@@ -1,4 +1,10 @@
-import { formatList, SHOPPING_SITES, storeBrandsText, supportedStoresText } from "@picky/catalog/sites";
+import {
+  formatList,
+  SHOPPING_SITES,
+  storeBrandsText,
+  storeNamesWithDomains,
+  supportedStoresText,
+} from "@picky/catalog/sites";
 import { Link } from "@tanstack/react-router";
 import { EXTENSION_PATH } from "../auth/route-guards.ts";
 import { AppBar, BrandLink, SiteNav } from "../components/app-bar.tsx";
@@ -7,8 +13,9 @@ import { usePageTitle } from "../hooks/use-page-title.ts";
 /** Where privacy questions and deletion requests go; also linked from the Chrome Web Store listing. */
 export const PRIVACY_CONTACT_URL = "https://github.com/Abhishek-03113/Picky/issues";
 const LAST_UPDATED = "2 November 2026";
-const STORES_AND_PICKY = formatList([...SHOPPING_SITES.map((site) => site.label), "the Picky website"], "and");
-// Every company and store name that belongs to someone else: "Amazon, Amazon.in, Amazon.com and Flipkart".
+// "Amazon (amazon.in and amazon.com), Flipkart and the Picky website": exactly where the extension works.
+const STORES_AND_PICKY = formatList([...storeNamesWithDomains(), "the Picky website"], "and");
+// Every company and store name that belongs to someone else: "Amazon and Flipkart".
 const STORE_MARKS = formatList([...new Set(SHOPPING_SITES.flatMap((site) => [site.brand, site.label]))], "and");
 
 /**
@@ -35,8 +42,8 @@ export function PrivacyPage() {
             <Link to={EXTENSION_PATH}>Picky browser extension</Link>.
           </p>
           <p>
-            In short: Picky collects only what it needs to give you your library and comparisons, uses it only for that,
-            and never sells it.
+            In short: Picky collects only what it needs to give you your saved products and comparisons, uses it only
+            for that, and never sells it.
           </p>
 
           <h2>Information we collect</h2>
@@ -64,7 +71,7 @@ export function PrivacyPage() {
           <ul>
             <li>{`It works only on ${STORES_AND_PICKY}, and nowhere else.`}</li>
             <li>It looks at a product page only when you ask it to, for example by clicking the Picky button.</li>
-            <li>Viewing a product's specs with Quick Look happens entirely in your browser. Nothing is saved.</li>
+            <li>Seeing a product's details without saving it happens entirely in your browser. Nothing is stored.</li>
             <li>It saves a product to your account only when you choose to save it.</li>
             <li>It does not track the sites you visit or collect your browsing history.</li>
           </ul>
@@ -94,8 +101,8 @@ export function PrivacyPage() {
 
           <h2>How long we keep it</h2>
           <p>
-            We keep your information for as long as you have a Picky account. Anything you delete from your library is
-            removed. If you ask us to delete your account, we delete it and everything in it within 30 days.
+            We keep your information for as long as you have a Picky account. Anything you delete from Picky is removed.
+            If you ask us to delete your account, we delete it and everything in it within 30 days.
           </p>
 
           <h2>Keeping it safe</h2>
@@ -107,7 +114,7 @@ export function PrivacyPage() {
 
           <h2>Your choices</h2>
           <ul>
-            <li>Remove any saved product or comparison from your library at any time.</li>
+            <li>Remove any saved product or comparison at any time.</li>
             <li>Uninstall the extension at any time. Its preferences are removed with it.</li>
             <li>
               Ask for a copy of the information Picky holds about you, ask us to correct it, or ask us to delete your
@@ -134,7 +141,7 @@ export function PrivacyPage() {
           </p>
           <ul>
             <li>
-              Prices, offers, stock and other details can change at any time. Information in your library reflects the
+              Prices, offers, stock and other details can change at any time. Saved product information reflects the
               page when it was saved. Always confirm the details on the seller&apos;s page before you buy.
             </li>
             <li>

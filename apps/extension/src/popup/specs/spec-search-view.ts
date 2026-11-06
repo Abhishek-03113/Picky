@@ -16,7 +16,7 @@ export function renderSpecSearchView(dom: Dom, onQueryChange: (query: string) =>
     attrs: {
       id: "spec-search",
       type: "search",
-      placeholder: "Find a spec — try “battery”",
+      placeholder: "Search details — try “battery”",
       autocomplete: "off",
       "data-focus": "spec-search",
     },
@@ -24,7 +24,7 @@ export function renderSpecSearchView(dom: Dom, onQueryChange: (query: string) =>
   input.addEventListener("input", () => onQueryChange(input.value));
   const element = dom.el("div", { className: "search-box" }, [
     dom.icon("search", "icon-md"),
-    dom.el("label", { className: "visually-hidden", attrs: { for: "spec-search" }, text: "Find a spec" }),
+    dom.el("label", { className: "visually-hidden", attrs: { for: "spec-search" }, text: "Search details" }),
     input,
   ]);
   return { element, input };

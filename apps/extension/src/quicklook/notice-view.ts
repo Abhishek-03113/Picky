@@ -1,4 +1,5 @@
 import { supportedStoresText } from "@picky/catalog/sites";
+import { failureHint } from "../failure-hint.ts";
 import { Dom } from "../popup/dom.ts";
 import type { OverlayActions } from "./overlay-actions.ts";
 import { thisPageColumn, type QuickLookModel } from "./quicklook-model.ts";
@@ -44,17 +45,17 @@ export function signedOutView(dom: Dom, webBaseUrl: string): HTMLElement {
   return notice(
     dom,
     "Sign in to compare",
-    "Specs work without an account. Sign in to save products and compare them side by side.",
+    "You can see details without an account. Sign in to save products and compare them side by side.",
     link,
   );
 }
 
-/** Shown when the first load failed; `message` is the worker's reason. */
+/** Shown when the first load failed; `message` is the worker's reason, turned into a shopper's hint. */
 export function failedView(dom: Dom, message: string, actions: OverlayActions): HTMLElement {
   return notice(
     dom,
-    "Quick Look could not load",
-    message,
+    "Couldn't open Picky on this page",
+    failureHint(message),
     actionButton(dom, "Try again", "retry", () => actions.retry()),
   );
 }
@@ -70,16 +71,16 @@ export function emptyView(dom: Dom, model: QuickLookModel, actions: OverlayActio
     return notice(
       dom,
       "No comparisons yet",
-      `Open a product page on ${supportedStoresText("or")} and press Quick Look to start one.`,
+      `Open a product page on ${supportedStoresText("or")} and click Picky to start one.`,
       null,
     );
   }
-  const button = actionButton(dom, "Add this page to start a comparison", "add-page", () => actions.addPage());
+  const button = actionButton(dom, "Add this product to start a comparison", "add-page", () => actions.addPage());
   button.toggleAttribute("disabled", model.busy);
-  return notice(dom, "No comparisons yet", "Save this page and it becomes your first comparison.", button);
+  return notice(dom, "No comparisons yet", "Save this product and it becomes your first comparison.", button);
 }
 
 /** A comparison with nothing saved and no product on this page. */
 export function emptyComparisonView(dom: Dom): HTMLElement {
-  return notice(dom, "Nothing saved here yet", "Open a product page and press Quick Look to add it.", null);
+  return notice(dom, "Nothing saved here yet", "Open a product page and click Picky to add it.", null);
 }

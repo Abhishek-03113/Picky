@@ -2,6 +2,7 @@ import { useNavigate } from "@tanstack/react-router";
 import { useState, type FormEvent } from "react";
 import { useAutoImport } from "../hooks/use-auto-import.ts";
 import { useImportProduct } from "../hooks/use-import-product.ts";
+import { importErrorMessage } from "../format/shopper-error.ts";
 import { useUrlImportEnabled } from "../hooks/use-url-import-enabled.ts";
 import { ImportCardView, ImportPillView } from "./import-field-views.tsx";
 
@@ -13,7 +14,7 @@ interface ImportProductFormProps {
 }
 
 /**
- * Paste a product URL from any supported site; the extension reads it and the spec sheet opens.
+ * Paste a product URL from any supported site; the extension saves it and its page opens.
  * Greyed out when the extension is not installed, and `?import=` is then left alone.
  */
 export function ImportProductForm({ variant, autoImportUrl }: ImportProductFormProps) {
@@ -37,7 +38,7 @@ export function ImportProductForm({ variant, autoImportUrl }: ImportProductFormP
     onSubmit: submit,
     isPending: importProduct.isPending,
     isUnavailable: !urlImportEnabled,
-    errorMessage: importProduct.isError ? importProduct.error.message : null,
+    errorMessage: importProduct.isError ? importErrorMessage(url) : null,
   };
   return variant === "pill" ? <ImportPillView {...viewProps} /> : <ImportCardView {...viewProps} />;
 }

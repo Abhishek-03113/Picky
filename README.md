@@ -2,7 +2,7 @@
 
 **Stop shopping by opening more tabs. Start shopping by making better decisions.**
 
-Picky is a personal shopping workspace that turns scattered product research into a clear decision. It helps you
+Picky is where you save, compare and decide, between finding a product and buying it. It helps you
 collect products as you browse, understand what each one actually offers, compare them side by side, and move from
 endless research to a confident purchase.
 
@@ -25,7 +25,7 @@ often decide from memory, intuition or whichever product they saw last.
 Picky sits between discovering a product and buying it.
 
 1. **Save** products while you browse. You don't have to leave the page or copy anything by hand.
-2. **Understand** each product through a clean, consistent spec sheet, free of store layouts and promotional noise.
+2. **Understand** each product with every detail on one clean page, without the store's offers and ads.
 3. **Compare** your shortlist. See what the products share, where they differ, and where one clearly wins.
 4. **Decide** with confidence. The buyer always makes the final call.
 
@@ -44,7 +44,7 @@ priorities vary (price, battery, performance, weight, reliability, one specific 
   layout each time.
 - **Comparison where you shop.** When you look at a new product, Picky shows how it stacks up against your shortlist.
   There is no need to remember which tab held the other one or to build your own spreadsheet.
-- **A library you own.** Research doesn't vanish when a tab closes. Come back to it whenever you like, and organise it
+- **Yours to keep.** Research doesn't vanish when a tab closes. Come back to it whenever you like, and organise it
   by category, store, brand or price.
 
 ## Comparison is the heart of the product

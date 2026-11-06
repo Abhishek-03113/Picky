@@ -74,7 +74,7 @@ function renderTable(dom: Dom, chart: SizeChartTable): HTMLElement {
 }
 
 function renderImage(dom: Dom, imageUrl: string): HTMLElement {
-  const image = dom.el("img", { attrs: { src: imageUrl, alt: "Size chart image from the seller", loading: "lazy" } });
+  const image = dom.el("img", { attrs: { src: imageUrl, alt: "Size chart, as the store shows it", loading: "lazy" } });
   const attrs = { href: imageUrl, target: "_blank", rel: "noopener noreferrer" };
   return dom.el("a", { className: "size-chart-image", attrs }, [image]);
 }

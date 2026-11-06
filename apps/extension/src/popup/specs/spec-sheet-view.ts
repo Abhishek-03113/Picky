@@ -69,7 +69,7 @@ function renderSpecSheet(dom: Dom, groups: readonly SpecGroup[]): HTMLElement {
   repaint("");
   return dom.el("section", { className: "spec-sheet", attrs: { "aria-labelledby": "spec-sheet-title" } }, [
     dom.el("div", { className: "spec-sheet-head" }, [
-      dom.el("h2", { attrs: { id: "spec-sheet-title" }, text: "Specifications" }),
+      dom.el("h2", { attrs: { id: "spec-sheet-title" }, text: "Details" }),
       slots.count,
     ]),
     dom.el("div", { className: "spec-sheet-tools" }, [search.element, slots.chips]),

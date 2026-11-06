@@ -7,6 +7,7 @@ import { emptyComparisonView, emptyView, failedView, loadingView, signedOutView 
 import type { OverlayActions } from "./overlay-actions.ts";
 import { renderSpecSheetContent } from "../popup/specs/spec-sheet-view.ts";
 import { showsSpecs, thisPageColumn, type QuickLookModel } from "./quicklook-model.ts";
+import { failureHint } from "../failure-hint.ts";
 
 function bodyContent(dom: Dom, model: QuickLookModel, actions: OverlayActions): HTMLElement {
   // The page snapshot is already in the model, so specs render without waiting for the comparison API.
@@ -23,7 +24,7 @@ function bodyContent(dom: Dom, model: QuickLookModel, actions: OverlayActions): 
 
 function errorBanner(dom: Dom, model: QuickLookModel): HTMLElement[] {
   if (model.status !== "ready" || model.message === null || showsSpecs(model)) return [];
-  return [dom.el("p", { className: "banner", text: model.message, attrs: { role: "alert" } })];
+  return [dom.el("p", { className: "banner", text: failureHint(model.message), attrs: { role: "alert" } })];
 }
 
 /**
@@ -48,7 +49,7 @@ export function overlayView(
   const body = dom.el("div", { className: "body" }, [...errorBanner(dom, model), bodyContent(dom, model, actions)]);
   // tabindex -1 + data-focus: the card takes initial focus, so Return reaches "add this page"
   // instead of activating whichever button would otherwise be focused first.
-  const cardAttrs = { role: "dialog", "aria-modal": "true", "aria-label": `Quick Look: ${label}`, tabindex: "-1" };
+  const cardAttrs = { role: "dialog", "aria-modal": "true", "aria-label": `Picky: ${label}`, tabindex: "-1" };
   const card = dom.el("section", { className: "card", attrs: { ...cardAttrs, "data-focus": "dialog" } }, [
     headerView(dom, model, actions),
     body,

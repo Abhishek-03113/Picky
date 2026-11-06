@@ -10,13 +10,13 @@ const signInRouteApi = getRouteApi("/login");
 const COPY: Record<SignInMode, { title: string; lead: string; submit: string; pending: string }> = {
   signin: {
     title: "Sign in to Picky",
-    lead: "Your library and comparisons are waiting.",
+    lead: "Your saved products and comparisons are waiting.",
     submit: "Sign in",
     pending: "Signing in…",
   },
   signup: {
     title: "Create your Picky account",
-    lead: "Save products and compare them, on any device. Reading specs in the extension never needs an account.",
+    lead: "Save products and compare them, on any device. Seeing details in the extension never needs an account.",
     submit: "Create account",
     pending: "Creating account…",
   },

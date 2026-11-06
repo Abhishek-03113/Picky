@@ -41,7 +41,7 @@ export function SizeChartCard({ charts }: SizeChartCardProps) {
               <ChartTable chart={sizeChartInUnit(chart, unit)} />
             ) : (
               <a className="size-chart-image" href={chart.imageUrl} target="_blank" rel="noopener noreferrer">
-                <img src={chart.imageUrl} alt="Size chart image from the seller" loading="lazy" />
+                <img src={chart.imageUrl} alt="Size chart, as the store shows it" loading="lazy" />
               </a>
             )}
           </figure>

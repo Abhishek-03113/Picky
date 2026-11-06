@@ -40,10 +40,10 @@ describe("library route", () => {
     const html = await renderAppAt("/", populated());
     expect(html).toContain("2 products in 1 group");
     expect(html).toContain('aria-pressed="true">All</button>');
-    expect(html).toContain("Amazon.in");
+    expect(html).toContain('aria-pressed="false">Amazon</button>');
     expect(html).toContain("Flipkart");
     expect(html).toContain("Apple iPhone 17");
-    expect(html).toContain("Paste a product link to add it");
+    expect(html).toContain("Paste a product link to save it");
   });
 
   test("prefills the import field from ?import= without importing during render", async () => {
@@ -96,10 +96,10 @@ describe("URL import availability", () => {
 describe("product route", () => {
   test("renders back link, source pill, price card and specs", async () => {
     const html = await renderAppAt("/products/p1", populated());
-    expect(html).toContain("Library");
-    expect(html).toContain("View on Amazon.in");
+    expect(html).toContain("Saved");
+    expect(html).toContain("View on Amazon");
     expect(html).toContain("17% off · save ₹6,064");
-    expect(html).toContain("2 specs in 2 groups");
+    expect(html).toContain("2 details in 2 sections");
   });
 });
 
@@ -168,7 +168,7 @@ describe("comparison routes", () => {
     expect(html).toContain('aria-label="Comparisons"');
     expect(html).toContain("All comparisons");
     expect(html).toContain("Differences");
-    expect(html).toContain("Mark best values");
+    expect(html).toContain("Show which is better");
     expect(html).toContain("Lowest");
     expect(html).toContain("Search Flipkart");
     expect(html).toContain('href="/products/p1"');

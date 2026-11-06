@@ -7,7 +7,16 @@ import { SHOPPING_SITES, type SupportedSite } from "./shopping-sites.ts";
  * @example siteHosts(shoppingSite("amazon.in")) // ["www.amazon.in", "amazon.in"]
  */
 export function siteHosts(site: ShoppingSite): string[] {
-  return [...new Set([site.host, site.host.replace(/^www\./, "")])];
+  return [...new Set([site.host, siteDomain(site)])];
+}
+
+/**
+ * The site's bare domain, as shoppers type it.
+ *
+ * @example siteDomain(shoppingSite("amazon.in")) // "amazon.in"
+ */
+export function siteDomain(site: ShoppingSite): string {
+  return site.host.replace(/^www\./, "");
 }
 
 /**

@@ -111,7 +111,7 @@ describe("colours card", () => {
       return blueRead;
     });
     swatches(view)[1]?.click();
-    expect(preview(view, "price")).toBe("Reading this colour…");
+    expect(preview(view, "price")).toBe("Getting this colour’s details…");
     expect(swatches(view)[1]?.getAttribute("aria-pressed")).toBe("true");
     await settle();
     expect(preview(view, "name")).toBe("Blue");
@@ -136,7 +136,7 @@ describe("colours card", () => {
     swatches(view)[1]?.click();
     fail(new Error("HTTP 503"));
     await settle();
-    expect(preview(view, "price")).toBe("Couldn’t read this colour’s price");
+    expect(preview(view, "price")).toBe("Couldn’t get this colour’s details. Tap it again to try once more.");
   });
 
   test("without a reader an unread colour shows its swatch and no price", () => {

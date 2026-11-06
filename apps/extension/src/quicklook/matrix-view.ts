@@ -55,7 +55,7 @@ function pageHead(
   model: QuickLookModel,
   actions: OverlayActions,
 ): HTMLElement {
-  const pill = dom.el("span", { className: "page-pill", text: "This page" });
+  const pill = dom.el("span", { className: "page-pill", text: "Viewing now" });
   const head = columnHead(dom, page, rating, [addButton(dom, model.busy, actions)]);
   head.classList.add("is-page");
   head.prepend(pill);
@@ -96,7 +96,7 @@ function groupTitle(dom: Dom, title: string): HTMLElement {
 }
 
 /**
- * The comparison matrix: a head row (saved products, then the highlighted "This page" column), the price
+ * The comparison matrix: a head row (saved products, then the highlighted "Viewing now" column), the price
  * row, then spec groups from buildComparisonMatrix, and an "N identical specs hidden" line.
  *
  * @example matrixView(dom, model, actions)
@@ -127,7 +127,7 @@ function headRow(
     ]),
   );
   if (page !== null) heads.push(pageHead(dom, page, ratingAt(saved.length), model, actions));
-  const note = dom.el("div", { className: "label label-note", text: "Lowest price and best values are labelled" });
+  const note = dom.el("div", { className: "label label-note", text: "Lowest price and better details are marked" });
   return dom.el("div", { className: "row head-row", attrs: { role: "row" } }, [note, ...heads]);
 }
 
@@ -144,6 +144,6 @@ function bodyRows(dom: Dom, matrix: ComparisonMatrix, hasPage: boolean): HTMLEle
 }
 
 function identicalLine(dom: Dom, count: number): HTMLElement {
-  const noun = count === 1 ? "spec" : "specs";
-  return dom.el("p", { className: "identical-note", text: `${count} identical ${noun} hidden` });
+  const noun = count === 1 ? "detail" : "details";
+  return dom.el("p", { className: "identical-note", text: `${count} ${noun} the same on all, hidden` });
 }

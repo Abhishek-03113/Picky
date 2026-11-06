@@ -59,7 +59,7 @@ function isSameProduct(product: CatalogProduct, snapshot: ProductSnapshot): bool
 }
 
 /**
- * The "This page" column's snapshot: the open tab's product, unless it is already saved in the comparison
+ * The "Viewing now" column's snapshot: the open tab's product, unless it is already saved in the comparison
  * (then it is just a normal column).
  *
  * @example thisPageColumn(model) // null on a search page or when the product is already saved

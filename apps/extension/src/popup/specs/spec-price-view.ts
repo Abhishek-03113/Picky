@@ -23,7 +23,7 @@ export function renderSpecPriceView(dom: Dom, snapshot: PriceSnapshot): HTMLElem
     renderPriceBlock(dom, snapshot.price, snapshot.listPrice),
   ]);
   if (snapshot.availability !== null) card.append(renderAvailability(dom, snapshot.availability));
-  const note = `Captured ${formatCaptureTime(snapshot.capturedAt)} · Prices change often — capture again to refresh.`;
+  const note = `Price as of ${formatCaptureTime(snapshot.capturedAt)} · Prices change often, so save it again from the store to update.`;
   card.append(dom.el("span", { className: "price-card-note", text: note }));
   return card;
 }

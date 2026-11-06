@@ -47,7 +47,7 @@ function ColorPreview({ option }: { option: ColorOption }) {
           {option.price === null ? "Price not shown for this colour" : formatMoney(option.price)}
         </span>
         {option.availability !== null && <span className="color-preview-stock">{option.availability}</span>}
-        {option.selected && <span className="chip">This page</span>}
+        {option.selected && <span className="chip">The one you saved</span>}
       </span>
     </div>
   );

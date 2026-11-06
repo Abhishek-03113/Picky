@@ -191,6 +191,6 @@ export class LinkCaptureService {
 }
 
 function describeTarget(target: AddTarget): string {
-  if (target.kind === "library") return "your library";
+  if (target.kind === "library") return "Saved";
   return target.kind === "new" ? "a new comparison" : "your comparison";
 }

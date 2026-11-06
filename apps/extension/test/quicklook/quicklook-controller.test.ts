@@ -62,11 +62,11 @@ const text = (root: HTMLElement, selector: string): string[] =>
   Array.from(root.querySelectorAll(selector), (node) => node.textContent ?? "");
 
 describe("QuickLookController", () => {
-  test("renders saved products, a highlighted This page column and Add", async () => {
+  test("renders saved products, a highlighted Viewing now column and Add", async () => {
     const { root, controller } = setup();
     await controller.open("compare");
     expect(text(root, ".head-name")).toEqual(["LG 27UP850N", "Dell S2722QC", "Apple iPhone 17"]);
-    expect(text(root, ".page-pill")).toEqual(["This page"]);
+    expect(text(root, ".page-pill")).toEqual(["Viewing now"]);
     expect(root.querySelector(".add")?.textContent).toContain("Add");
     expect(root.querySelector('[role="dialog"]')?.getAttribute("aria-modal")).toBe("true");
   });
@@ -80,17 +80,17 @@ describe("QuickLookController", () => {
   test("hides identical rows and says how many", async () => {
     const { root, controller } = setup({ page: null });
     await controller.open("compare");
-    expect(root.querySelector(".identical-note")?.textContent).toBe("1 identical spec hidden");
+    expect(root.querySelector(".identical-note")?.textContent).toBe("1 detail the same on all, hidden");
     expect(text(root, ".label")).not.toContain("Panel");
   });
 
-  test("has no Differences / All specs switch", async () => {
+  test("has no Differences / All details switch", async () => {
     const { root, controller } = setup();
     await controller.open("compare");
     expect(root.querySelector('[aria-label="Rows"]')).toBeNull();
   });
 
-  test("on a non-product page there is no This page column", async () => {
+  test("on a non-product page there is no Viewing now column", async () => {
     const { root, controller } = setup({ page: null });
     await controller.open("compare");
     expect(root.querySelector(".page-pill")).toBeNull();
@@ -134,7 +134,7 @@ describe("QuickLookController", () => {
   test("with no comparisons, offers to start one from this page", async () => {
     const { root, api, controller } = setup({ comparisons: 0 });
     await controller.open("compare");
-    expect(root.textContent).toContain("Add this page to start a comparison");
+    expect(root.textContent).toContain("Add this product to start a comparison");
     controller.addPage();
     await Bun.sleep(0);
     expect(api.calls).toContain("add created B0FQG1YHYR");
@@ -143,13 +143,14 @@ describe("QuickLookController", () => {
   test("with no comparisons on a non-product page there is nothing to add", async () => {
     const { root, controller } = setup({ comparisons: 0, page: null });
     await controller.open("compare");
-    expect(root.textContent).not.toContain("Add this page to start");
+    expect(root.textContent).not.toContain("Add this product to start");
   });
 
-  test("a failed first load shows the reason and Try again recovers", async () => {
+  test("a failed first load shows a retry hint, not the logged reason, and Try again recovers", async () => {
     const { root, api, controller } = setup({ fail: new Error("API down") });
     await controller.open("compare");
-    expect(root.textContent).toContain("API down");
+    expect(root.textContent).toContain("Reload the page, then try again.");
+    expect(root.textContent).not.toContain("API down");
     controller.retry();
     await Bun.sleep(0);
     expect(api.calls.filter((call) => call === "init")).toHaveLength(2);
@@ -162,7 +163,7 @@ describe("QuickLookController", () => {
     api.failNext = new Error("could not remove");
     controller.removeProduct("p1");
     await Bun.sleep(0);
-    expect(root.querySelector('[role="alert"]')?.textContent).toBe("could not remove");
+    expect(root.querySelector('[role="alert"]')?.textContent).toBe("Reload the page, then try again.");
     expect(text(root, ".head-name")).toContain("LG 27UP850N");
   });
 

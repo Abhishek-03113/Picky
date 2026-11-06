@@ -40,26 +40,26 @@ describe("renderPopupView", () => {
   test("capturing: has a status region and the host label", () => {
     const { dom } = createTestDom();
     const view = renderPopupView(dom, { kind: "capturing", phase: "saving" }, createTestContext().context);
-    expect(view.querySelector('[role="status"]')?.textContent).toContain("Reading this page");
+    expect(view.querySelector('[role="status"]')?.textContent).toContain("Getting the details");
     expect(view.querySelector(".header-host")?.textContent).toBe("amazon.in");
     expect(view.querySelectorAll(".progress-done").length).toBe(2);
   });
 
-  test("saved: card, struck list price, View specs button, Picky and library links, no HTML injection", () => {
+  test("saved: card, struck list price, See details button, Picky and library links, no HTML injection", () => {
     const { dom } = createTestDom();
     const view = renderPopupView(dom, { kind: "saved", summary: SUMMARY }, createTestContext().context);
     const hrefs = [...view.querySelectorAll("a")].map((link) => link.getAttribute("href"));
     expect(hrefs).toEqual(["http://web/", "http://web/products/p1", "http://web/products/p1"]);
     const links = [...view.querySelectorAll("a.button-secondary")].map((link) => link.textContent);
     expect(links).toEqual(["Open in Picky ↗"]);
-    expect(view.querySelector("button.button-primary")?.textContent).toBe("View specs");
+    expect(view.querySelector("button.button-primary")?.textContent).toBe("See details");
     expect(view.querySelector(".list-price")?.tagName).toBe("S");
     expect(view.querySelector(".product-title")?.textContent).toBe(SUMMARY.title);
     expect(view.querySelector("img.thumb-image")).toBeNull();
-    expect(view.textContent).toContain("54 specs in 10 groups");
+    expect(view.textContent).toContain("54 details in 10 sections");
   });
 
-  test("saved: View specs reports the click", () => {
+  test("saved: See details reports the click", () => {
     const { dom } = createTestDom();
     const { context, clicks } = createTestContext();
     const view = renderPopupView(dom, { kind: "saved", summary: SUMMARY }, context);
@@ -71,8 +71,8 @@ describe("renderPopupView", () => {
     const { dom } = createTestDom();
     const { context, clicks } = createTestContext();
     const view = renderPopupView(dom, { kind: "specs", summary: SUMMARY }, context);
-    expect(view.querySelector(".header .brand")?.textContent).toBe("Specifications");
-    expect(view.querySelector('a[aria-label="Open library"]')?.getAttribute("href")).toBe("http://web/");
+    expect(view.querySelector(".header .brand")?.textContent).toBe("Details");
+    expect(view.querySelector('a[aria-label="See saved products"]')?.getAttribute("href")).toBe("http://web/");
     expect(view.querySelector("main.spec-body")).not.toBeNull();
     (view.querySelector("button.back-button") as HTMLButtonElement).click();
     expect(clicks.backedToSaved).toBe(1);
@@ -105,11 +105,12 @@ describe("renderPopupView", () => {
     expect(view.textContent).toContain("Flipkart");
   });
 
-  test("failed: shows the message and retries", () => {
+  test("failed: shows a retry hint, not the logged reason, and retries", () => {
     const { dom } = createTestDom();
     const { context, clicks } = createTestContext();
     const view = renderPopupView(dom, { kind: "failed", message: "HTTP 500" }, context);
-    expect(view.querySelector(".detail")?.textContent).toBe("HTTP 500");
+    expect(view.textContent).toContain("Reload the page, then try again.");
+    expect(view.textContent).not.toContain("HTTP 500");
     (view.querySelector("button.button-primary") as HTMLButtonElement).click();
     expect(clicks.retried).toBe(1);
   });
@@ -119,7 +120,7 @@ describe("view helpers", () => {
   test("stepStates and describeSpecCount", () => {
     expect(stepStates("reading")).toEqual(["done", "active", "pending"]);
     expect(stepStates("saving")).toEqual(["done", "done", "active"]);
-    expect(describeSpecCount(1, 1)).toBe("1 spec in 1 group");
-    expect(describeSpecCount(54, 10)).toBe("54 specs in 10 groups");
+    expect(describeSpecCount(1, 1)).toBe("1 detail in 1 section");
+    expect(describeSpecCount(54, 10)).toBe("54 details in 10 sections");
   });
 });

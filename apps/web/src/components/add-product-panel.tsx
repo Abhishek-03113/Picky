@@ -32,8 +32,8 @@ export function AddProductPanel({ memberIds, onAdd, onClose }: AddProductPanelPr
         <input
           autoFocus
           type="search"
-          placeholder="Search your library"
-          aria-label="Search your library"
+          placeholder="Search saved products"
+          aria-label="Search saved products"
           value={text}
           onChange={(event) => setText(event.target.value)}
         />
@@ -51,7 +51,7 @@ interface PickerListProps {
 
 function pickerMeta(product: CatalogProductSummary, isMember: boolean): string {
   if (isMember) return "Added";
-  return product.price === null ? "No price" : formatMoney(product.price);
+  return product.price === null ? "Price not shown" : formatMoney(product.price);
 }
 
 function PickerList({ products, memberIds, onAdd }: PickerListProps) {

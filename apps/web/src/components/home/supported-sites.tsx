@@ -15,13 +15,11 @@ export function SupportedSites({
         <h2 id="sites-title" className="h2">
           The store is where you buy. Picky is where you decide.
         </h2>
-        <p className="sub">
-          {`Today it reads ${supportedStoresText()} pages. Comparing across stores is where it's headed.`}
-        </p>
+        <p className="sub">{`Today it works on ${supportedStoresText()}. Comparing across stores is coming.`}</p>
       </div>
       <ul className="site-list">
         {sites.map((site) => (
-          <li key={site.host}>
+          <li key={site.name}>
             <TickIcon />
             {site.name}
           </li>

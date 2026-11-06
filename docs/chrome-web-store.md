@@ -30,7 +30,7 @@ version it has already seen.
 
 | Field              | Value                                                                                       |
 | ------------------ | ------------------------------------------------------------------------------------------- |
-| Name               | From the manifest: `Picky: Product Spec Sheets & Compare`                                   |
+| Name               | From the manifest: `Picky: Compare Products & See Every Detail`                             |
 | Summary            | From the manifest `description`                                                             |
 | Category           | Shopping                                                                                    |
 | Language           | English (India), or English                                                                 |
@@ -46,42 +46,42 @@ Regenerate the promo tiles after a brand change with `bun run --cwd apps/extensi
 (source: `apps/extension/store/promo.html`).
 
 **Screenshots** have to show the extension itself, so take them by hand on real pages at a
-1280×800 window: Quick Look's Specs view on an Amazon.in product, the Compare view with two products,
-the right-click "Add to Picky" menu, and the web app's spec sheet or comparison page.
+1280×800 window: the Picky panel's Details view on an Amazon product, the Compare view with two
+products, the right-click "Save to Picky" menu, and the web app's product or comparison page.
 
 **Description** (paste as is):
 
-> Picky turns cluttered Amazon.in, Amazon.com and Flipkart product pages into one clean, consistent
-> spec sheet, and helps you compare the products you are choosing between.
+> Picky shows every detail of an Amazon or Flipkart product on one clean page, without the offers and
+> ads, and helps you compare the products on your shortlist.
 >
-> • Quick Look: click the Picky button (or press Alt+Shift+S) on any product page to see its specs,
-> grouped and searchable, without offers, ads and financing in the way. No account needed.
-> • Sizes and colours: clothing and shoes get a size chart you can read in inches or centimetres, and
-> every colour's photo, price and stock, picked in place without opening new tabs.
-> • Save as you browse: right-click → Add to Picky, or Alt+click a product link, to add it to your
-> library without leaving the page.
-> • Compare: put your shortlist side by side (Alt+Shift+V). Identical specs fold away, clear wins are
-> marked, and matters of taste are left to you.
-> • Your library on any device: saved products and comparisons live in your free Picky account.
+> • See every detail: click the Picky button (or press Alt+Shift+S) on any product page. Full specs, in
+> clear sections you can search. No account needed.
+> • Sizes and colours: clothes and shoes come with their size chart, in inches or centimetres. Tap a
+> colour to see its photo, price and stock, without opening another tab.
+> • Save as you browse: right-click → Save to Picky, or hold Alt and click a product link, to save it
+> without leaving the page.
+> • Compare: put your shortlist side by side (Alt+Shift+V). Details that match fold away, clear wins
+> are marked, and matters of taste are left to you.
+> • Saved on any device: your products and comparisons live in your free Picky account.
 >
-> Picky works only on Amazon.in, Amazon.com, Flipkart and the Picky website. It reads a page only when
-> you ask, shows no ads and sells nothing. Picky is not affiliated with Amazon or Flipkart.
+> Picky works only on Amazon (amazon.in and amazon.com), Flipkart and the Picky website. It looks at a
+> page only when you ask, shows no ads and sells nothing. Picky is not affiliated with Amazon or Flipkart.
 
 ## 3. Privacy practices tab
 
 **Single purpose:**
 
-> Picky turns product pages on Amazon.in, Amazon.com and Flipkart into clean spec sheets that the user
-> can save to their Picky library and compare.
+> Picky shows every detail of a product page on Amazon (amazon.in and amazon.com) and Flipkart on one
+> clean page, which the user can save to their Picky account and compare.
 
 **Permission justifications** (the same text as `PERMISSION_JUSTIFICATIONS`):
 
 | Permission         | Justification                                                                                                                                       |
 | ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `activeTab`        | Reads the product page in the current tab only when the user clicks the toolbar button, presses the shortcut or uses the context menu.             |
-| `scripting`        | Injects the Quick Look panel and the page reader into that tab, after one of those user actions, to turn the page into a spec sheet.               |
+| `scripting`        | Injects the Picky panel and the page reader into that tab, after one of those user actions, to show the product's details.                         |
 | `storage`          | Keeps a few preferences on the device, such as the comparison the user picked last.                                                                 |
-| `contextMenus`     | Adds "Add to Picky" and "Quick Look" to the right-click menu on Amazon.in, Amazon.com and Flipkart.                                                 |
+| `contextMenus`     | Adds "Save to Picky" and "See details" to the right-click menu on Amazon (amazon.in and amazon.com) and Flipkart.                                         |
 | `offscreen`        | Parses a product page downloaded from a link (Alt+click or right-click) in an offscreen document, because the service worker has no DOM.           |
 | Host permissions   | amazon.in, amazon.com and flipkart.com: download a product link the user Alt+clicked or right-clicked, in their browser. The Picky web domain: save products to the user's account and read their comparisons. |
 | Content scripts    | On amazon.in, amazon.com and flipkart.com, a small listener that only reacts to Alt+click on a product link. On the Picky web domain, a bridge so the web app's "paste a link" field can ask the extension to read that link. |
@@ -95,7 +95,7 @@ exchanges JSON with the Picky API.)
   extension sends the sign-in cookie with its requests).
 - *Authentication information*: yes, the Picky session cookie, used only to save to the user's own
   account.
-- *Website content*: yes, the product details of pages the user chooses to save or Quick Look.
+- *Website content*: yes, the product details of pages the user chooses to save or open in the Picky panel.
 - Everything else (health, financial, personal communications, location, web history, user
   activity): no.
 
@@ -117,7 +117,8 @@ purposes unrelated to the single purpose, and not used to determine creditworthi
 - **Missing or mismatched privacy policy:** `/privacy` lists exactly the data above.
 - **Remote code / obfuscation:** bundles are minified (whitespace and syntax only; names are kept, so the
   code stays readable) and contain no `eval`.
-- **Keyword spam or misleading branding:** the description names the stores once, plainly, and says
+- **Keyword spam or misleading branding:** the description names the stores once, plainly (Amazon's two
+  sites by domain), and says
   Picky is not affiliated with them.
-- **Broken functionality for reviewers:** Quick Look works without an account. Mention in the
+- **Broken functionality for reviewers:** the Picky panel (See details) works without an account. Mention in the
   reviewer notes that saving needs a free account, created at `https://<web domain>/login?mode=signup`.

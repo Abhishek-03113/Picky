@@ -26,20 +26,20 @@ function steps(os: OperatingSystem): readonly Step[] {
       title: "Save",
       body: (
         <>
-          Click Picky on any product page, or press <Shortcut os={os} />, to read its specs. Right-click → Add to Picky
-          keeps it. Nothing to copy, and you never leave the page.
+          Click Picky on any product page, or press <Shortcut os={os} />, to see every detail. Right-click → Save to
+          Picky to keep it. Nothing to copy, and you never leave the page.
         </>
       ),
     },
     {
       title: "Understand",
-      body: "Every product opens as the same grouped spec sheet, free of store layouts and promotional noise.",
+      body: "Every product opens the same way: its details in clear sections, without the store's offers and ads.",
     },
     {
       title: "Compare",
       body: "Put your shortlist side by side. See what they share, where they differ and where one clearly wins.",
     },
-    { title: "Decide", body: "You make the call. Your research stays in your library for whenever you come back." },
+    { title: "Decide", body: "You make the call. Everything you saved is still here when you come back." },
   ];
 }
 
