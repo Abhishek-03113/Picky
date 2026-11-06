@@ -53,6 +53,6 @@ describe("PortCaptureService", () => {
     const port = new FakeDuplexPort<CaptureRequest, CaptureEvent>();
     const pending = new PortCaptureService(() => port).capture(TAB, () => {});
     port.close();
-    await expect(pending).rejects.toThrow("disconnected");
+    await expect(pending).rejects.toThrow("Picky stopped before this page was saved");
   });
 });

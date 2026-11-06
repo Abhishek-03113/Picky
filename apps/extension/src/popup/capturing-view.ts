@@ -9,7 +9,7 @@ export interface CapturingModel {
 
 export type StepState = "done" | "active" | "pending";
 
-const STEP_LABELS = ["Title, brand and price", "Spec tables", "Saving to your library"] as const;
+const STEP_LABELS = ["Title, brand and price", "Specs, size chart and colours", "Saving to your library"] as const;
 
 const STEP_ICONS: Readonly<Record<StepState, { icon: IconName; className: string }>> = {
   done: { icon: "check", className: "icon-sm icon-done" },
@@ -19,7 +19,7 @@ const STEP_ICONS: Readonly<Record<StepState, { icon: IconName; className: string
 
 /**
  * Which of the three progress steps is done / active / pending. The page read covers the first
- * two steps in one go, so "reading" shows spec tables as the active step.
+ * two steps in one go, so "reading" shows specs as the active step.
  *
  * @example stepStates("saving") // ["done", "done", "active"]
  */
@@ -34,7 +34,7 @@ export function stepStates(phase: CapturePhase): readonly StepState[] {
  */
 export function renderCapturingView(dom: Dom, model: CapturingModel): HTMLElement {
   const footer = model.autoOpen
-    ? "You can close this. The sheet opens in a new tab when it's ready."
+    ? "You can close this. The spec sheet opens in a new tab when it's ready."
     : "You can close this. Your product is saved to the library.";
   return dom.el("main", { className: "body" }, [
     renderStatus(dom),
@@ -49,7 +49,7 @@ function renderStatus(dom: Dom): HTMLElement {
     dom.icon("spinner", "icon-lg icon-spin"),
     dom.el("span", { className: "status-copy" }, [
       dom.el("span", { className: "title-md", text: "Reading this page…" }),
-      dom.el("span", { className: "muted-sm", text: "Usually under two seconds" }),
+      dom.el("span", { className: "muted-sm", text: "Usually a few seconds" }),
     ]),
   ]);
 }

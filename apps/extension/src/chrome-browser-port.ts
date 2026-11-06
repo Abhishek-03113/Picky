@@ -21,7 +21,12 @@ export class ChromeBrowserPort implements BrowserPort {
     const earlier = await this.runCapture(tabId);
     if (earlier !== null) return earlier;
     await chrome.scripting.executeScript({ target: { tabId }, files: [this.captureScriptFile] });
-    return (await this.runCapture(tabId)) ?? { ok: false, message: "Picky capture script did not load" };
+    return (
+      (await this.runCapture(tabId)) ?? {
+        ok: false,
+        message: "Picky couldn’t read this page. Reload it and try again.",
+      }
+    );
   }
 
   /** Calls the capture function injected into this tab, or returns null when the tab does not have it yet. */

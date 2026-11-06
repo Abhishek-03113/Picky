@@ -8,7 +8,7 @@ export interface CaptureFlowDependencies {
   browser: BrowserPort;
   config: CaptureConfig;
   sendSnapshot: (snapshot: Extract<CaptureResult, { ok: true }>["snapshot"]) => Promise<string>;
-  /** The "Open sheet automatically" preference, read fresh for every capture. */
+  /** The "Open spec sheet automatically" preference, read fresh for every capture. */
   settings: { isAutoOpenEnabled(): Promise<boolean> };
   log: (event: string, fields: Record<string, string | number>) => void;
 }
@@ -21,7 +21,7 @@ export interface ActiveTab {
 export type ProgressListener = (phase: CapturePhase) => void;
 
 /**
- * Popup opened → capture the page → send to the API → (when "Open sheet automatically" is on)
+ * Popup opened → capture the page → send to the API → (when "Open spec sheet automatically" is on)
  * open its Picky spec sheet. Every outcome ends in a badge, so the user always sees whether it worked.
  *
  * @example const outcome = await runCaptureFlow({ id: 7, url: "https://www.amazon.in/dp/B0FQG1YHYR" }, deps)

@@ -56,6 +56,8 @@ the right-click "Add to Picky" menu, and the web app's spec sheet or comparison 
 >
 > • Quick Look: click the Picky button (or press Alt+Shift+S) on any product page to see its specs,
 > grouped and searchable, without offers, ads and financing in the way. No account needed.
+> • Sizes and colours: clothing and shoes get a size chart you can read in inches or centimetres, and
+> every colour's photo, price and stock, picked in place without opening new tabs.
 > • Save as you browse: right-click → Add to Picky, or Alt+click a product link, to add it to your
 > library without leaving the page.
 > • Compare: put your shortlist side by side (Alt+Shift+V). Identical specs fold away, clear wins are

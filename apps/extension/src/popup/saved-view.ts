@@ -23,7 +23,7 @@ export function describeSpecCount(specCount: number, groupCount: number): string
 
 /**
  * Saved body: confirmation, product card (links to the sheet), primary "View specs"
- * button, the secondary "Open in Picky" link and the "Open sheet automatically" switch.
+ * button, the secondary "Open in Picky" link and the "Open spec sheet automatically" switch.
  *
  * @example renderSavedView(dom, { summary, webBaseUrl: "http://localhost:5173", autoOpen: true }, handlers)
  */
@@ -104,7 +104,7 @@ function renderAutoOpenRow(dom: Dom, autoOpen: boolean, handlers: SavedHandlers)
       dom.el("span", {
         className: "setting-label",
         attrs: { id: AUTO_OPEN_LABEL_ID },
-        text: "Open sheet automatically",
+        text: "Open spec sheet automatically",
       }),
       dom.el("span", { className: "muted-sm", text: "Skip this popup next time" }),
     ]),
