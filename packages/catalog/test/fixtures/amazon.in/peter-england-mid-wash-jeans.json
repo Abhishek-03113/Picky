@@ -1,0 +1,232 @@
+{
+  "url": "https://www.amazon.in/dp/B0BKQ7JYZJ",
+  "capturedAt": "2026-11-06T05:09:12.180Z",
+  "expected": {
+    "source": "amazon.in",
+    "externalId": "B0BKQ7JYZJ",
+    "url": "https://www.amazon.in/dp/B0BKQ7JYZJ",
+    "title": "Peter England Men's Mid Wash Stretchable Jeans",
+    "brand": "Peter England",
+    "category": "Jeans",
+    "price": {
+      "amount": 999,
+      "currency": "INR"
+    },
+    "listPrice": {
+      "amount": 1999,
+      "currency": "INR"
+    },
+    "availability": "In stock",
+    "rating": {
+      "average": 3.6,
+      "count": 894
+    },
+    "images": [
+      "https://m.media-amazon.com/images/I/61BwMlXsJzL._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/31+iWgfnozL._SL1000_.jpg",
+      "https://m.media-amazon.com/images/I/41S74Y3odAL._SL1000_.jpg",
+      "https://m.media-amazon.com/images/I/41w490fONAL._SL1000_.jpg",
+      "https://m.media-amazon.com/images/I/51crkEV7B-L._SL1000_.jpg",
+      "https://m.media-amazon.com/images/I/41Ohyj-3BQL._SL1000_.jpg"
+    ],
+    "highlights": [
+      {
+        "heading": null,
+        "text": "Product Type: Jeans"
+      },
+      {
+        "heading": null,
+        "text": "Occasion: Casual"
+      },
+      {
+        "heading": null,
+        "text": "Fit: Low Skinny Fit"
+      }
+    ],
+    "specGroups": [
+      {
+        "title": "Product facts",
+        "specs": [
+          {
+            "label": "Material type",
+            "value": "Cotton Blend"
+          },
+          {
+            "label": "Length",
+            "value": "Ankle Length"
+          },
+          {
+            "label": "Style",
+            "value": "Boyfriend"
+          },
+          {
+            "label": "Closure type",
+            "value": "Button"
+          },
+          {
+            "label": "Occasion type",
+            "value": "Casual"
+          },
+          {
+            "label": "Care instructions",
+            "value": "Machine Wash"
+          },
+          {
+            "label": "Country of Origin",
+            "value": "India"
+          },
+          {
+            "label": "Manufacturer",
+            "value": "ABFRL, Aditya Birla Fashion and Retail,Khacharakanahalli Village,Survey No 32 & 33 Soukya Road (IOC Road)-560067,Hosakote Taluk, Bangalore,Karnataka,India"
+          },
+          {
+            "label": "Packer",
+            "value": "Aditya Birla Fashion and Retail,Khacharakanahalli Village,Survey No 32 & 33 Soukya Road (IOC Road)-560067,Hosakote Taluk, Bangalore,Karnataka,India"
+          },
+          {
+            "label": "Item Weight",
+            "value": "500 g"
+          },
+          {
+            "label": "Item Dimensions LxWxH",
+            "value": "36 x 32 x 2.5 Centimeters"
+          },
+          {
+            "label": "Generic Name",
+            "value": "Jeans"
+          }
+        ]
+      },
+      {
+        "title": "Item details",
+        "specs": [
+          {
+            "label": "Product Dimensions",
+            "value": "36 x 32 x 2.5 cm; 500 g"
+          },
+          {
+            "label": "Date First Available",
+            "value": "28 October 2022"
+          },
+          {
+            "label": "Manufacturer",
+            "value": "ABFRL"
+          },
+          {
+            "label": "ASIN",
+            "value": "B0BKQ7JYZJ"
+          },
+          {
+            "label": "Item model number",
+            "value": "PJDNPSKPZ50654"
+          },
+          {
+            "label": "Country of Origin",
+            "value": "India"
+          },
+          {
+            "label": "Department",
+            "value": "Men"
+          },
+          {
+            "label": "Manufacturer",
+            "value": "ABFRL, Aditya Birla Fashion and Retail,Khacharakanahalli Village,Survey No 32 & 33 Soukya Road (IOC Road)-560067,Hosakote Taluk, Bangalore,Karnataka,India"
+          },
+          {
+            "label": "Packer",
+            "value": "Aditya Birla Fashion and Retail,Khacharakanahalli Village,Survey No 32 & 33 Soukya Road (IOC Road)-560067,Hosakote Taluk, Bangalore,Karnataka,India"
+          },
+          {
+            "label": "Item Weight",
+            "value": "500 g"
+          },
+          {
+            "label": "Item Dimensions LxWxH",
+            "value": "36 x 32 x 2.5 Centimeters"
+          },
+          {
+            "label": "Generic Name",
+            "value": "Jeans"
+          }
+        ]
+      }
+    ],
+    "sizeCharts": [
+      {
+        "kind": "table",
+        "title": "IN JEANS - MID RISE - REGULAR FIT",
+        "columns": ["Brand Size", "Waist (in)", "Length (in)"],
+        "rows": [
+          ["28", "28", "33.5"],
+          ["30", "30", "33.5"],
+          ["32", "32", "33.5"],
+          ["34", "34", "33.5"],
+          ["36", "36", "33.5"],
+          ["38", "38", "33.5"],
+          ["40", "40", "33.5"],
+          ["44", "44", "33.5"]
+        ]
+      },
+      {
+        "kind": "table",
+        "title": "IN JEANS - MID RISE - SLIM FIT",
+        "columns": ["Brand Size", "Waist (in)", "Length (in)"],
+        "rows": [
+          ["28", "28", "33.5"],
+          ["30", "30", "33.5"],
+          ["32", "32", "33.5"],
+          ["34", "34", "33.5"],
+          ["36", "36", "33.5"],
+          ["38", "38", "33.5"],
+          ["40", "40", "33.5"]
+        ]
+      }
+    ],
+    "colorOptions": [
+      {
+        "name": "Medium Blue",
+        "externalId": "B0BKQ7JYZJ",
+        "url": "https://www.amazon.in/dp/B0BKQ7JYZJ",
+        "swatchImage": "https://m.media-amazon.com/images/I/41W6jkmZiXL._SS64_.jpg",
+        "selected": true,
+        "price": {
+          "amount": 999,
+          "currency": "INR"
+        },
+        "availability": "In stock",
+        "image": "https://m.media-amazon.com/images/I/61BwMlXsJzL._SL1500_.jpg"
+      },
+      {
+        "name": "Dark Navy",
+        "externalId": "B0BKQ5GT1T",
+        "url": "https://www.amazon.in/dp/B0BKQ5GT1T",
+        "swatchImage": "https://m.media-amazon.com/images/I/41n6PVYSvgL._SS64_.jpg",
+        "selected": false,
+        "price": null,
+        "availability": null,
+        "image": null
+      },
+      {
+        "name": "Navy Blue",
+        "externalId": "B0BKQM32WK",
+        "url": "https://www.amazon.in/dp/B0BKQM32WK",
+        "swatchImage": "https://m.media-amazon.com/images/I/31uRrg6arWL._SS64_.jpg",
+        "selected": false,
+        "price": null,
+        "availability": null,
+        "image": null
+      },
+      {
+        "name": "Deep Navy",
+        "externalId": "B0BKQ64MQ8",
+        "url": "https://www.amazon.in/dp/B0BKQ64MQ8",
+        "swatchImage": "https://m.media-amazon.com/images/I/31UmDMUfZNL._SS64_.jpg",
+        "selected": false,
+        "price": null,
+        "availability": null,
+        "image": null
+      }
+    ],
+    "capturedAt": "2026-11-06T05:09:12.180Z"
+  }
+}

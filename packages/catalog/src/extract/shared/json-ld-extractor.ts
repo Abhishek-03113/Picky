@@ -77,6 +77,8 @@ export function extractJsonLdProduct(
     images: product.images,
     highlights: rules.readHighlights?.(page) ?? [],
     specGroups,
+    sizeCharts: [],
+    colorOptions: [],
     capturedAt: capturedAt.toISOString(),
   };
 }

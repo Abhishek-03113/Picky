@@ -1,4 +1,5 @@
 import type { OperatingSystem, ProductSnapshot } from "@picky/catalog";
+import type { ReadColorOption } from "../link-capture/color-page-reader.ts";
 import type { QuickLookState } from "../messaging/messages.ts";
 import { Dom } from "../popup/dom.ts";
 import { focusableControls, nextFocusTarget } from "./focus-trap.ts";
@@ -26,6 +27,8 @@ export interface QuickLookControllerDependencies {
   activeElement: () => Element | null;
   /** Labels the keyboard hints (⌥ ⇧ on a Mac). */
   os: OperatingSystem;
+  /** Reads another colour's listing when it is picked in the specs view. */
+  readColor?: ReadColorOption;
 }
 
 // INPUT: the spec search box owns Return and the arrow keys for its own caret, so they are not shortcuts there.
@@ -42,9 +45,11 @@ export class QuickLookController implements OverlayActions {
   /** True once the dialog has been drawn; later renders must not replay the open animation. */
   private hasEntered = false;
   private readonly dom: Dom;
+  readonly readColor: ReadColorOption | null;
 
   constructor(private readonly deps: QuickLookControllerDependencies) {
     this.dom = new Dom(deps.container.ownerDocument);
+    this.readColor = deps.readColor ?? null;
   }
 
   /**

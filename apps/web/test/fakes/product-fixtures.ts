@@ -20,6 +20,8 @@ export function makeSnapshot(overrides: Partial<ProductSnapshot> = {}): ProductS
       { title: "At a glance", specs: [{ label: "Brand", value: "Sony" }] },
       { title: "Battery", specs: [{ label: "Battery Average Life", value: "40 Hours" }] },
     ],
+    sizeCharts: [],
+    colorOptions: [],
     capturedAt: "2026-10-05T06:14:00Z",
     ...overrides,
   };

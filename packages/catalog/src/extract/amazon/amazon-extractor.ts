@@ -6,9 +6,11 @@ import { ProductPageError } from "../product-page-error.ts";
 import { amazonBreadcrumbLabels, categoryFromCrumbs } from "../shared/breadcrumb-category.ts";
 import { findSpecValue } from "../shared/spec-lookup.ts";
 import type { SiteExtractor } from "../site-extractor.ts";
+import { extractAmazonColorOptions } from "./amazon-color-options.ts";
 import { extractAmazonHighlights } from "./amazon-highlights.ts";
 import { extractAmazonImages } from "./amazon-images.ts";
 import { extractAmazonListPrice, extractAmazonPrice, extractAmazonRating } from "./amazon-offer.ts";
+import { extractAmazonSizeCharts } from "./amazon-size-charts.ts";
 import { extractAmazonSpecGroups } from "./amazon-specs.ts";
 import { canonicalAmazonUrl, parseAmazonProductUrl, type AmazonProductRef } from "./amazon-url.ts";
 
@@ -52,6 +54,9 @@ export function extractAmazonProduct(
   // Amazon may serve a sibling variant for the requested ASIN; the page's own ASIN input wins.
   const asin = textOrNull(firstAttr(page, "input#ASIN", "value")) ?? ref.asin;
   const specGroups = extractAmazonSpecGroups(page);
+  const price = extractAmazonPrice(page, site.currency);
+  const availability = firstText(page, ["#availability"]);
+  const images = extractAmazonImages(page);
   return {
     source: site.source,
     externalId: asin,
@@ -59,13 +64,15 @@ export function extractAmazonProduct(
     title,
     brand: findSpecValue(specGroups, "Brand") ?? extractBylineBrand(page),
     category: categoryFromCrumbs(amazonBreadcrumbLabels(page), title),
-    price: extractAmazonPrice(page, site.currency),
+    price,
     listPrice: extractAmazonListPrice(page, site.currency),
-    availability: firstText(page, ["#availability"]),
+    availability,
     rating: extractAmazonRating(page),
-    images: extractAmazonImages(page),
+    images,
     highlights: extractAmazonHighlights(page),
     specGroups,
+    sizeCharts: extractAmazonSizeCharts(page),
+    colorOptions: extractAmazonColorOptions(page, site, { price, availability, image: images[0] ?? null }),
     capturedAt: capturedAt.toISOString(),
   };
 }

@@ -15,6 +15,8 @@ export function buildSnapshot(): ProductSnapshot {
     images: [],
     highlights: [],
     specGroups: [],
+    sizeCharts: [],
+    colorOptions: [],
     capturedAt: "2026-10-05T10:00:00.000Z",
   };
 }

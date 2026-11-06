@@ -10,12 +10,9 @@ import type { Logger } from "./logging/json-logger.ts";
 import { PostgresComparisonRepository } from "./comparisons/postgres-comparison-repository.ts";
 import { PostgresProductRepository } from "./products/postgres-product-repository.ts";
 import { ProductIngestion } from "./products/product-ingestion.ts";
-import { DisabledHtmlFetcher } from "./scraping/disabled-html-fetcher.ts";
-import { FirecrawlHtmlFetcher } from "./scraping/firecrawl-html-fetcher.ts";
-import type { HtmlFetcher } from "./scraping/html-fetcher.ts";
 
 /**
- * Wires the real repositories and the optional add-ons (Firecrawl URL import, Laya) into the HTTP app.
+ * Wires the real repositories and the optional Laya decision model into the HTTP app.
  * Shared by the long-running server (main.ts) and the Vercel function entry (index.ts).
  *
  * @example const app = await composeApi(loadApiConfig(Bun.env), logger, new SQL(url))
@@ -23,11 +20,10 @@ import type { HtmlFetcher } from "./scraping/html-fetcher.ts";
 export async function composeApi(config: ApiConfig, logger: Logger, sql: SQL): Promise<Hono> {
   const auth = new AuthService(new PostgresAccountRepository(sql), bunPasswordHasher, () => new Date());
   const repository = new PostgresProductRepository(sql);
-  const ingestion = new ProductIngestion(repository, createHtmlFetcher(config), () => new Date());
+  const ingestion = new ProductIngestion(repository);
   const decisionModel = await loadDecisionModel(config.decisionModelDir);
   logger.info("decisions.model", { dir: config.decisionModelDir, loaded: decisionModel !== undefined });
   const comparisons = new PostgresComparisonRepository(sql);
-  const urlImportEnabled = config.firecrawlUrl !== null;
   // Secure cookies need https; local dev serves the web app over plain http://localhost.
   const sessionCookie = { secure: new URL(config.webOrigin).protocol === "https:" };
   return createApp({
@@ -38,15 +34,8 @@ export async function composeApi(config: ApiConfig, logger: Logger, sql: SQL): P
     ingestion,
     logger,
     webOrigin: config.webOrigin,
-    urlImportEnabled,
     decisionModel,
   });
-}
-
-// DOM capture by the extension is the default; Firecrawl URL import is an opt-in add-on.
-function createHtmlFetcher(config: ApiConfig): HtmlFetcher {
-  if (config.firecrawlUrl === null) return new DisabledHtmlFetcher();
-  return new FirecrawlHtmlFetcher(config.firecrawlUrl, fetch, config.firecrawlApiKey);
 }
 
 // Imported lazily so deployments without a model (Vercel) never load onnxruntime-node's native binary.

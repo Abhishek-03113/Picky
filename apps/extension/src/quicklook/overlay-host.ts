@@ -1,5 +1,6 @@
 import { detectOperatingSystem, type ProductSnapshot } from "@picky/catalog";
 import { capturePage } from "../capture-page.ts";
+import { colorPageReader, type ReadColorOption } from "../link-capture/color-page-reader.ts";
 import { ChromeQuickLookApi } from "./chrome-quicklook-api.ts";
 import { QuickLookController } from "./quicklook-controller.ts";
 import type { QuickLookApi } from "./quicklook-api.ts";
@@ -13,6 +14,8 @@ export interface OverlayHostDependencies {
   api: QuickLookApi;
   /** Reads the live tab; defaults to the real page, injectable so tests need no product page. */
   readPage?: () => ProductSnapshot | null;
+  /** Reads another colour's listing; defaults to fetching it from this page (same origin, the user's cookies). */
+  readColor?: ReadColorOption;
 }
 
 /** The document's own window (not the global), so the overlay works in any document, including test ones. */
@@ -92,6 +95,7 @@ export class QuickLookOverlay {
       onClose: close,
       activeElement: () => root.activeElement,
       os: detectOperatingSystem(pageWindow.navigator),
+      readColor: this.deps.readColor ?? pageColorReader(pageWindow),
     });
     onKey = keyForwarder(controller);
     pageWindow.addEventListener("keydown", onKey, true);
@@ -99,6 +103,11 @@ export class QuickLookOverlay {
     this.open = { host, close, controller };
     void controller.open(view);
   }
+}
+
+/** Colour pages live on the marketplace this overlay sits on, so the page's own fetch and DOMParser read them. */
+function pageColorReader(pageWindow: Window & typeof globalThis): ReadColorOption {
+  return colorPageReader((input, init) => pageWindow.fetch(input, init), new pageWindow.DOMParser());
 }
 
 /**

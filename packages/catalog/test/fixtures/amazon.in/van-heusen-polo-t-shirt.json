@@ -1,0 +1,405 @@
+{
+  "url": "https://www.amazon.in/dp/B076CKF1GB",
+  "capturedAt": "2026-11-06T05:09:11.836Z",
+  "expected": {
+    "source": "amazon.in",
+    "externalId": "B076CKF1GB",
+    "url": "https://www.amazon.in/dp/B076CKF1GB",
+    "title": "Van Heusen Men's Cotton Solid Regular Fit Collar Polo T-Shirt",
+    "brand": "Van Heusen",
+    "category": "Polos",
+    "price": {
+      "amount": 582,
+      "currency": "INR"
+    },
+    "listPrice": {
+      "amount": 1099,
+      "currency": "INR"
+    },
+    "availability": "In stock",
+    "rating": {
+      "average": 4,
+      "count": 45442
+    },
+    "images": [
+      "https://m.media-amazon.com/images/I/51IeycKBNkL._SL1280_.jpg",
+      "https://m.media-amazon.com/images/I/418ozo3xxFL._SL1000_.jpg",
+      "https://m.media-amazon.com/images/I/318mrcX8sjL._SL1000_.jpg",
+      "https://m.media-amazon.com/images/I/31EJTu7k0IL._SL1000_.jpg",
+      "https://m.media-amazon.com/images/I/311ClU8g4sL._SL1000_.jpg",
+      "https://m.media-amazon.com/images/I/319+5lPrQXL._SL1000_.jpg"
+    ],
+    "highlights": [
+      {
+        "heading": null,
+        "text": "Occasion : Leisure Sport"
+      },
+      {
+        "heading": null,
+        "text": "Pattern : Solid"
+      },
+      {
+        "heading": null,
+        "text": "Fit :Regular Fit"
+      },
+      {
+        "heading": null,
+        "text": "Material: 60%Cotton40%Polyester"
+      },
+      {
+        "heading": null,
+        "text": "Sleeves : Half Sleeves"
+      },
+      {
+        "heading": null,
+        "text": "Product Type & Features – Solid Polo T-Shirt, Regular Fit, Half sleeves, Regular length, Polo collar with ribbed detailing, and a clean, minimalistic finish for versatile wear."
+      }
+    ],
+    "specGroups": [
+      {
+        "title": "Product facts",
+        "specs": [
+          {
+            "label": "Material composition",
+            "value": "60% Cotton, 40% Polyester"
+          },
+          {
+            "label": "Pattern",
+            "value": "Solid"
+          },
+          {
+            "label": "Fit type",
+            "value": "Regular Fit"
+          },
+          {
+            "label": "Sleeve type",
+            "value": "Half Sleeve"
+          },
+          {
+            "label": "Collar style",
+            "value": "Spread Collar"
+          },
+          {
+            "label": "Length",
+            "value": "Standard Length"
+          },
+          {
+            "label": "Country of Origin",
+            "value": "India"
+          },
+          {
+            "label": "Manufacturer",
+            "value": "ABFRL, ABFRL, Building No.288/2 ,Begur,Bangalore-560068"
+          },
+          {
+            "label": "Packer",
+            "value": "ABFRL, Building No.288/2 ,Begur,Bangalore-560068"
+          },
+          {
+            "label": "Item Weight",
+            "value": "250 g"
+          },
+          {
+            "label": "Item Dimensions LxWxH",
+            "value": "27 x 22 x 0.5 Centimeters"
+          },
+          {
+            "label": "Net Quantity",
+            "value": "1 Count"
+          },
+          {
+            "label": "Generic Name",
+            "value": "T-Shirt"
+          }
+        ]
+      },
+      {
+        "title": "Item details",
+        "specs": [
+          {
+            "label": "Product Dimensions",
+            "value": "27 x 22 x 0.5 cm; 250 g"
+          },
+          {
+            "label": "Date First Available",
+            "value": "11 October 2017"
+          },
+          {
+            "label": "Manufacturer",
+            "value": "ABFRL"
+          },
+          {
+            "label": "ASIN",
+            "value": "B076CKF1GB"
+          },
+          {
+            "label": "Item model number",
+            "value": "VSKP517S011409"
+          },
+          {
+            "label": "Country of Origin",
+            "value": "India"
+          },
+          {
+            "label": "Department",
+            "value": "Men"
+          },
+          {
+            "label": "Manufacturer",
+            "value": "ABFRL, ABFRL, Building No.288/2 ,Begur,Bangalore-560068"
+          },
+          {
+            "label": "Packer",
+            "value": "ABFRL, Building No.288/2 ,Begur,Bangalore-560068"
+          },
+          {
+            "label": "Item Weight",
+            "value": "250 g"
+          },
+          {
+            "label": "Item Dimensions LxWxH",
+            "value": "27 x 22 x 0.5 Centimeters"
+          },
+          {
+            "label": "Net Quantity",
+            "value": "1 Count"
+          },
+          {
+            "label": "Generic Name",
+            "value": "T-Shirt"
+          }
+        ]
+      }
+    ],
+    "sizeCharts": [
+      {
+        "kind": "table",
+        "title": "IN Regular",
+        "columns": ["Brand Size", "Chest (in)", "Shoulder (in)", "Length (in)"],
+        "rows": [
+          ["S", "36.5", "15.5", "26.5"],
+          ["M", "38.5", "16.5", "27"],
+          ["L", "40.5", "17", "27.5"],
+          ["XL", "42.5", "17.5", "28.5"],
+          ["XXL", "45", "18.5", "29.5"]
+        ]
+      }
+    ],
+    "colorOptions": [
+      {
+        "name": "White",
+        "externalId": "B076CKF1GB",
+        "url": "https://www.amazon.in/dp/B076CKF1GB",
+        "swatchImage": "https://m.media-amazon.com/images/I/31Hjk2gHoJL._SS64_.jpg",
+        "selected": true,
+        "price": {
+          "amount": 582,
+          "currency": "INR"
+        },
+        "availability": "In stock",
+        "image": "https://m.media-amazon.com/images/I/51IeycKBNkL._SL1280_.jpg"
+      },
+      {
+        "name": "Blue",
+        "externalId": "B076CJV46V",
+        "url": "https://www.amazon.in/dp/B076CJV46V",
+        "swatchImage": "https://m.media-amazon.com/images/I/31jE2sQu-TL._SS64_.jpg",
+        "selected": false,
+        "price": null,
+        "availability": null,
+        "image": null
+      },
+      {
+        "name": "Brown",
+        "externalId": "B0DF7CDXL6",
+        "url": "https://www.amazon.in/dp/B0DF7CDXL6",
+        "swatchImage": "https://m.media-amazon.com/images/I/31t8yXVg+wL._SS64_.jpg",
+        "selected": false,
+        "price": null,
+        "availability": null,
+        "image": null
+      },
+      {
+        "name": "Green",
+        "externalId": "B07HJ9MGW9",
+        "url": "https://www.amazon.in/dp/B07HJ9MGW9",
+        "swatchImage": "https://m.media-amazon.com/images/I/31QV5UtW5WL._SS64_.jpg",
+        "selected": false,
+        "price": null,
+        "availability": null,
+        "image": null
+      },
+      {
+        "name": "Lilac",
+        "externalId": "B0DF7CWXMH",
+        "url": "https://www.amazon.in/dp/B0DF7CWXMH",
+        "swatchImage": "https://m.media-amazon.com/images/I/31SHxSyIxXL._SS64_.jpg",
+        "selected": false,
+        "price": null,
+        "availability": null,
+        "image": null
+      },
+      {
+        "name": "Navy",
+        "externalId": "B076CHSL6Z",
+        "url": "https://www.amazon.in/dp/B076CHSL6Z",
+        "swatchImage": "https://m.media-amazon.com/images/I/31z0ZL2HVaL._SS64_.jpg",
+        "selected": false,
+        "price": null,
+        "availability": null,
+        "image": null
+      },
+      {
+        "name": "Red",
+        "externalId": "B07HJKB8X8",
+        "url": "https://www.amazon.in/dp/B07HJKB8X8",
+        "swatchImage": "https://m.media-amazon.com/images/I/31xkDqJnL4L._SS64_.jpg",
+        "selected": false,
+        "price": null,
+        "availability": null,
+        "image": null
+      },
+      {
+        "name": "Black",
+        "externalId": "B076CRKX1P",
+        "url": "https://www.amazon.in/dp/B076CRKX1P",
+        "swatchImage": "https://m.media-amazon.com/images/I/31vw-gfZlRL._SS64_.jpg",
+        "selected": false,
+        "price": null,
+        "availability": null,
+        "image": null
+      },
+      {
+        "name": "Grey Mélange",
+        "externalId": "B076CJMH9V",
+        "url": "https://www.amazon.in/dp/B076CJMH9V",
+        "swatchImage": "https://m.media-amazon.com/images/I/31BnjUbRlRL._SS64_.jpg",
+        "selected": false,
+        "price": null,
+        "availability": null,
+        "image": null
+      },
+      {
+        "name": "Light Blue",
+        "externalId": "B07HJJ8D14",
+        "url": "https://www.amazon.in/dp/B07HJJ8D14",
+        "swatchImage": "https://m.media-amazon.com/images/I/31agYuncDVL._SS64_.jpg",
+        "selected": false,
+        "price": null,
+        "availability": null,
+        "image": null
+      },
+      {
+        "name": "Mint",
+        "externalId": "B076CJV483",
+        "url": "https://www.amazon.in/dp/B076CJV483",
+        "swatchImage": "https://m.media-amazon.com/images/I/3184HlGd60L._SS64_.jpg",
+        "selected": false,
+        "price": null,
+        "availability": null,
+        "image": null
+      },
+      {
+        "name": "Nautical",
+        "externalId": "B076CNJ1YN",
+        "url": "https://www.amazon.in/dp/B076CNJ1YN",
+        "swatchImage": "https://m.media-amazon.com/images/I/31c289Yi2ML._SS64_.jpg",
+        "selected": false,
+        "price": null,
+        "availability": null,
+        "image": null
+      },
+      {
+        "name": "Pink",
+        "externalId": "B076CHQK11",
+        "url": "https://www.amazon.in/dp/B076CHQK11",
+        "swatchImage": "https://m.media-amazon.com/images/I/31+kg1uTBZL._SS64_.jpg",
+        "selected": false,
+        "price": null,
+        "availability": null,
+        "image": null
+      },
+      {
+        "name": "Purple",
+        "externalId": "B07HJJTHD1",
+        "url": "https://www.amazon.in/dp/B07HJJTHD1",
+        "swatchImage": "https://m.media-amazon.com/images/I/31Gjg6lqqJL._SS64_.jpg",
+        "selected": false,
+        "price": null,
+        "availability": null,
+        "image": null
+      },
+      {
+        "name": "Teal",
+        "externalId": "B07HJ9HH2W",
+        "url": "https://www.amazon.in/dp/B07HJ9HH2W",
+        "swatchImage": "https://m.media-amazon.com/images/I/316vu3apMVL._SS64_.jpg",
+        "selected": false,
+        "price": null,
+        "availability": null,
+        "image": null
+      },
+      {
+        "name": "Yellow",
+        "externalId": "B07HJ9LK7G",
+        "url": "https://www.amazon.in/dp/B07HJ9LK7G",
+        "swatchImage": "https://m.media-amazon.com/images/I/31GhcyEUPlL._SS64_.jpg",
+        "selected": false,
+        "price": null,
+        "availability": null,
+        "image": null
+      },
+      {
+        "name": "Cream",
+        "externalId": "B076CJMHBC",
+        "url": "https://www.amazon.in/dp/B076CJMHBC",
+        "swatchImage": "https://m.media-amazon.com/images/I/310xUaucwxL._SS64_.jpg",
+        "selected": false,
+        "price": null,
+        "availability": null,
+        "image": null
+      },
+      {
+        "name": "Cardinal Red",
+        "externalId": "B07HJBR3VN",
+        "url": "https://www.amazon.in/dp/B07HJBR3VN",
+        "swatchImage": "https://m.media-amazon.com/images/I/31Fsr8ObapL._SS64_.jpg",
+        "selected": false,
+        "price": null,
+        "availability": null,
+        "image": null
+      },
+      {
+        "name": "Fern",
+        "externalId": "B0DF7CK8WN",
+        "url": "https://www.amazon.in/dp/B0DF7CK8WN",
+        "swatchImage": "https://m.media-amazon.com/images/I/31XzupUQZML._SS64_.jpg",
+        "selected": false,
+        "price": null,
+        "availability": null,
+        "image": null
+      },
+      {
+        "name": "Flame Orange",
+        "externalId": "B076CJMHB7",
+        "url": "https://www.amazon.in/dp/B076CJMHB7",
+        "swatchImage": "https://m.media-amazon.com/images/I/31d5e7O9teL._SS64_.jpg",
+        "selected": false,
+        "price": null,
+        "availability": null,
+        "image": null
+      },
+      {
+        "name": "Light Purple",
+        "externalId": "B076CKF4ZH",
+        "url": "https://www.amazon.in/dp/B076CKF4ZH",
+        "swatchImage": "https://m.media-amazon.com/images/I/31T076I5icL._SS64_.jpg",
+        "selected": false,
+        "price": null,
+        "availability": null,
+        "image": null
+      }
+    ],
+    "capturedAt": "2026-11-06T05:09:11.836Z"
+  }
+}

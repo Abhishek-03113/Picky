@@ -8,6 +8,7 @@ import { HttpComparisonsClient } from "./comparisons/http-comparisons-client.ts"
 import { welcomePageUrl } from "./install-welcome.ts";
 import { BadgeCounter, ChromeBadgeText } from "./link-capture/badge-counter.ts";
 import { ChromeContextMenu } from "./link-capture/chrome-context-menu.ts";
+import { ColorOptionsReader } from "./link-capture/color-options-reader.ts";
 import { ChromeSnapshotReader } from "./link-capture/chrome-snapshot-reader.ts";
 import { menuClickFromItem } from "./link-capture/context-menu-model.ts";
 import { FetchHtmlFetcher } from "./link-capture/html-fetcher.ts";
@@ -36,7 +37,13 @@ const browser = new ChromeBrowserPort("page-capture.js");
 const settings = new SettingsStore(new ChromeKeyValueStorage());
 const log = (event: string, fields: Record<string, string | number>) =>
   console.log(JSON.stringify({ time: new Date().toISOString(), event, ...fields }));
-const post = (snapshot: Parameters<typeof sendSnapshot>[2]) => sendSnapshot(fetch, config.apiBaseUrl, snapshot);
+const htmlFetcher = new FetchHtmlFetcher(fetch);
+const snapshotReader = new ChromeSnapshotReader("offscreen.html");
+// Every save path (popup, Quick Look, context menu, web paste) goes through post, so each stored
+// product carries its other colours' prices and photos, read from those colours' own pages.
+const colorOptions = new ColorOptionsReader({ fetcher: htmlFetcher, reader: snapshotReader, log });
+const post = async (snapshot: Parameters<typeof sendSnapshot>[2]) =>
+  sendSnapshot(fetch, config.apiBaseUrl, await colorOptions.fillIn(snapshot));
 const comparisons = new HttpComparisonsClient(fetch, config.apiBaseUrl);
 const tabPort = new ChromeQuickLookTabPort("quicklook.js", "popup.html");
 const menuRefresher = new MenuRefresher(comparisons, new ChromeContextMenu(), () => settings.lastComparisonId(), log);
@@ -50,8 +57,8 @@ const quickLook = new QuickLookService({
   onComparisonsChanged: refreshMenu,
 });
 const linkCapture = new LinkCaptureService({
-  fetcher: new FetchHtmlFetcher(fetch),
-  reader: new ChromeSnapshotReader("offscreen.html"),
+  fetcher: htmlFetcher,
+  reader: snapshotReader,
   capturePage: (tabId) => browser.capturePageInTab(tabId),
   sendSnapshot: post,
   showQuickLook: (tabId, snapshot) => tabPort.injectAndShowProduct(tabId, snapshot),

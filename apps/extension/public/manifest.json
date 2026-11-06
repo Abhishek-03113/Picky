@@ -2,8 +2,8 @@
   "manifest_version": 3,
   "name": "Picky: Product Spec Sheets & Compare",
   "short_name": "Picky",
-  "version": "1.2.2",
-  "description": "Turn {stores} product pages into clean spec sheets, save them to your Picky library, and compare.",
+  "version": "1.3.0",
+  "description": "Save products from {stores} as you browse, get a clean spec sheet for each, and compare your shortlist.",
   "minimum_chrome_version": "116",
   "icons": {
     "16": "logo-16.png",

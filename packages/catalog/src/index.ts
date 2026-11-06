@@ -40,3 +40,11 @@ export {
   type OperatingSystem,
   type ShortcutKeys,
 } from "./present/os-shortcuts.ts";
+export {
+  LENGTH_UNITS,
+  convertLength,
+  measurementColumn,
+  sizeChartInUnit,
+  sizeChartUnit,
+  type LengthUnit,
+} from "./present/size-chart-units.ts";

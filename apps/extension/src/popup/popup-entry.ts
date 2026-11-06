@@ -3,6 +3,7 @@ import type { CaptureConfig } from "../capture-config.ts";
 import { CAPTURE_PORT_NAME } from "../capture-protocol.ts";
 import { adaptChromePort } from "../chrome-duplex-port.ts";
 import { ChromeKeyValueStorage } from "../chrome-key-value-storage.ts";
+import { colorPageReader } from "../link-capture/color-page-reader.ts";
 import { SettingsStore } from "../settings.ts";
 import { ChromeActiveTabSource } from "./active-tab-source.ts";
 import { PortCaptureService } from "./capture-service.ts";
@@ -27,4 +28,6 @@ void new PopupController({
   captureService: new PortCaptureService(() => adaptChromePort(chrome.runtime.connect({ name: CAPTURE_PORT_NAME }))),
   webBaseUrl: __PICKY_CAPTURE_CONFIG__.webBaseUrl,
   os: detectOperatingSystem(navigator),
+  // The popup is an extension page: host permissions let it fetch a colour's listing with the user's cookies.
+  readColor: colorPageReader(fetch, new DOMParser()),
 }).start();

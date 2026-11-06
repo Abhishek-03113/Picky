@@ -27,8 +27,6 @@ Everything goes through the extension, so no scraping service is needed:
   web app talks to the extension through a content script on its own origin (`PICKY_WEB_URL` at
   extension build time) and greys out paste-a-link when the extension is not installed.
   "Picky ▸ Quick Look" on a link reads it the same way but only shows its specs, saving nothing.
-- **Unused: URL import through Firecrawl** (`POST /api/imports`, `GET /api/capabilities`). It is still
-  wired when `FIRECRAWL_API_KEY` or `FIRECRAWL_URL` is set, but no client calls it any more.
 
 ## What's already in the repo
 
@@ -64,7 +62,6 @@ Environment variables:
 | --------------- | -------------------------- | ---------------------------------------------- |
 | `picky-api`     | `DATABASE_URL`             | From the Neon integration                      |
 | `picky-api`     | `WEB_ORIGIN`               | `https://<web domain>`                         |
-| `picky-api`     | `FIRECRAWL_API_KEY`        | Optional; turns on URL import                  |
 | `picky-web`     | `VITE_PICKY_EXTENSION_URL` | Chrome Web Store listing                       |
 | `picky-web`     | `PICKY_SITE_URL`           | Optional; public origin for link previews      |
 | `picky-landing` | `VITE_PICKY_WEB_URL`       | `https://<web domain>` (defaults to localhost) |
@@ -72,12 +69,11 @@ Environment variables:
 `PICKY_SITE_URL` fills in the absolute `og:url` and `og:image` tags that chat apps use for link
 previews. Without it the build uses Vercel's production domain (`VERCEL_PROJECT_PRODUCTION_URL`).
 
-Never put the Firecrawl key in a `VITE_*` variable: those are bundled into public JavaScript.
+Never put a secret in a `VITE_*` variable: those are bundled into public JavaScript.
 
 ### 3. Deploy the API first
 
-Check that `https://<api domain>/health` returns `{"status":"ok"}`, and that
-`https://<api domain>/api/capabilities` reports what you expect.
+Check that `https://<api domain>/health` returns `{"status":"ok"}`.
 
 ### 4. Point the web app at the API
 

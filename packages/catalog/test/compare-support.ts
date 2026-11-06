@@ -26,6 +26,8 @@ export function snapshotWith(
       title: group,
       specs: specs.filter(([g]) => g === group).map(([, label, value]) => ({ label, value })),
     })),
+    sizeCharts: [],
+    colorOptions: [],
     capturedAt: "2026-10-05T10:00:00.000Z",
     ...overrides,
   } as ProductSnapshot;

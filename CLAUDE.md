@@ -8,7 +8,7 @@ Research behind the design: `research/FINDINGS.md`.
   Supported stores are one registry, `@picky/catalog/sites` (`src/sites/shopping-sites.ts`); everything that
   names or matches a store reads it. Never hard-code a store list. Adding one: `docs/adding-a-site.md`.
 - `packages/ui-tokens` — shared `--ez-*` CSS design tokens (Apple HIG, light + dark) for web and extension popup.
-- `apps/api` — Bun + Hono backend, Postgres storage, stores snapshots the extension parses (Firecrawl import is unused tech debt).
+- `apps/api` — Bun + Hono backend, Postgres storage, stores snapshots the extension parses.
 - `apps/web` — React + TanStack Router/Query frontend: signed-out homepage at `/`, `/extension` install guide, `/privacy`, and the library + spec sheets once signed in.
 - `apps/landing` — redirect-only page that forwards the old landing URL to the web app's homepage.
 - `apps/extension` — MV3 browser extension that captures the open product page.

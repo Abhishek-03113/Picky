@@ -36,6 +36,41 @@ export interface Rating {
   count: number;
 }
 
+/** A size chart the page shows as a table: header row plus one row per size, cells as printed. */
+export interface SizeChartTable {
+  kind: "table";
+  /** The chart's own heading, e.g. "IN Regular"; null when the page gives none. */
+  title: string | null;
+  /** Header cells, e.g. ["Brand Size", "Chest (in)"]. A unit in brackets marks a measurement column. */
+  columns: string[];
+  rows: string[][];
+}
+
+/** A size chart the seller uploaded as a picture; it cannot be converted, only shown. */
+export interface SizeChartImage {
+  kind: "image";
+  title: string | null;
+  imageUrl: string;
+}
+
+export type SizeChart = SizeChartTable | SizeChartImage;
+
+/**
+ * One colour the product is sold in. Each colour is its own listing with its own product id, so
+ * price, availability and image come from reading that colour's page; they stay null until it is read.
+ */
+export interface ColorOption {
+  name: string;
+  externalId: string;
+  url: string;
+  swatchImage: string | null;
+  /** True for the colour of the page this snapshot was read from. */
+  selected: boolean;
+  price: Money | null;
+  availability: string | null;
+  image: string | null;
+}
+
 /**
  * Everything Picky keeps about one product page at one moment.
  * Produced by the extension (live DOM) or the API (fetched HTML); both use the same extractor.
@@ -54,6 +89,8 @@ export interface ProductSnapshot {
   images: string[];
   highlights: Highlight[];
   specGroups: SpecGroup[];
+  sizeCharts: SizeChart[];
+  colorOptions: ColorOption[];
   /** ISO 8601 date-time. */
   capturedAt: string;
 }

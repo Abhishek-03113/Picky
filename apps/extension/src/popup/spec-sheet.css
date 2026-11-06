@@ -413,3 +413,189 @@
   font-weight: 500;
   overflow-wrap: anywhere;
 }
+
+.spec-view .color-options,
+.spec-view .size-charts {
+  padding: var(--ez-space-16);
+  display: flex;
+  flex-direction: column;
+  gap: var(--ez-space-12);
+}
+.spec-view .color-options-head,
+.spec-view .size-charts-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ez-space-8);
+}
+.spec-view .color-options h2,
+.spec-view .size-charts h2 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+}
+/* Colours: a preview of the picked colour above a row of swatches; picking never leaves the page. */
+.spec-view .color-preview {
+  display: flex;
+  align-items: center;
+  gap: var(--ez-space-12);
+  min-width: 0;
+}
+.spec-view .color-preview-photo {
+  flex: 0 0 88px;
+  width: 88px;
+  height: 88px;
+  border-radius: var(--ez-radius-control);
+  background: var(--ez-surface-grouped);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.spec-view .color-preview-photo img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+.spec-view .color-preview-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 3px;
+  min-width: 0;
+}
+.spec-view .color-preview-name {
+  font-size: 15px;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+.spec-view .color-preview-price {
+  font-size: 15px;
+  color: var(--ez-label-strong-secondary);
+}
+.spec-view .color-preview[aria-busy="true"] .color-preview-price {
+  color: var(--ez-label-secondary);
+}
+.spec-view .color-preview-stock {
+  font-size: 12px;
+  color: var(--ez-label-secondary);
+}
+.spec-view .color-swatches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ez-space-8);
+}
+.spec-view .color-swatch {
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 2px solid transparent;
+  border-radius: 10px;
+  background: var(--ez-surface-grouped);
+  overflow: hidden;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.spec-view .color-swatch:hover {
+  border-color: var(--ez-separator);
+}
+.spec-view .color-swatch[aria-pressed="true"] {
+  border-color: var(--ez-blue);
+}
+.spec-view .color-swatch img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.spec-view .color-swatch-name {
+  font-size: 10px;
+  line-height: 1.1;
+  padding: 2px;
+  overflow: hidden;
+  color: var(--ez-label-strong-secondary);
+}
+
+/* Size chart: a fluid card. Wide tables scroll sideways inside it; chart images scale to its width. */
+.spec-view .unit-switch {
+  display: inline-flex;
+  padding: 2px;
+  border-radius: var(--ez-radius-full);
+  background: var(--ez-fill);
+}
+.spec-view .unit-switch button {
+  min-width: 44px;
+  height: 28px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: var(--ez-radius-full);
+  background: transparent;
+  color: var(--ez-label-strong-secondary);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.spec-view .unit-switch button[aria-pressed="true"] {
+  background: var(--ez-surface-raised);
+  color: var(--ez-label);
+  box-shadow: var(--ez-shadow-card);
+}
+.spec-view .size-chart-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ez-space-16);
+  min-width: 0;
+}
+.spec-view .size-chart {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--ez-space-8);
+  min-width: 0;
+}
+.spec-view .size-chart figcaption {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ez-label-strong-secondary);
+}
+.spec-view .size-chart-scroll {
+  max-width: 100%;
+  overflow-x: auto;
+  border-radius: var(--ez-radius-control);
+  border: 1px solid var(--ez-separator);
+}
+.spec-view .size-chart table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+}
+.spec-view .size-chart th,
+.spec-view .size-chart td {
+  padding: 8px 10px;
+  text-align: left;
+  white-space: nowrap;
+  border-bottom: 1px solid var(--ez-separator);
+}
+.spec-view .size-chart thead th {
+  background: var(--ez-surface-grouped);
+  font-weight: 600;
+  color: var(--ez-label-strong-secondary);
+}
+.spec-view .size-chart tbody tr:last-child > * {
+  border-bottom: 0;
+}
+.spec-view .size-chart tbody th {
+  font-weight: 600;
+}
+.spec-view .size-chart-image {
+  display: block;
+}
+.spec-view .size-chart-image img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--ez-radius-control);
+}

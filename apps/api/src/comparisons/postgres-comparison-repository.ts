@@ -1,12 +1,8 @@
 import type { SQL } from "bun";
-import type {
-  CatalogComparisonDetail,
-  CatalogComparisonSummary,
-  CatalogProduct,
-  ProductSnapshot,
-} from "@picky/catalog";
+import type { CatalogComparisonDetail, CatalogComparisonSummary, CatalogProduct } from "@picky/catalog";
 import { isUuid } from "../db/uuid.ts";
 import type { ComparisonRepository } from "./comparison-repository.ts";
+import { fromStoredSnapshot, type StoredSnapshot } from "../products/stored-snapshot.ts";
 
 interface SummaryRow {
   id: string;
@@ -17,7 +13,7 @@ interface SummaryRow {
 
 interface ProductRow {
   id: string;
-  snapshot: ProductSnapshot;
+  snapshot: StoredSnapshot;
   created_at: Date;
   updated_at: Date;
 }
@@ -137,7 +133,7 @@ function toSummary(row: SummaryRow): CatalogComparisonSummary {
 function toProduct(row: ProductRow): CatalogProduct {
   return {
     id: row.id,
-    snapshot: row.snapshot,
+    snapshot: fromStoredSnapshot(row.snapshot),
     createdAt: row.created_at.toISOString(),
     updatedAt: row.updated_at.toISOString(),
   };

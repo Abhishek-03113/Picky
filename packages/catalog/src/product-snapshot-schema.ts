@@ -29,6 +29,32 @@ export const RatingSchema = z.object({
   count: z.number().int().nonnegative(),
 });
 
+export const SizeChartTableSchema = z.object({
+  kind: z.literal("table"),
+  title: z.string().min(1).nullable(),
+  columns: z.array(z.string().min(1)).min(1),
+  rows: z.array(z.array(z.string())).min(1),
+});
+
+export const SizeChartImageSchema = z.object({
+  kind: z.literal("image"),
+  title: z.string().min(1).nullable(),
+  imageUrl: z.url(),
+});
+
+export const SizeChartSchema = z.discriminatedUnion("kind", [SizeChartTableSchema, SizeChartImageSchema]);
+
+export const ColorOptionSchema = z.object({
+  name: z.string().min(1),
+  externalId: z.string().min(1),
+  url: z.url(),
+  swatchImage: z.url().nullable(),
+  selected: z.boolean(),
+  price: MoneySchema.nullable(),
+  availability: z.string().min(1).nullable(),
+  image: z.url().nullable(),
+});
+
 /**
  * Validates a submitted snapshot; its output is exactly a ProductSnapshot (checked below).
  *
@@ -49,6 +75,9 @@ export const ProductSnapshotSchema = z.object({
   images: z.array(z.url()),
   highlights: z.array(HighlightSchema),
   specGroups: z.array(SpecGroupSchema),
+  // Rows stored before size charts and colours existed lack these keys; defaults keep them readable.
+  sizeCharts: z.array(SizeChartSchema).default([]),
+  colorOptions: z.array(ColorOptionSchema).default([]),
   capturedAt: z.iso.datetime(),
 });
 

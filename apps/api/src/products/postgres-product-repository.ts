@@ -2,10 +2,11 @@ import type { SQL } from "bun";
 import type { CatalogProduct, CatalogProductSummary, ProductSnapshot } from "@picky/catalog";
 import { isUuid } from "../db/uuid.ts";
 import { summarizeProduct, type ProductRepository } from "./product-repository.ts";
+import { fromStoredSnapshot, type StoredSnapshot } from "./stored-snapshot.ts";
 
 interface ProductRow {
   id: string;
-  snapshot: ProductSnapshot;
+  snapshot: StoredSnapshot;
   created_at: Date;
   updated_at: Date;
 }
@@ -74,7 +75,7 @@ function requireRow(rows: ProductRow[], externalId: string): ProductRow {
 function toCatalogProduct(row: ProductRow): CatalogProduct {
   return {
     id: row.id,
-    snapshot: row.snapshot,
+    snapshot: fromStoredSnapshot(row.snapshot),
     createdAt: row.created_at.toISOString(),
     updatedAt: row.updated_at.toISOString(),
   };

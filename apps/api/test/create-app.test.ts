@@ -1,21 +1,6 @@
 import { describe, expect, test } from "bun:test";
-import { htmlByFixtureUrl, loadPageFixtures } from "./support/page-fixtures.ts";
 import { buildSampleSnapshot } from "./support/sample-snapshot.ts";
 import { createTestApp } from "./support/test-app.ts";
-
-const fixtures = await loadPageFixtures();
-
-describe("GET /api/capabilities", () => {
-  test("reports URL import as on when a scraping backend is configured, without signing in", async () => {
-    const response = await createTestApp({ urlImportEnabled: true }).send("GET", "/api/capabilities");
-    expect(await response.json()).toEqual({ urlImport: true });
-  });
-
-  test("reports URL import as off for a DOM-capture-only deployment", async () => {
-    const response = await createTestApp({ urlImportEnabled: false }).send("GET", "/api/capabilities");
-    expect(await response.json()).toEqual({ urlImport: false });
-  });
-});
 
 describe("product API", () => {
   test("POST /api/snapshots stores the capture and GET returns it", async () => {
@@ -41,21 +26,16 @@ describe("product API", () => {
     expect(logger.entries.map((entry) => entry.event)).toContain("product.deleted");
   });
 
-  test("POST /api/imports reads every supported site and lists the products", async () => {
-    const { send, signUp } = createTestApp({ htmlByUrl: htmlByFixtureUrl(fixtures) });
+  test("GET /api/products lists the user's captured products", async () => {
+    const { send, signUp } = createTestApp();
     const cookie = await signUp("me@example.com");
-    for (const fixture of fixtures) {
-      expect((await send("POST", "/api/imports", { body: { url: fixture.url }, cookie })).status).toBe(201);
-    }
-    const listed = (await (await send("GET", "/api/products", { cookie })).json()) as {
-      products: { source: string }[];
-    };
-    expect(new Set(listed.products.map((product) => product.source))).toEqual(new Set(["amazon.in", "flipkart.com"]));
-    expect(listed.products).toHaveLength(fixtures.length);
+    expect((await send("POST", "/api/snapshots", { body: buildSampleSnapshot(), cookie })).status).toBe(201);
+    const listed = (await (await send("GET", "/api/products", { cookie })).json()) as { products: unknown[] };
+    expect(listed.products).toHaveLength(1);
   });
 
-  test("rejects malformed JSON and bad import bodies with 400", async () => {
-    const { send, signUp, app } = createTestApp();
+  test("rejects malformed JSON with 400", async () => {
+    const { signUp, app } = createTestApp();
     const cookie = await signUp("me@example.com");
     const malformed = new Request("http://api.test/api/snapshots", {
       method: "POST",
@@ -63,7 +43,6 @@ describe("product API", () => {
       body: "{nope",
     });
     expect((await app.request(malformed)).status).toBe(400);
-    expect((await send("POST", "/api/imports", { body: { url: "nope" }, cookie })).status).toBe(400);
   });
 
   test("returns 404 for unknown products and routes, and logs failures", async () => {
@@ -71,7 +50,7 @@ describe("product API", () => {
     const cookie = await signUp("me@example.com");
     expect((await send("GET", "/api/products/missing", { cookie })).status).toBe(404);
     expect((await send("GET", "/nowhere")).status).toBe(404);
-    expect((await send("POST", "/api/imports", { body: { url: "https://example.com/x" }, cookie })).status).toBe(422);
+    expect((await send("POST", "/api/snapshots", { body: { title: "" }, cookie })).status).toBe(400);
     expect(logger.entries.at(-1)).toMatchObject({ level: "error", event: "request.failed" });
   });
 

@@ -1,6 +1,7 @@
 import type { OperatingSystem } from "@picky/catalog";
 import type { ActiveTab } from "../capture-flow.ts";
 import type { SavedSummary } from "../capture-outcome.ts";
+import type { ReadColorOption } from "../link-capture/color-page-reader.ts";
 import type { SettingsStore } from "../settings.ts";
 import type { ActiveTabSource } from "./active-tab-source.ts";
 import type { CaptureService } from "./capture-service.ts";
@@ -15,6 +16,8 @@ export interface PopupDependencies {
   captureService: CaptureService;
   webBaseUrl: string;
   os: OperatingSystem;
+  /** Reads another colour's listing when it is picked in the specs view. */
+  readColor?: ReadColorOption;
 }
 
 /** "www.amazon.in" → "amazon.in"; null for anything that is not a parseable URL. */
@@ -77,6 +80,7 @@ export class PopupController {
       onAutoOpenChange: (checked) => void this.saveAutoOpen(checked),
       onViewSpecs: () => this.showSummaryAs("specs"),
       onBackToSaved: () => this.showSummaryAs("saved"),
+      readColor: this.deps.readColor ?? null,
     });
     this.deps.root.replaceChildren(view);
   }

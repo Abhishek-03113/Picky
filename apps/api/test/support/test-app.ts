@@ -2,7 +2,6 @@ import { AuthService } from "../../src/auth/auth-service.ts";
 import type { DecisionModel } from "../../src/decisions/decision-model.ts";
 import { createApp } from "../../src/http/create-app.ts";
 import { ProductIngestion } from "../../src/products/product-ingestion.ts";
-import { FakeHtmlFetcher } from "../fakes/fake-html-fetcher.ts";
 import { InMemoryAccountRepository } from "../fakes/in-memory-account-repository.ts";
 import { InMemoryComparisonRepository } from "../fakes/in-memory-comparison-repository.ts";
 import { InMemoryProductRepository } from "../fakes/in-memory-product-repository.ts";
@@ -12,11 +11,7 @@ import { RecordingLogger } from "../fakes/recording-logger.ts";
 export const TEST_NOW = new Date("2026-10-05T10:00:00Z");
 
 export interface TestAppOptions {
-  /** Pages the fake scraper serves to /api/imports. */
-  htmlByUrl?: ReadonlyMap<string, string>;
   decisionModel?: DecisionModel;
-  /** What GET /api/capabilities reports; on by default. */
-  urlImportEnabled?: boolean;
 }
 
 /**
@@ -24,7 +19,7 @@ export interface TestAppOptions {
  *
  * @example const harness = createTestApp(); const alice = await harness.signUp("alice@example.com")
  */
-export function createTestApp({ htmlByUrl = new Map(), decisionModel, urlImportEnabled = true }: TestAppOptions = {}) {
+export function createTestApp({ decisionModel }: TestAppOptions = {}) {
   const accounts = new InMemoryAccountRepository();
   const repository = new InMemoryProductRepository();
   const logger = new RecordingLogger();
@@ -32,11 +27,10 @@ export function createTestApp({ htmlByUrl = new Map(), decisionModel, urlImportE
     auth: new AuthService(accounts, plainPasswordHasher, () => TEST_NOW),
     repository,
     comparisons: new InMemoryComparisonRepository(repository),
-    ingestion: new ProductIngestion(repository, new FakeHtmlFetcher(htmlByUrl), () => TEST_NOW),
+    ingestion: new ProductIngestion(repository),
     logger,
     sessionCookie: { secure: true },
     webOrigin: "http://web.test",
-    urlImportEnabled,
     decisionModel,
   });
 

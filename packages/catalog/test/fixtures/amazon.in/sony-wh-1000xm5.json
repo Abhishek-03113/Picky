@@ -319,6 +319,52 @@
         ]
       }
     ],
+    "sizeCharts": [],
+    "colorOptions": [
+      {
+        "name": "WH-1000XM5, Black",
+        "externalId": "B09XS7JWHH",
+        "url": "https://www.amazon.in/dp/B09XS7JWHH",
+        "swatchImage": "https://m.media-amazon.com/images/I/31vOBg8cPaL._SS64_.jpg",
+        "selected": true,
+        "price": {
+          "amount": 28926,
+          "currency": "INR"
+        },
+        "availability": "In stock",
+        "image": "https://m.media-amazon.com/images/I/61O3iMlnJIL._SL1500_.jpg"
+      },
+      {
+        "name": "Silver",
+        "externalId": "B09XSDMT4F",
+        "url": "https://www.amazon.in/dp/B09XSDMT4F",
+        "swatchImage": "https://m.media-amazon.com/images/I/21F6MKKV6EL._SS64_.jpg",
+        "selected": false,
+        "price": null,
+        "availability": null,
+        "image": null
+      },
+      {
+        "name": "Smoky Pink",
+        "externalId": "B0DGL6R3SX",
+        "url": "https://www.amazon.in/dp/B0DGL6R3SX",
+        "swatchImage": "https://m.media-amazon.com/images/I/31bNDAcLWEL._SS64_.jpg",
+        "selected": false,
+        "price": null,
+        "availability": null,
+        "image": null
+      },
+      {
+        "name": "WH-1000XM5, Mid Night Blue",
+        "externalId": "B0BZP2H373",
+        "url": "https://www.amazon.in/dp/B0BZP2H373",
+        "swatchImage": "https://m.media-amazon.com/images/I/31nVFQSCKvL._SS64_.jpg",
+        "selected": false,
+        "price": null,
+        "availability": null,
+        "image": null
+      }
+    ],
     "capturedAt": "2026-10-05T06:14:59.665Z"
   }
 }

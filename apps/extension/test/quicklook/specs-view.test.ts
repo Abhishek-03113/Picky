@@ -38,6 +38,7 @@ function modelWith(overrides: Partial<QuickLookModel>): QuickLookModel {
 /** An OverlayActions whose calls are recorded by name, for view tests. */
 class RecordingActions implements OverlayActions {
   readonly calls: string[] = [];
+  readonly readColor = null;
   close(): void {
     this.calls.push("close");
   }
