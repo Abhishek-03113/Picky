@@ -1,4 +1,5 @@
 import { renderCapturingView } from "./capturing-view.ts";
+import type { ReadColorOption } from "../link-capture/color-page-reader.ts";
 import type { Dom } from "./dom.ts";
 import { renderErrorView } from "./error-view.ts";
 import type { PopupState } from "./popup-state.ts";
@@ -18,6 +19,8 @@ export interface PopupViewContext {
   onAutoOpenChange: (checked: boolean) => void;
   onViewSpecs: () => void;
   onBackToSaved: () => void;
+  /** Reads another colour's listing when it is picked in the specs view; null shows saved data only. */
+  readColor: ReadColorOption | null;
 }
 
 /**
@@ -50,7 +53,7 @@ export function renderPopupView(dom: Dom, state: PopupState, context: PopupViewC
       return renderShell(
         dom,
         { libraryUrl, onBack: context.onBackToSaved, title: "Specifications" },
-        renderSpecSheetView(dom, state.summary.snapshot),
+        renderSpecSheetView(dom, state.summary.snapshot, context.readColor),
       );
     case "unsupported":
       return renderShell(dom, { libraryUrl }, renderUnsupportedView(dom, context.webBaseUrl));

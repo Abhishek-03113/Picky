@@ -1,6 +1,7 @@
 import { describe, expect, test } from "bun:test";
 import { readFileSync } from "node:fs";
 import { Window } from "happy-dom";
+import { colorPageReader } from "../../src/link-capture/color-page-reader.ts";
 import { FetchHtmlFetcher } from "../../src/link-capture/html-fetcher.ts";
 import { isParseProductRequest } from "../../src/link-capture/offscreen-protocol.ts";
 import { parseProductHtml, type HtmlDocumentParser } from "../../src/link-capture/parse-product-html.ts";
@@ -51,5 +52,32 @@ describe("isParseProductRequest", () => {
     expect(isParseProductRequest({ target: "offscreen", type: "parse-product", html: "", url: "" })).toBe(true);
     expect(isParseProductRequest({ type: "parse-product" })).toBe(false);
     expect(isParseProductRequest(null)).toBe(false);
+  });
+});
+
+describe("colorPageReader", () => {
+  const blue = {
+    name: "Blue",
+    externalId: "B076CKF1GB",
+    url: "https://www.amazon.in/dp/B076CKF1GB",
+    swatchImage: null,
+    selected: false,
+    price: null,
+    availability: null,
+    image: null,
+  };
+
+  test("downloads the colour's listing with the user's cookies and fills in its price, stock and photo", async () => {
+    const html = readFileSync(new URL(`${FIXTURE_DIR}/van-heusen-polo-t-shirt.html`, import.meta.url), "utf8");
+    const server = new FakePageServer(200, html);
+    const read = await colorPageReader(server.fetch, happyParser())(blue);
+    expect(server.requests).toEqual([{ url: blue.url, credentials: "include" }]);
+    expect(read).toMatchObject({ name: "Blue", price: { amount: 582, currency: "INR" }, availability: "In stock" });
+    expect(read.image).toStartWith("https://m.media-amazon.com/");
+  });
+
+  test("throws when the colour's page is not a product page", async () => {
+    const server = new FakePageServer(200, "<html><body>Type the characters you see</body></html>");
+    await expect(colorPageReader(server.fetch, happyParser())(blue)).rejects.toThrow("no #productTitle");
   });
 });

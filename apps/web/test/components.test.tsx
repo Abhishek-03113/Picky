@@ -192,7 +192,7 @@ describe("SizeChartCard", () => {
 describe("ColorOptionsCard", () => {
   const base = { swatchImage: "https://img/s.jpg", availability: null, image: null, price: null, selected: false };
 
-  test("links each colour to its listing with its read price, marking the current one", () => {
+  test("previews this page's colour with swatches to pick from, and never links away", () => {
     const html = renderToStaticMarkup(
       <ColorOptionsCard
         options={[
@@ -208,10 +208,11 @@ describe("ColorOptionsCard", () => {
         ]}
       />,
     );
-    expect(html).toContain('href="https://www.amazon.in/dp/B1"');
-    expect(html).toContain('aria-current="page"');
-    expect(html).toContain("₹582");
-    expect(html).toContain("Open to see price");
+    expect(html).not.toContain("<a ");
+    expect(html).toContain('<span class="color-preview-name">White</span>');
+    expect(html).toContain('<span class="color-preview-price">₹582</span>');
+    expect(html).toContain('aria-pressed="true" aria-label="White"');
+    expect(html).toContain('aria-pressed="false" aria-label="Blue"');
     expect(html).toContain("2 colours");
     expect(renderToStaticMarkup(<ColorOptionsCard options={[]} />)).toBe("");
   });

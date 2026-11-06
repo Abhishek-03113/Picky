@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Picky",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "description": "Save products from Amazon.in and Flipkart as you browse, turn each into a clean spec sheet, and see where your shortlist differs.",
   "icons": {
     "16": "logo-16.png",
