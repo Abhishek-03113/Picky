@@ -1,4 +1,5 @@
 import { firstAttr, type PageNode } from "../../page/page-node.ts";
+import { textOrNull } from "../../text/normalize-text.ts";
 
 // Amazon image URLs carry a resize directive before the extension: …/I/31tFpNCkk5L._SX38_SY50_CR,0,0,38,50_.jpg
 const RESIZE_DIRECTIVE = /\._[^/]*_\.(jpg|jpeg|png|webp)$/i;
@@ -13,14 +14,20 @@ const GALLERY_THUMBNAILS = "#altImages li.imageThumbnail:not(.variant-MAIN) img"
  * @example extractAmazonImages(page)[0] // "https://m.media-amazon.com/images/I/61NBcHAmCpL._SL1500_.jpg"
  */
 export function extractAmazonImages(page: PageNode): string[] {
-  const landing = firstAttr(page, "#landingImage", "data-old-hires") ?? firstAttr(page, "#landingImage", "src");
+  const landing = textOrNull(firstAttr(page, "#landingImage", "data-old-hires")) ?? landingThumbnail(page);
   const gallery = page
     .findAll(GALLERY_THUMBNAILS)
     .map((thumbnail) => thumbnail.attr("src"))
     .filter((src): src is string => src !== null && src.startsWith("https://"))
     .map(enlargeAmazonImageUrl);
-  const all = landing === null || landing === "" ? gallery : [landing, ...gallery];
+  const all = landing === null ? gallery : [landing, ...gallery];
   return [...new Set(all)];
+}
+
+// Clothing pages often leave data-old-hires empty and ship only a small src (…_SX342_SY445_QL70_ML2_.jpg).
+function landingThumbnail(page: PageNode): string | null {
+  const src = textOrNull(firstAttr(page, "#landingImage", "src"));
+  return src === null ? null : enlargeAmazonImageUrl(src);
 }
 
 /**

@@ -28,6 +28,41 @@ export const RatingSchema = z.object({
   count: z.number().int().nonnegative(),
 });
 
+/** A size chart the page shows as a table: header row plus one row per size, cells as printed. */
+export const SizeChartTableSchema = z.object({
+  kind: z.literal("table"),
+  /** The chart's own heading, e.g. "IN Regular"; null when the page gives none. */
+  title: z.string().min(1).nullable(),
+  /** Header cells, e.g. ["Brand Size", "Chest (in)"]. A unit in brackets marks a measurement column. */
+  columns: z.array(z.string().min(1)).min(1),
+  rows: z.array(z.array(z.string())).min(1),
+});
+
+/** A size chart the seller uploaded as a picture; it cannot be converted, only shown. */
+export const SizeChartImageSchema = z.object({
+  kind: z.literal("image"),
+  title: z.string().min(1).nullable(),
+  imageUrl: z.url(),
+});
+
+export const SizeChartSchema = z.discriminatedUnion("kind", [SizeChartTableSchema, SizeChartImageSchema]);
+
+/**
+ * One colour the product is sold in. Each colour is its own listing with its own product id, so
+ * price, availability and image come from reading that colour's page; they stay null until it is read.
+ */
+export const ColorOptionSchema = z.object({
+  name: z.string().min(1),
+  externalId: z.string().min(1),
+  url: z.url(),
+  swatchImage: z.url().nullable(),
+  /** True for the colour of the page this snapshot was read from. */
+  selected: z.boolean(),
+  price: MoneySchema.nullable(),
+  availability: z.string().min(1).nullable(),
+  image: z.url().nullable(),
+});
+
 /**
  * Everything Picky keeps about one product page at one moment.
  * Produced by the extension from the live DOM or from a fetched page; both use the same extractor.
@@ -49,6 +84,9 @@ export const ProductSnapshotSchema = z.object({
   images: z.array(z.url()),
   highlights: z.array(HighlightSchema),
   specGroups: z.array(SpecGroupSchema),
+  // Rows stored before size charts and colours existed lack these keys; defaults keep them readable.
+  sizeCharts: z.array(SizeChartSchema).default([]),
+  colorOptions: z.array(ColorOptionSchema).default([]),
   capturedAt: z.iso.datetime(),
 });
 
@@ -58,6 +96,10 @@ export type Spec = z.infer<typeof SpecSchema>;
 export type SpecGroup = z.infer<typeof SpecGroupSchema>;
 export type Highlight = z.infer<typeof HighlightSchema>;
 export type Rating = z.infer<typeof RatingSchema>;
+export type SizeChartTable = z.infer<typeof SizeChartTableSchema>;
+export type SizeChartImage = z.infer<typeof SizeChartImageSchema>;
+export type SizeChart = z.infer<typeof SizeChartSchema>;
+export type ColorOption = z.infer<typeof ColorOptionSchema>;
 export type ProductSnapshot = z.infer<typeof ProductSnapshotSchema>;
 
 /** A stored snapshot, as the API returns it. */

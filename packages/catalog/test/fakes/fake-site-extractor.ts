@@ -33,6 +33,8 @@ export class FakeSiteExtractor implements SiteExtractor {
       images: [],
       highlights: [],
       specGroups: [],
+      sizeCharts: [],
+      colorOptions: [],
       capturedAt: capturedAt.toISOString(),
     };
   }

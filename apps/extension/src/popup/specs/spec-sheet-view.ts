@@ -1,13 +1,15 @@
 import { filterSpecGroups, specCountLabel, type ProductSnapshot, type SpecGroup } from "@picky/catalog";
 import type { Dom } from "../dom.ts";
+import { renderSpecColorOptionsView } from "./spec-color-options-view.ts";
 import { renderSpecHighlightsView } from "./spec-highlights-view.ts";
 import { renderGroupChips, renderGroupSections, renderNoMatches } from "./spec-groups-view.ts";
 import { renderSpecPriceView } from "./spec-price-view.ts";
 import { renderSpecSearchView } from "./spec-search-view.ts";
+import { renderSpecSizeChartsView } from "./spec-size-charts-view.ts";
 import { renderSpecSummaryView } from "./spec-summary-view.ts";
 
 /**
- * The spec sheet content, host-agnostic: product summary, price, highlights, then searchable spec
+ * The spec sheet content, host-agnostic: product summary, price, highlights, colours, size chart, then searchable spec
  * groups. It is a size container (see spec-sheet.css) so it lays out for the width it is given, not
  * the viewport: the popup stays compact and the Quick Look card gets the web's wide layout. It does
  * not scroll itself; the host's scroll container is what the sticky search + chips stick inside.
@@ -20,6 +22,8 @@ export function renderSpecSheetContent(dom: Dom, snapshot: ProductSnapshot): HTM
     renderSpecSummaryView(dom, snapshot),
     renderSpecPriceView(dom, snapshot),
     ...renderSpecHighlightsView(dom, snapshot.highlights),
+    ...renderSpecColorOptionsView(dom, snapshot.colorOptions),
+    ...renderSpecSizeChartsView(dom, snapshot.sizeCharts),
     renderSpecSheet(dom, snapshot.specGroups),
   ]);
   return dom.el("div", { className: "spec-view" }, [content]);

@@ -3,16 +3,18 @@ import { Link, getRouteApi } from "@tanstack/react-router";
 import { comparisonListQuery, productComparisonsQuery } from "../api/comparison-queries.ts";
 import { productDetailQuery } from "../api/product-queries.ts";
 import { AppBar, MainNav } from "../components/app-bar.tsx";
+import { ColorOptionsCard } from "../components/color-options-card.tsx";
 import { ChevronLeftIcon } from "../components/icons.tsx";
 import { usePageTitle } from "../hooks/use-page-title.ts";
 import { ProductComparisonsCard } from "../components/product-comparisons-card.tsx";
 import { ProductSummary } from "../components/product-summary.tsx";
+import { SizeChartCard } from "../components/size-chart-card.tsx";
 import { SourceLink } from "../components/source-link.tsx";
 import { SpecSheet } from "../components/spec-sheet.tsx";
 
 const productRouteApi = getRouteApi("/products/$productId");
 
-/** One product as a spec sheet: summary on top, then every spec group. */
+/** One product as a spec sheet: summary on top, colours and size chart, then every spec group. */
 export function ProductDetailPage() {
   const { productId } = productRouteApi.useParams();
   const { productsClient } = productRouteApi.useRouteContext();
@@ -35,6 +37,8 @@ export function ProductDetailPage() {
           productId={productId}
           suggestedName={snapshot.category ?? snapshot.brand ?? "New comparison"}
         />
+        <ColorOptionsCard options={snapshot.colorOptions} />
+        <SizeChartCard charts={snapshot.sizeCharts} />
         <SpecSheet groups={snapshot.specGroups} />
       </main>
     </>

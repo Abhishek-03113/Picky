@@ -1,6 +1,9 @@
 import type { PageNode } from "../../page/page-node.ts";
 import type { Highlight } from "../../product-snapshot.ts";
 
+// Most listings use #feature-bullets; clothing pages put the same bullets under "Product facts".
+const BULLETS = "#feature-bullets li, #productFactsDesktopExpander ul li";
+
 // Legal boilerplate Amazon injects into "About this item" on some listings (seen on AppleCare bundles).
 const BOILERPLATE_BULLET = /^By clicking on Add to Cart/i;
 
@@ -15,7 +18,7 @@ const MAX_HEADING_LENGTH = 80;
  */
 export function extractAmazonHighlights(page: PageNode): Highlight[] {
   return page
-    .findAll("#feature-bullets li")
+    .findAll(BULLETS)
     .map((item) => item.text())
     .filter((bullet) => bullet !== "" && !BOILERPLATE_BULLET.test(bullet))
     .map(splitHighlight);
