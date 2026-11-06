@@ -19,10 +19,10 @@ declare global {
 /**
  * The toast's second line: where the product went.
  *
- * @example addedDetail({ specCount: 54, placement: { comparisonName: "Monitors", count: 5 } }) // "54 specs · now 5 in Monitors"
+ * @example addedDetail({ specCount: 54, placement: { comparisonName: "Monitors", count: 5 } }) // "54 details · now 5 in Monitors"
  */
 export function addedDetail(message: Extract<ToastMessage, { kind: "added" }>): string {
-  const specs = `${message.specCount} specs`;
-  if (message.placement === null) return `${specs} · saved to your library`;
-  return `${specs} · now ${message.placement.count} in ${message.placement.comparisonName}`;
+  const details = `${message.specCount} details`;
+  if (message.placement === null) return `${details} · saved to Picky`;
+  return `${details} · now ${message.placement.count} in ${message.placement.comparisonName}`;
 }

@@ -16,18 +16,18 @@ async function readManifest(): Promise<Manifest> {
 }
 
 describe("manifest.json commands", () => {
-  test("the toolbar action and Alt+Shift+S open Specs", async () => {
+  test("the toolbar action and Alt+Shift+S open Details", async () => {
     const manifest = await readManifest();
     expect(manifest.commands["_execute_action"]?.suggested_key.default).toBe("Alt+Shift+S");
-    expect(manifest.commands["_execute_action"]?.description).toBe("Quick Look: specs of this page");
-    expect(manifest.action.default_title).toBe("Quick Look: specs of this page");
+    expect(manifest.commands["_execute_action"]?.description).toBe("See this product's details");
+    expect(manifest.action.default_title).toBe("Picky: see this product's details");
   });
 
   // Not Alt+Shift+C: Chromium leaves that suggested key unassigned (chrome.commands.getAll() → shortcut "").
   test("open-comparison is Alt+Shift+V", async () => {
     const command = (await readManifest()).commands["open-comparison"];
     expect(command?.suggested_key.default).toBe("Alt+Shift+V");
-    expect(command?.description).toBe("Quick Look: compare this page");
+    expect(command?.description).toBe("Compare this product with your saved ones");
   });
 
   // The web app and the extension label these keys per OS from the shared definitions; they must be the real ones.

@@ -27,7 +27,7 @@ export function extractAmazonPrice(page: PageNode, currency: string): Money | nu
 }
 
 /**
- * List price (M.R.P. on Amazon.in) shown struck through next to a discounted price; null when there is no discount.
+ * List price (M.R.P. on amazon.in) shown struck through next to a discounted price; null when there is no discount.
  *
  * @example extractAmazonListPrice(page, "INR") // { amount: 133399, currency: "INR" }
  */

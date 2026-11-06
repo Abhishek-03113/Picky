@@ -24,7 +24,7 @@ export function ProductDetailPage() {
       <AppBar sticky>
         <Link to="/" className="back-link">
           <ChevronLeftIcon size={20} />
-          Library
+          Saved
         </Link>
         <MainNav />
         <SourceLink source={snapshot.source} url={snapshot.url} />

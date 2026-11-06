@@ -34,8 +34,8 @@ export function countSpecs(groups: readonly SpecGroup[]): number {
  * @example specCountLabel(all, visible, "") // "54 specs in 10 groups"; with a query: "3 matching specs"
  */
 export function specCountLabel(all: readonly SpecGroup[], visible: readonly SpecGroup[], query: string): string {
-  if (query.trim() !== "") return `${countSpecs(visible)} matching ${countSpecs(visible) === 1 ? "spec" : "specs"}`;
-  return `${pluralize(countSpecs(all), "spec")} in ${pluralize(all.length, "group")}`;
+  if (query.trim() !== "") return `${countSpecs(visible)} matching ${countSpecs(visible) === 1 ? "detail" : "details"}`;
+  return `${pluralize(countSpecs(all), "detail")} in ${pluralize(all.length, "section")}`;
 }
 
 /**

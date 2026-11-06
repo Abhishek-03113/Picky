@@ -6,7 +6,7 @@ import { BoxIcon, CheckIcon } from "./icons.tsx";
 
 interface ProductCardProps {
   product: CatalogProductSummary;
-  /** Injected so "Captured today" is deterministic in tests. */
+  /** Injected so "Saved today" is deterministic in tests. */
   now: Date;
   /** Present in the library: a checkbox circle on the card, and card clicks select once anything is selected. */
   selection?: CardSelection;
@@ -73,12 +73,12 @@ function CardBody({ product, now }: Pick<ProductCardProps, "product" | "now">) {
   return (
     <span className="product-card-body">
       <span className="product-card-top">
-        <span className="product-card-brand">{product.brand ?? "Unknown brand"}</span>
+        <span className="product-card-brand">{product.brand ?? "Brand not listed"}</span>
         <span className="chip">{sourceLabel(product.source)}</span>
       </span>
       <span className="product-card-title">{product.title}</span>
       <span className="product-card-price">
-        {product.price === null ? <span className="muted">No price</span> : formatMoney(product.price)}
+        {product.price === null ? <span className="muted">Price not shown</span> : formatMoney(product.price)}
       </span>
       <span className="product-card-date">{formatCapturedLabel(product.updatedAt, now)}</span>
     </span>

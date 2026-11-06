@@ -13,15 +13,15 @@ const titles = (entries: readonly MenuEntry[], context: MenuEntry["context"]) =>
   entries.filter((entry) => entry.context === context).map((entry) => entry.title);
 
 describe("buildMenuEntries", () => {
-  test("links get a flat list: Quick Look, then the last-used comparison first, others, Library only and New", () => {
+  test("links get a flat list: See details, then the last-used comparison first, others, Just save it and New", () => {
     const entries = buildMenuEntries(COMPARISONS, "c2");
     expect(titles(entries, "link")).toEqual([
-      "Quick Look",
+      "See details",
       "",
       "Add to Monitors (last used)",
       "Add to Home && office",
       "",
-      "Library only",
+      "Just save it",
       "New comparison…",
     ]);
     // Top-level only: Chrome itself groups several items under the extension's name ("Picky ▸").
@@ -31,17 +31,17 @@ describe("buildMenuEntries", () => {
   });
   test("keeps order and omits the targets separator when nothing is remembered or nothing exists", () => {
     expect(titles(buildMenuEntries(COMPARISONS, null), "link")[2]).toBe("Add to Home && office");
-    expect(titles(buildMenuEntries([], null), "link")).toEqual(["Quick Look", "", "Library only", "New comparison…"]);
+    expect(titles(buildMenuEntries([], null), "link")).toEqual(["See details", "", "Just save it", "New comparison…"]);
   });
   test("the open page gets one Add to Picky root with the same targets, under unique ids", () => {
     const entries = buildMenuEntries(COMPARISONS, "c2");
     const page = entries.filter((entry) => entry.context === "page");
     expect(page.map((entry) => entry.title)).toEqual([
-      "Add to Picky",
+      "Save to Picky",
       "Monitors (last used)",
       "Home && office",
       "",
-      "Library only",
+      "Just save it",
       "New comparison…",
     ]);
     expect(page.slice(1).every((entry) => entry.parentId === "picky:page:add")).toBe(true);
@@ -93,7 +93,7 @@ describe("MenuRefresher", () => {
     ).refresh();
     expect(menu.menus[0]?.map((entry) => entry.title)).toContain("Add to Monitors (last used)");
   });
-  test("still offers Library only when the API is down", async () => {
+  test("still offers Just save it when the API is down", async () => {
     const menu = new FakeContextMenu();
     const client = new FakeComparisonsClient();
     client.failWith = new Error("offline");
@@ -104,7 +104,7 @@ describe("MenuRefresher", () => {
       async () => null,
       (event) => void logged.push(event),
     ).refresh();
-    expect(titles(menu.menus[0] ?? [], "link")).toEqual(["Quick Look", "", "Library only", "New comparison…"]);
+    expect(titles(menu.menus[0] ?? [], "link")).toEqual(["See details", "", "Just save it", "New comparison…"]);
     expect(logged).toEqual(["menu.comparisons_unavailable"]);
   });
 });

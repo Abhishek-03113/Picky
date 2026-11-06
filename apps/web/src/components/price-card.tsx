@@ -15,7 +15,7 @@ export function PriceCard({ snapshot }: { snapshot: PriceCardSnapshot }) {
         </span>
       )}
       <span className="price-card-note">
-        {`Captured ${formatCaptureTime(snapshot.capturedAt)} · Prices change often — capture again to refresh.`}
+        {`Price as of ${formatCaptureTime(snapshot.capturedAt)} · Prices change often, so save it again from the store to update.`}
       </span>
     </div>
   );

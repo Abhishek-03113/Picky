@@ -33,7 +33,7 @@ export function renderWelcomeView(dom: Dom, handlers: WelcomeHandlers, os: Opera
 function renderIntro(dom: Dom): HTMLElement {
   return dom.el("div", { className: "intro" }, [
     dom.el("h1", { className: "title-lg", text: "You're all set" }),
-    dom.el("p", { className: "muted", text: "Two quick things and you'll never dig for specs again." }),
+    dom.el("p", { className: "muted", text: "Two quick things and you'll never dig through a product page again." }),
   ]);
 }
 

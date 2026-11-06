@@ -49,10 +49,10 @@ function NoComparisonsYet() {
     <div className="card empty-state">
       <strong>No comparisons yet</strong>
       <p className="subtle">
-        Pick products in your library and press “Compare”, or start an empty comparison with “New comparison”.
+        Pick products in Saved and press “Compare”, or start an empty comparison with “New comparison”.
       </p>
       <Link to="/" className="soft-button">
-        Open library
+        See saved products
       </Link>
     </div>
   );

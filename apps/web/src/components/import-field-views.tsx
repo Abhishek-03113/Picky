@@ -1,4 +1,4 @@
-import { PRODUCT_SOURCES, sourceLabel } from "@picky/catalog";
+import { supportedStoresText } from "@picky/catalog/sites";
 import type { FormEvent } from "react";
 import { LinkIcon } from "./icons.tsx";
 
@@ -14,7 +14,7 @@ export interface ImportFieldViewProps {
 
 const UNAVAILABLE_NOTE = "Adding by link needs the Picky extension. Install it, then reload this page.";
 
-const SUPPORTED_STORES = new Intl.ListFormat("en-IN", { type: "conjunction" }).format(PRODUCT_SOURCES.map(sourceLabel));
+const SUPPORTED_STORES = supportedStoresText();
 
 function ErrorLine({ message }: { message: string | null }) {
   if (message === null) return null;
@@ -47,13 +47,13 @@ export function ImportPillView(props: ImportFieldViewProps) {
           id="import-url"
           type="url"
           required
-          placeholder={isUnavailable ? "Add products with the extension" : "Paste a product link to add it"}
+          placeholder={isUnavailable ? "Add products with the extension" : "Paste a product link to save it"}
           value={url}
           disabled={isUnavailable}
           onChange={(event) => onUrlChange(event.target.value)}
         />
         <button type="submit" className="pill-button" disabled={isPending || isUnavailable}>
-          {isPending ? "Reading…" : "Add"}
+          {isPending ? "Saving…" : "Save"}
         </button>
       </div>
       <ErrorLine message={errorMessage} />
@@ -80,7 +80,7 @@ export function ImportCardView(props: ImportFieldViewProps) {
           onChange={(event) => onUrlChange(event.target.value)}
         />
         <button type="submit" className="primary-button" disabled={isPending || isUnavailable}>
-          {isPending ? "Reading page…" : "Get specs"}
+          {isPending ? "Saving…" : "Save product"}
         </button>
       </div>
       <span className="hint">{isUnavailable ? UNAVAILABLE_NOTE : `${SUPPORTED_STORES} product pages`}</span>

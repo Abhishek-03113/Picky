@@ -1,9 +1,9 @@
 {
   "manifest_version": 3,
-  "name": "Picky: Product Spec Sheets & Compare",
+  "name": "Picky: Compare Products & See Every Detail",
   "short_name": "Picky",
   "version": "1.2.2",
-  "description": "Turn {stores} product pages into clean spec sheets, save them to your Picky library, and compare.",
+  "description": "See every detail of {brands} products on one clean page. Save them and compare side by side.",
   "minimum_chrome_version": "116",
   "icons": {
     "16": "logo-16.png",
@@ -16,7 +16,7 @@
       "16": "logo-16.png",
       "32": "logo-32.png"
     },
-    "default_title": "Quick Look: specs of this page"
+    "default_title": "Picky: see this product's details"
   },
   "background": {
     "service_worker": "background.js",
@@ -29,13 +29,13 @@
       "suggested_key": {
         "default": "Alt+Shift+S"
       },
-      "description": "Quick Look: specs of this page"
+      "description": "See this product's details"
     },
     "open-comparison": {
       "suggested_key": {
         "default": "Alt+Shift+V"
       },
-      "description": "Quick Look: compare this page"
+      "description": "Compare this product with your saved ones"
     }
   },
   "content_scripts": [

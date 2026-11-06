@@ -9,7 +9,7 @@ export interface CapturingModel {
 
 export type StepState = "done" | "active" | "pending";
 
-const STEP_LABELS = ["Title, brand and price", "Spec tables", "Saving to your library"] as const;
+const STEP_LABELS = ["Name, brand and price", "All the details", "Saving"] as const;
 
 const STEP_ICONS: Readonly<Record<StepState, { icon: IconName; className: string }>> = {
   done: { icon: "check", className: "icon-sm icon-done" },
@@ -34,8 +34,8 @@ export function stepStates(phase: CapturePhase): readonly StepState[] {
  */
 export function renderCapturingView(dom: Dom, model: CapturingModel): HTMLElement {
   const footer = model.autoOpen
-    ? "You can close this. The sheet opens in a new tab when it's ready."
-    : "You can close this. Your product is saved to the library.";
+    ? "You can close this. Picky opens it in a new tab when it's ready."
+    : "You can close this. Your product is saved.";
   return dom.el("main", { className: "body" }, [
     renderStatus(dom),
     renderSkeletonCard(dom),
@@ -48,7 +48,7 @@ function renderStatus(dom: Dom): HTMLElement {
   return dom.el("div", { className: "status", attrs: { role: "status" } }, [
     dom.icon("spinner", "icon-lg icon-spin"),
     dom.el("span", { className: "status-copy" }, [
-      dom.el("span", { className: "title-md", text: "Reading this page…" }),
+      dom.el("span", { className: "title-md", text: "Getting the details…" }),
       dom.el("span", { className: "muted-sm", text: "Usually under two seconds" }),
     ]),
   ]);

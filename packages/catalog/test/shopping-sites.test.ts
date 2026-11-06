@@ -2,7 +2,14 @@ import { describe, expect, test } from "bun:test";
 import { findSiteExtractor } from "../src/extract/extract-product.ts";
 import { SITE_EXTRACTORS } from "../src/extract/site-extractors.ts";
 import { PRODUCT_SOURCES, SHOPPING_SITES, shoppingSite, type ProductSource } from "../src/sites/shopping-sites.ts";
-import { formatList, storeBrandsText, supportedStoresText } from "../src/sites/site-copy.ts";
+import {
+  formatList,
+  storeBrandsText,
+  storeNamesWithDomains,
+  supportedDomainsText,
+  supportedStoresText,
+} from "../src/sites/site-copy.ts";
+import { shoppingStores } from "../src/sites/shopping-stores.ts";
 import {
   looksLikeProductLink,
   productLinkPatterns,
@@ -36,6 +43,21 @@ describe("SHOPPING_SITES", () => {
     const hosts = SHOPPING_SITES.flatMap(siteHosts);
     expect(new Set(hosts).size).toBe(hosts.length);
     expect(SITE_EXTRACTORS.map((extractor) => extractor.source)).toEqual([...PRODUCT_SOURCES]);
+  });
+
+  test("Amazon is one store: storefronts share name and reader, keep their own id, host and currency", () => {
+    const amazon = SHOPPING_SITES.filter((site) => site.reader === "amazon");
+    expect(amazon.map((site) => site.source)).toEqual(["amazon.in", "amazon.com"]);
+    expect(new Set(amazon.map((site) => site.label))).toEqual(new Set(["Amazon"]));
+    expect(amazon.map((site) => site.currency)).toEqual(["INR", "USD"]);
+    expect(findSiteExtractor("https://www.amazon.com/dp/B08N5WRWNW")?.source).toBe("amazon.com");
+    expect(findSiteExtractor("https://amazon.in/dp/B0FQG1YHYR")?.source).toBe("amazon.in");
+  });
+
+  test("shoppingStores groups storefronts by store name, in registry order", () => {
+    const stores = shoppingStores();
+    expect(stores.map((store) => store.name)).toEqual(["Amazon", "Flipkart"]);
+    expect(stores[0]?.sites.map((site) => site.source)).toEqual(["amazon.in", "amazon.com"]);
   });
 
   test("shoppingSite looks a source up and refuses unknown ones", () => {
@@ -74,9 +96,14 @@ describe("site URLs", () => {
 
 describe("site copy", () => {
   test("lists every store, and every company once", () => {
-    expect(supportedStoresText()).toBe("Amazon.in, Amazon.com and Flipkart");
-    expect(supportedStoresText("or")).toBe("Amazon.in, Amazon.com or Flipkart");
+    expect(supportedStoresText()).toBe("Amazon and Flipkart");
+    expect(supportedStoresText("or")).toBe("Amazon or Flipkart");
     expect(storeBrandsText("or")).toBe("Amazon or Flipkart");
+  });
+
+  test("names Amazon's domains where copy must say exactly where Picky works", () => {
+    expect(supportedDomainsText()).toBe("Amazon (amazon.in and amazon.com) and Flipkart");
+    expect(storeNamesWithDomains()).toEqual(["Amazon (amazon.in and amazon.com)", "Flipkart"]);
   });
 
   test("formatList handles short lists", () => {

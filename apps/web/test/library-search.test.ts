@@ -26,6 +26,6 @@ describe("group options", () => {
   });
 
   test("groupLabel names the active grouping", () => {
-    expect(groupLabel("price")).toBe("Price band");
+    expect(groupLabel("price")).toBe("Price range");
   });
 });

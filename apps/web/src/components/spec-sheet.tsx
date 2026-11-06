@@ -13,7 +13,7 @@ interface SpecSheetProps {
 function NoMatches({ query, onClear }: { query: string; onClear: () => void }) {
   return (
     <div className="card empty-state">
-      <strong>No specs match “{query.trim()}”</strong>
+      <strong>No details match “{query.trim()}”</strong>
       <button type="button" className="soft-button" onClick={onClear}>
         Clear search
       </button>
@@ -36,7 +36,7 @@ export function SpecSheet({ groups }: SpecSheetProps) {
     <section className="spec-sheet" aria-labelledby="spec-sheet-title">
       <div className="spec-sheet-head">
         <div className="page-head-text">
-          <h2 id="spec-sheet-title">Specifications</h2>
+          <h2 id="spec-sheet-title">Details</h2>
           <span className="subtle">{specCountLabel(groups, visibleGroups, query)}</span>
         </div>
         <SpecSearchBox query={query} onQueryChange={setQuery} />

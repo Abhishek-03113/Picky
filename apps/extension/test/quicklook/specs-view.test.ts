@@ -123,10 +123,10 @@ describe("QuickLookController.setView", () => {
   test("keeps focus on the View segment that was activated", async () => {
     const { root, controller } = setup();
     await controller.open("compare");
-    root.querySelector<HTMLElement>('[data-focus="view-Specs"]')?.click();
-    root.querySelector<HTMLElement>('[data-focus="view-Specs"]')?.focus();
+    root.querySelector<HTMLElement>('[data-focus="view-Details"]')?.click();
+    root.querySelector<HTMLElement>('[data-focus="view-Details"]')?.focus();
     controller.setView("specs");
-    expect(root.ownerDocument.activeElement?.getAttribute("data-focus")).toBe("view-Specs");
+    expect(root.ownerDocument.activeElement?.getAttribute("data-focus")).toBe("view-Details");
   });
 
   test("falls back to the dialog when the focused control disappears", async () => {
@@ -144,7 +144,7 @@ describe("headerView", () => {
     const noComparisons = modelWith({ state: { ...stateWith("c1", []), comparisons: [], selectedId: null } });
     const header = headerView(dom, noComparisons, new RecordingActions());
     expect([...header.querySelectorAll('[aria-label="View"] .segment')].map((n) => n.textContent)).toEqual([
-      "Specs",
+      "Details",
       "Compare",
     ]);
   });
@@ -163,14 +163,14 @@ describe("headerView", () => {
     expect(header.querySelector(".subtitle")).toBeNull();
     expect(header.querySelector('[aria-label="Rows"]')).toBeNull();
     expect(header.querySelector(".close")).not.toBeNull();
-    expect(header.querySelector('[aria-label="View"] [aria-checked="true"]')?.textContent).toBe("Specs");
+    expect(header.querySelector('[aria-label="View"] [aria-checked="true"]')?.textContent).toBe("Details");
   });
 
   test("clicking a segment asks for that view", () => {
     const { dom } = createTestDom();
     const actions = new RecordingActions();
     const header = headerView(dom, modelWith({}), actions);
-    header.querySelector<HTMLElement>('[data-focus="view-Specs"]')?.click();
+    header.querySelector<HTMLElement>('[data-focus="view-Details"]')?.click();
     expect(actions.calls).toEqual(["view specs"]);
   });
 });
@@ -184,7 +184,7 @@ describe("overlayView signed out", () => {
     const link = view.querySelector<HTMLAnchorElement>('[data-focus="sign-in"]');
     expect(link?.getAttribute("href")).toBe("http://web/login");
     expect(link?.getAttribute("target")).toBe("_blank");
-    expect(view.textContent).toContain("Specs work without an account");
+    expect(view.textContent).toContain("You can see details without an account");
   });
 
   test("Specs still render this page's sheet", () => {
@@ -234,9 +234,9 @@ describe("overlayView in the specs view", () => {
     const footer = footerView(dom, modelWith({ view: "compare" }), "windows");
     expect(footerHints(footer)).toEqual([
       "Esc close",
-      "Enter add this page",
+      "Enter add this product",
       "← → switch comparison",
-      "Alt Shift S specs",
+      "Alt Shift S details",
     ]);
   });
 
@@ -245,16 +245,16 @@ describe("overlayView in the specs view", () => {
     expect(footerHints(footerView(dom, modelWith({ view: "specs" }), "mac"))).toEqual(["Esc close", "⌥ ⇧ V compare"]);
     expect(footerHints(footerView(dom, modelWith({ view: "compare" }), "mac"))).toEqual([
       "Esc close",
-      "Return add this page",
+      "Return add this product",
       "← → switch comparison",
-      "⌥ ⇧ S specs",
+      "⌥ ⇧ S details",
     ]);
   });
 
   test("a non-product page shows the compare footer even when specs was requested", () => {
     const { dom } = createTestDom();
     const footer = footerView(dom, modelWith({ view: "specs", pageSnapshot: null }), "windows");
-    expect(footerHints(footer)).toContain("Alt Shift S specs");
+    expect(footerHints(footer)).toContain("Alt Shift S details");
   });
 
   test("an action-failure banner is not shown over the spec sheet", () => {

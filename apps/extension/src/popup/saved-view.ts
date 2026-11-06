@@ -15,15 +15,15 @@ export interface SavedHandlers {
 
 const AUTO_OPEN_LABEL_ID = "auto-open-label";
 
-/** "54 specs in 10 groups", singular-aware. */
+/** "54 details in 10 sections", singular-aware. */
 export function describeSpecCount(specCount: number, groupCount: number): string {
-  const specs = `${specCount} ${specCount === 1 ? "spec" : "specs"}`;
-  return `${specs} in ${groupCount} ${groupCount === 1 ? "group" : "groups"}`;
+  const details = `${specCount} ${specCount === 1 ? "detail" : "details"}`;
+  return `${details} in ${groupCount} ${groupCount === 1 ? "section" : "sections"}`;
 }
 
 /**
  * Saved body: confirmation, product card (links to the sheet), primary "View specs"
- * button, the secondary "Open in Picky" link and the "Open sheet automatically" switch.
+ * button, the secondary "Open in Picky" link and the "Always open in Picky after saving" switch.
  *
  * @example renderSavedView(dom, { summary, webBaseUrl: "http://localhost:5173", autoOpen: true }, handlers)
  */
@@ -43,7 +43,7 @@ function renderConfirmation(dom: Dom, summary: SavedSummary): HTMLElement {
   return dom.el("div", { className: "status", attrs: { role: "status" } }, [
     badge,
     dom.el("span", { className: "status-copy" }, [
-      dom.el("span", { className: "title-md", text: "Saved to your library" }),
+      dom.el("span", { className: "title-md", text: "Saved to Picky" }),
       dom.el("span", { className: "muted-sm", text: describeSpecCount(summary.specCount, summary.groupCount) }),
     ]),
   ]);
@@ -82,7 +82,7 @@ function renderViewSpecsButton(dom: Dom, handlers: SavedHandlers): HTMLElement {
   const button = dom.el("button", {
     className: "button button-primary button-tall",
     attrs: { type: "button" },
-    text: "View specs",
+    text: "See details",
   });
   button.addEventListener("click", handlers.onViewSpecs);
   return button;
@@ -104,9 +104,9 @@ function renderAutoOpenRow(dom: Dom, autoOpen: boolean, handlers: SavedHandlers)
       dom.el("span", {
         className: "setting-label",
         attrs: { id: AUTO_OPEN_LABEL_ID },
-        text: "Open sheet automatically",
+        text: "Always open in Picky after saving",
       }),
-      dom.el("span", { className: "muted-sm", text: "Skip this popup next time" }),
+      dom.el("span", { className: "muted-sm", text: "Don't show this again" }),
     ]),
     toggle,
   ]);

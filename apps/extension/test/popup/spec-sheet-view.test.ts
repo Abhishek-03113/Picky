@@ -26,7 +26,7 @@ describe("renderSpecSheetView", () => {
     const { view } = mount();
     expect(view.querySelectorAll("section.spec-group").length).toBe(3);
     expect(rowLabels(view)).toEqual(["Size", "Type", "Capacity", "Color"]);
-    expect(view.querySelector(".spec-sheet-head .subtle")?.textContent).toBe("4 specs in 3 groups");
+    expect(view.querySelector(".spec-sheet-head .subtle")?.textContent).toBe("4 details in 3 sections");
     expect(view.querySelectorAll(".group-chips button").length).toBe(3);
     expect(view.querySelector("#group-item-details h3")?.textContent).toBe("Item details");
   });
@@ -34,7 +34,7 @@ describe("renderSpecSheetView", () => {
   test("summary shows brand, store chip, title, rating and the first image", () => {
     const { view } = mount();
     expect(view.querySelector(".summary-brand")?.textContent).toBe("Apple");
-    expect(view.querySelector(".summary .chip")?.textContent).toBe("Amazon.in");
+    expect(view.querySelector(".summary .chip")?.textContent).toBe("Amazon");
     expect(view.querySelector("h1")?.textContent).toBe("Apple iPhone 17");
     expect(view.querySelector(".rating-note")?.textContent).toContain("4.4out of 5 · 17,240 ratings");
     expect(view.querySelector(".gallery-main img")?.getAttribute("src")).toBe("https://img.test/a.jpg");
@@ -53,14 +53,14 @@ describe("renderSpecSheetView", () => {
     type(view, "battery");
     expect(view.querySelector("input")).toBe(input);
     expect(rowLabels(view)).toEqual(["Capacity"]);
-    expect(view.querySelector(".spec-sheet-head .subtle")?.textContent).toBe("1 matching spec");
+    expect(view.querySelector(".spec-sheet-head .subtle")?.textContent).toBe("1 matching detail");
     expect(view.querySelectorAll(".group-chips button").length).toBe(1);
   });
 
   test("no match shows the empty state and Clear search restores everything", () => {
     const { view } = mount();
     const input = type(view, " zzz ");
-    expect(view.querySelector(".empty-state strong")?.textContent).toBe("No specs match “zzz”");
+    expect(view.querySelector(".empty-state strong")?.textContent).toBe("No details match “zzz”");
     expect(view.querySelector(".group-chips")).toBeNull();
     (view.querySelector(".empty-state button") as HTMLButtonElement).click();
     expect(input.value).toBe("");
@@ -138,7 +138,7 @@ describe("price card", () => {
     expect(view.querySelector(".list-price s")?.textContent).toBe("₹34,990");
     expect(view.querySelector(".discount-chip")?.textContent).toBe("17% off · save ₹6,064");
     expect(view.querySelector(".availability-dot")?.classList.contains("in-stock")).toBe(true);
-    expect(view.querySelector(".price-card-note")?.textContent).toContain("Captured");
+    expect(view.querySelector(".price-card-note")?.textContent).toContain("Price as of");
   });
 
   test("no discount chip without a real discount", () => {

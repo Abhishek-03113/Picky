@@ -62,7 +62,9 @@ export class PopupController {
       const outcome = await this.deps.captureService.capture(tab, (phase) => this.show({ kind: "capturing", phase }));
       return stateFromOutcome(outcome);
     } catch (error) {
-      return { kind: "failed", message: error instanceof Error ? error.message : String(error) };
+      const message = error instanceof Error ? error.message : String(error);
+      console.warn("picky.popup.capture_failed", message);
+      return { kind: "failed", message };
     }
   }
 

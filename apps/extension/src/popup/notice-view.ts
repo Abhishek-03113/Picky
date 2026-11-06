@@ -5,8 +5,6 @@ export interface NoticeModel {
   icon: IconName;
   title: string;
   body: string;
-  /** Technical detail shown small under the body (e.g. an error message). */
-  detail?: string;
 }
 
 /**
@@ -29,11 +27,9 @@ export function renderNoticeView(
 }
 
 function renderMessage(dom: Dom, model: NoticeModel): HTMLElement {
-  const message = dom.el("div", { className: "notice" }, [
+  return dom.el("div", { className: "notice" }, [
     dom.el("span", { className: "notice-icon" }, [dom.icon(model.icon, "icon-lg")]),
     dom.el("h1", { className: "title-md-lg", text: model.title }),
     dom.el("p", { className: "muted", text: model.body }),
   ]);
-  if (model.detail !== undefined) message.append(dom.el("p", { className: "detail", text: model.detail }));
-  return message;
 }

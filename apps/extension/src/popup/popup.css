@@ -123,12 +123,6 @@ p {
   color: var(--ez-label-secondary);
   text-align: center;
 }
-.detail {
-  font-size: 13px;
-  color: var(--ez-label-secondary);
-  overflow-wrap: anywhere;
-}
-
 .icon {
   flex: 0 0 auto;
   fill: none;

@@ -26,13 +26,13 @@ function relativeDayLabel(isoTimestamp: string, now: Date, timeZone: string | un
 }
 
 /**
- * Library-card capture label: "Captured today", "Captured yesterday", then "Captured 3 Oct" (with the year
+ * Library-card save label: "Saved today", "Saved yesterday", then "Saved 3 Oct" (with the year
  * once it is not the current one).
  *
- * @example formatCapturedLabel("2026-10-03T08:00:00Z", new Date("2026-10-05T08:00:00Z"), "UTC") // "Captured 3 Oct"
+ * @example formatCapturedLabel("2026-10-03T08:00:00Z", new Date("2026-10-05T08:00:00Z"), "UTC") // "Saved 3 Oct"
  */
 export function formatCapturedLabel(isoTimestamp: string, now: Date, timeZone?: string): string {
-  return `Captured ${relativeDayLabel(isoTimestamp, now, timeZone)}`;
+  return `Saved ${relativeDayLabel(isoTimestamp, now, timeZone)}`;
 }
 
 /**

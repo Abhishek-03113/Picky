@@ -11,12 +11,12 @@ export function SpecSearchBox({ query, onQueryChange }: SpecSearchBoxProps) {
     <div className="search-box">
       <SearchIcon size={18} />
       <label htmlFor="spec-search" className="visually-hidden">
-        Find a spec
+        Search details
       </label>
       <input
         id="spec-search"
         type="search"
-        placeholder="Find a spec — try “battery”"
+        placeholder="Search details — try “battery”"
         value={query}
         onChange={(event) => onQueryChange(event.target.value)}
       />

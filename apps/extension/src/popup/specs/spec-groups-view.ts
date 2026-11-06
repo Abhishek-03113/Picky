@@ -13,7 +13,7 @@ export function renderGroupChips(dom: Dom, groups: readonly SpecGroup[]): HTMLEl
   if (groups.length === 0) return null;
   const highlighter = new GroupHighlighter();
   const chips = groups.map((group) => renderChip(dom, group, highlighter));
-  return dom.el("nav", { className: "group-chips", attrs: { "aria-label": "Spec groups" } }, chips);
+  return dom.el("nav", { className: "group-chips", attrs: { "aria-label": "Sections" } }, chips);
 }
 
 function renderChip(dom: Dom, group: SpecGroup, highlighter: GroupHighlighter): HTMLElement {
@@ -94,7 +94,7 @@ export function renderNoMatches(dom: Dom, query: string, onClear: () => void): H
   const clear = dom.el("button", { className: "soft-button", attrs: { type: "button" }, text: "Clear search" });
   clear.addEventListener("click", onClear);
   return dom.el("div", { className: "spec-card empty-state" }, [
-    dom.el("strong", { text: `No specs match “${query.trim()}”` }),
+    dom.el("strong", { text: `No details match “${query.trim()}”` }),
     clear,
   ]);
 }

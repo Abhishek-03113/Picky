@@ -75,7 +75,7 @@ export function ProductListPage() {
   const { import: autoImportUrl, q = "", group = DEFAULT_GROUP_KEY } = listRouteApi.useSearch();
   const { data: products } = useSuspenseQuery(productListQuery(productsClient, q));
   const { data: comparisons } = useSuspenseQuery(comparisonListQuery(comparisonsClient));
-  usePageTitle("Library");
+  usePageTitle("Saved");
   if (products.length === 0 && q === "") {
     return <WelcomeScreen autoImportUrl={autoImportUrl} />;
   }

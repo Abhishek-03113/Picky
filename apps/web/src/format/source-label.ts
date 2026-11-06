@@ -1,6 +1,7 @@
-import { PRODUCT_SOURCES, sourceLabel, type ProductSource } from "@picky/catalog";
+import { shoppingStores } from "@picky/catalog/sites";
 
-export type StoreFilter = "all" | ProductSource;
+/** "all", or a store name such as "Amazon" (which covers every Amazon storefront). */
+export type StoreFilter = "all" | string;
 
 export interface StoreFilterOption {
   value: StoreFilter;
@@ -8,13 +9,13 @@ export interface StoreFilterOption {
 }
 
 /**
- * Segments for the library's store filter: "All" first, then one per supported source.
+ * Segments for the library's store filter: "All" first, then one per store.
  *
- * @example storeFilterOptions().map((option) => option.label) // ["All", "Amazon.in", "Amazon.com", "Flipkart"]
+ * @example storeFilterOptions().map((option) => option.label) // ["All", "Amazon", "Flipkart"]
  */
 export function storeFilterOptions(): StoreFilterOption[] {
   return [
     { value: "all", label: "All" },
-    ...PRODUCT_SOURCES.map((source) => ({ value: source, label: sourceLabel(source) })),
+    ...shoppingStores().map((store) => ({ value: store.name, label: store.name })),
   ];
 }

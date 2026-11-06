@@ -3,13 +3,21 @@
  * extension's always-on content script and the web app can import it cheaply. The page reader for a
  * site lives in src/extract/ and is registered in src/extract/site-extractors.ts.
  */
-export interface ShoppingSite<Source extends string = string> {
+export interface ShoppingSite<Source extends string = string, Reader extends string = string> {
   /** Stable id stored with every snapshot. Never rename one: saved products are keyed by it. */
   readonly source: Source;
-  /** Store name shown in the UI, e.g. "Amazon.in". */
+  /**
+   * Store name shown to shoppers, e.g. "Amazon". Storefronts of one store (amazon.in, amazon.com) share
+   * it, so the UI lists, filters and groups them as one store.
+   */
   readonly label: string;
   /** Company behind the store, for "not affiliated with …" notices, e.g. "Amazon". */
   readonly brand: string;
+  /**
+   * Which page reader in src/extract/site-extractors.ts reads this site, e.g. "amazon". Storefronts of
+   * one store share a reader.
+   */
+  readonly reader: Reader;
   /** Canonical host. URLs on the bare domain (without "www.") are accepted too. */
   readonly host: string;
   /**
