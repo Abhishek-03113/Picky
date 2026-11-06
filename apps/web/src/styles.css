@@ -182,8 +182,14 @@ input::placeholder {
   background: var(--ez-blue);
   color: var(--ez-on-accent);
 }
+/* Links styled as buttons: restate the text colour, or the global a:hover colour (which matches the
+   hover background) wins and the label disappears. */
 .primary-button:hover {
   background: var(--ez-blue-hover);
+  color: var(--ez-on-accent);
+}
+.pill-button:hover {
+  color: var(--ez-on-accent);
 }
 .soft-button {
   height: var(--ez-control-height);
