@@ -12,6 +12,25 @@ export type {
   SharedCartItem,
   SharedCartView,
 } from "./cart/cart-types.ts";
+export { groupCartByStore, type CartStoreGroup } from "./cart/group-cart-by-store.ts";
+export { cartSavings, cartTotals, type CartSavings, type CartTotals } from "./cart/cart-totals.ts";
+export { isUnavailable, lineTotal } from "./cart/cart-item-state.ts";
+export { sumByCurrency } from "./cart/money-sums.ts";
+export {
+  buildCheckoutPlan,
+  checkoutStepSummary,
+  type CheckoutPlan,
+  type CheckoutStep,
+  type SkippedItem,
+  type SkippedReason,
+} from "./cart/checkout-plan.ts";
+export {
+  describePriceTrend,
+  priceRange,
+  sameCurrencyObservations,
+  sparklinePoints,
+  type PriceTrend,
+} from "./present/price-trend.ts";
 export {
   describeSupportedProductUrls,
   extractProductSnapshot,
