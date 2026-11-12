@@ -6,6 +6,7 @@ import { createEtsyExtractor } from "./etsy/etsy-extractor.ts";
 import { createFlipkartExtractor } from "./flipkart/flipkart-extractor.ts";
 import { createLayeredExtractor, jsonLdSource } from "./shared/layered-reader.ts";
 import type { SiteExtractor } from "./site-extractor.ts";
+import { createWalmartExtractor } from "./walmart/walmart-extractor.ts";
 
 // The page reader behind each registry `reader`. A Record, so a site registered with a new reader that has
 // no factory here is a type error rather than a silent "unsupported URL" at runtime. Every Amazon
@@ -13,8 +14,7 @@ import type { SiteExtractor } from "./site-extractor.ts";
 const READERS: Record<SiteReader, (site: SupportedSite) => SiteExtractor> = {
   amazon: createAmazonExtractor,
   flipkart: createFlipkartExtractor,
-  // replaced by extract/walmart
-  walmart: (site) => createLayeredExtractor(site, { parseProductUrl: () => null, sources: [jsonLdSource] }),
+  walmart: createWalmartExtractor,
   // replaced by extract/target
   target: (site) => createLayeredExtractor(site, { parseProductUrl: () => null, sources: [jsonLdSource] }),
   bestbuy: createBestBuyExtractor,
