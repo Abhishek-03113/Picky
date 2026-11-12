@@ -4,8 +4,8 @@ import { createBestBuyExtractor } from "./bestbuy/bestbuy-extractor.ts";
 import { createEbayExtractor } from "./ebay/ebay-extractor.ts";
 import { createEtsyExtractor } from "./etsy/etsy-extractor.ts";
 import { createFlipkartExtractor } from "./flipkart/flipkart-extractor.ts";
-import { createLayeredExtractor, jsonLdSource } from "./shared/layered-reader.ts";
 import type { SiteExtractor } from "./site-extractor.ts";
+import { createTargetExtractor } from "./target/target-extractor.ts";
 import { createWalmartExtractor } from "./walmart/walmart-extractor.ts";
 
 // The page reader behind each registry `reader`. A Record, so a site registered with a new reader that has
@@ -15,8 +15,7 @@ const READERS: Record<SiteReader, (site: SupportedSite) => SiteExtractor> = {
   amazon: createAmazonExtractor,
   flipkart: createFlipkartExtractor,
   walmart: createWalmartExtractor,
-  // replaced by extract/target
-  target: (site) => createLayeredExtractor(site, { parseProductUrl: () => null, sources: [jsonLdSource] }),
+  target: createTargetExtractor,
   bestbuy: createBestBuyExtractor,
   ebay: createEbayExtractor,
   etsy: createEtsyExtractor,
