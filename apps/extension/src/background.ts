@@ -4,6 +4,9 @@ import { CAPTURE_PORT_NAME } from "./capture-protocol.ts";
 import { adaptChromePort } from "./chrome-duplex-port.ts";
 import { ChromeBrowserPort } from "./chrome-browser-port.ts";
 import { ChromeKeyValueStorage } from "./chrome-key-value-storage.ts";
+import { CartBadge } from "./carts/cart-badge.ts";
+import { CartService } from "./carts/cart-service.ts";
+import { HttpCartsClient } from "./carts/http-carts-client.ts";
 import { HttpComparisonsClient } from "./comparisons/http-comparisons-client.ts";
 import { welcomePageUrl } from "./install-welcome.ts";
 import { BadgeCounter, ChromeBadgeText } from "./link-capture/badge-counter.ts";
@@ -26,7 +29,7 @@ import { QuickLookService } from "./quicklook/quicklook-service.ts";
 import { ChromeToastPort } from "./toast/toast-port.ts";
 
 // Service-worker composition root. The toolbar button (and Alt+Shift+S, _execute_action) fires
-// chrome.action.onClicked and toggles the in-page Quick Look on Specs; Alt+Shift+V (open-comparison) toggles it on Compare; when a tab cannot be scripted the worker
+// chrome.action.onClicked and toggles the in-page Quick Look on Specs; Alt+Shift+V (open-comparison) toggles it on Compare; Alt+Shift+C (open-cart) on Cart; when a tab cannot be scripted the worker
 // switches that tab to popup.html, which asks this worker to capture over a port (the original flow), and the
 // popup switches the tab back when it opens. No tabs.onUpdated listener: it would wake this worker on every
 // page load in every tab.
@@ -49,6 +52,16 @@ const tabPort = new ChromeQuickLookTabPort("quicklook.js", "popup.html");
 const menuRefresher = new MenuRefresher(comparisons, new ChromeContextMenu(), () => settings.lastComparisonId(), log);
 const refreshMenu = () => void menuRefresher.refresh();
 
+// One badge for both: the in-flight save count while a save runs, the selected cart's item count otherwise.
+const badge = new CartBadge(new ChromeBadgeText());
+const cart = new CartService({
+  carts: new HttpCartsClient(fetch, config.apiBaseUrl),
+  settings,
+  sendSnapshot: post,
+  badge,
+  webBaseUrl: config.webBaseUrl,
+});
+
 const quickLook = new QuickLookService({
   comparisons,
   settings,
@@ -65,7 +78,7 @@ const linkCapture = new LinkCaptureService({
   comparisons,
   settings,
   toasts: new ChromeToastPort("toast.js", log),
-  badge: new BadgeCounter(new ChromeBadgeText()),
+  badge: new BadgeCounter(badge),
   newToastId: () => crypto.randomUUID(),
   onComparisonsChanged: refreshMenu,
   log,
@@ -105,8 +118,10 @@ chrome.runtime.onMessage.addListener((message: unknown, sender, sendResponse) =>
   if (!isExtensionRequest(message)) return false;
   const deps = {
     quickLook,
+    cart,
     linkCapture,
     openQuickLook: (tabId: number) => toggleQuickLook({ id: tabId }, tabPort, log, "compare"),
+    openCart: (tabId: number) => toggleQuickLook({ id: tabId }, tabPort, log, "cart"),
   };
   void routeRequest(message, { tabId: sender.tab?.id ?? null }, deps).then(sendResponse);
   return true;

@@ -11,10 +11,17 @@ export interface ExtensionSettings {
   firstRunDismissed: boolean;
   /** The comparison Quick Look and "Add to Picky" offer first; null until the user picks or creates one. */
   lastComparisonId: string | null;
+  /** The cart Quick Look's Cart view and "Add to cart" use; null until the shopper picks or adds to one. */
+  lastCartId: string | null;
 }
 
 const SETTINGS_KEY = "picky.settings";
-const DEFAULT_SETTINGS: ExtensionSettings = { autoOpenSheet: false, firstRunDismissed: false, lastComparisonId: null };
+const DEFAULT_SETTINGS: ExtensionSettings = {
+  autoOpenSheet: false,
+  firstRunDismissed: false,
+  lastComparisonId: null,
+  lastCartId: null,
+};
 
 function parseSettings(stored: unknown): ExtensionSettings {
   if (typeof stored !== "object" || stored === null) return DEFAULT_SETTINGS;
@@ -24,6 +31,7 @@ function parseSettings(stored: unknown): ExtensionSettings {
     firstRunDismissed:
       typeof fields.firstRunDismissed === "boolean" ? fields.firstRunDismissed : DEFAULT_SETTINGS.firstRunDismissed,
     lastComparisonId: typeof fields.lastComparisonId === "string" ? fields.lastComparisonId : null,
+    lastCartId: typeof fields.lastCartId === "string" ? fields.lastCartId : null,
   };
 }
 
@@ -54,6 +62,14 @@ export class SettingsStore {
 
   async setLastComparisonId(lastComparisonId: string): Promise<void> {
     await this.update({ lastComparisonId });
+  }
+
+  async lastCartId(): Promise<string | null> {
+    return (await this.load()).lastCartId;
+  }
+
+  async setLastCartId(lastCartId: string): Promise<void> {
+    await this.update({ lastCartId });
   }
 
   async dismissFirstRun(): Promise<void> {

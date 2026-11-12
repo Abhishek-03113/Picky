@@ -1,12 +1,16 @@
-import type { ExtensionRequest, ExtensionResponse, QuickLookRequest } from "./messaging/messages.ts";
+import type { CartService } from "./carts/cart-service.ts";
+import type { CartRequest, ExtensionRequest, ExtensionResponse, QuickLookRequest } from "./messaging/messages.ts";
 import type { LinkCaptureService } from "./link-capture/link-capture-service.ts";
 import type { QuickLookService } from "./quicklook/quicklook-service.ts";
 
 export interface RouterDependencies {
   quickLook: Pick<QuickLookService, "init" | "select" | "add" | "remove">;
+  cart: Pick<CartService, "init" | "select" | "addSnapshot" | "setQuantity" | "remove" | "undoAdd">;
   linkCapture: Pick<LinkCaptureService, "add" | "importLink" | "undo">;
   /** Opens Quick Look in the tab a toast button was pressed in. */
   openQuickLook: (tabId: number) => Promise<void>;
+  /** Opens the Picky panel on the Cart view in the tab a toast's "Open cart" was pressed in. */
+  openCart: (tabId: number) => Promise<void>;
 }
 
 /**
@@ -41,6 +45,16 @@ function dispatch(
       return deps.linkCapture.undo(request.comparisonId, request.productId);
     case "toast:quicklook":
       return sender.tabId === null ? Promise.resolve() : deps.openQuickLook(sender.tabId);
+    case "toast:undo-cart":
+      return deps.cart.undoAdd(request.cartId, request.productId, request.previousQuantity);
+    case "toast:open-cart":
+      return sender.tabId === null ? Promise.resolve() : deps.openCart(sender.tabId);
+    case "cart:init":
+    case "cart:select":
+    case "cart:add":
+    case "cart:set-quantity":
+    case "cart:remove":
+      return dispatchCart(request, deps.cart);
     default:
       return dispatchQuickLook(request, deps.quickLook);
   }
@@ -56,6 +70,21 @@ function dispatchQuickLook(request: QuickLookRequest, quickLook: RouterDependenc
       return quickLook.add(request.comparisonId, request.snapshot);
     case "quicklook:remove":
       return quickLook.remove(request.comparisonId, request.productId);
+  }
+}
+
+function dispatchCart(request: CartRequest, cart: RouterDependencies["cart"]): Promise<unknown> {
+  switch (request.type) {
+    case "cart:init":
+      return cart.init();
+    case "cart:select":
+      return cart.select(request.cartId);
+    case "cart:add":
+      return cart.addSnapshot(request.cartId, request.snapshot);
+    case "cart:set-quantity":
+      return cart.setQuantity(request.cartId, request.productId, request.quantity);
+    case "cart:remove":
+      return cart.remove(request.cartId, request.productId);
   }
 }
 

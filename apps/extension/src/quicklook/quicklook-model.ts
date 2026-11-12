@@ -1,8 +1,8 @@
 import type { CatalogProduct, ProductSnapshot } from "@picky/catalog";
 import type { QuickLookState } from "../messaging/messages.ts";
 
-/** Which body the overlay shows: the comparison matrix or the open page's own spec sheet. */
-export type QuickLookView = "compare" | "specs";
+/** Which body the overlay shows: the comparison matrix, the open page's own spec sheet, or the cart. */
+export type QuickLookView = "compare" | "specs" | "cart";
 
 /** Everything the overlay renders from; the controller replaces it wholesale on each change. */
 export interface QuickLookModel {
@@ -49,10 +49,13 @@ export function showsSpecs(model: QuickLookModel): boolean {
  * `_execute_action` arrives as chrome.action.onClicked instead, so it is not handled here.
  *
  * @example viewForCommand("open-comparison") // "compare"
+ * @example viewForCommand("open-cart") // "cart"
  */
 export function viewForCommand(command: string): QuickLookView | null {
-  return command === "open-comparison" ? "compare" : null;
+  return COMMAND_VIEWS[command] ?? null;
 }
+
+const COMMAND_VIEWS: Readonly<Record<string, QuickLookView>> = { "open-comparison": "compare", "open-cart": "cart" };
 
 function isSameProduct(product: CatalogProduct, snapshot: ProductSnapshot): boolean {
   return product.snapshot.source === snapshot.source && product.snapshot.externalId === snapshot.externalId;

@@ -36,6 +36,12 @@
         "default": "Alt+Shift+V"
       },
       "description": "Compare this product with your saved ones"
+    },
+    "open-cart": {
+      "suggested_key": {
+        "default": "Alt+Shift+C"
+      },
+      "description": "Open your cart"
     }
   },
   "content_scripts": [
