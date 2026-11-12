@@ -22,7 +22,7 @@ price history, and five more stores.
 - **Price history.** Every price Picky sees when you save a product is kept. The details page and cart show a trend line
   and one plain line about it, such as "Lowest since you saved it".
 - **New stores (Beta):** Walmart, Target, Best Buy, eBay and Etsy. Each asks for access the first time Picky needs it there.
-- **Extension:** a Cart view in the Picky panel (`Alt+Shift+C`), "Add to cart" in the panel and the right-click menu, and a
+- **Extension:** a Cart view in the Picky panel (`Alt+Shift+K`), "Add to cart" in the panel and the right-click menu, and a
   small "Save to Picky" button on product pages that you can move or hide.
 - **Better reading of product pages:** decimal-comma and range prices, more structured-data shapes, the selected size or
   colour, and product identifiers (GTIN, MPN, model) when a page lists them.

@@ -39,7 +39,7 @@
     },
     "open-cart": {
       "suggested_key": {
-        "default": "Alt+Shift+C"
+        "default": "Alt+Shift+K"
       },
       "description": "Open your cart"
     }

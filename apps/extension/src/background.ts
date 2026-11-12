@@ -30,7 +30,7 @@ import { QuickLookService } from "./quicklook/quicklook-service.ts";
 import { ChromeToastPort } from "./toast/toast-port.ts";
 
 // Service-worker composition root. The toolbar button (and Alt+Shift+S, _execute_action) fires
-// chrome.action.onClicked and toggles the in-page Quick Look on Specs; Alt+Shift+V (open-comparison) toggles it on Compare; Alt+Shift+C (open-cart) on Cart; when a tab cannot be scripted the worker
+// chrome.action.onClicked and toggles the in-page Quick Look on Specs; Alt+Shift+V (open-comparison) toggles it on Compare; Alt+Shift+K (open-cart; not C, which Chromium leaves unassigned) on Cart; when a tab cannot be scripted the worker
 // switches that tab to popup.html, which asks this worker to capture over a port (the original flow), and the
 // popup switches the tab back when it opens. No tabs.onUpdated listener: it would wake this worker on every
 // page load in every tab.
