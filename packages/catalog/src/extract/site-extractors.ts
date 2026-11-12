@@ -1,5 +1,8 @@
 import { SHOPPING_SITES, type SiteReader, type SupportedSite } from "../sites/shopping-sites.ts";
 import { createAmazonExtractor } from "./amazon/amazon-extractor.ts";
+import { createBestBuyExtractor } from "./bestbuy/bestbuy-extractor.ts";
+import { createEbayExtractor } from "./ebay/ebay-extractor.ts";
+import { createEtsyExtractor } from "./etsy/etsy-extractor.ts";
 import { createFlipkartExtractor } from "./flipkart/flipkart-extractor.ts";
 import { createLayeredExtractor, jsonLdSource } from "./shared/layered-reader.ts";
 import type { SiteExtractor } from "./site-extractor.ts";
@@ -14,12 +17,9 @@ const READERS: Record<SiteReader, (site: SupportedSite) => SiteExtractor> = {
   walmart: (site) => createLayeredExtractor(site, { parseProductUrl: () => null, sources: [jsonLdSource] }),
   // replaced by extract/target
   target: (site) => createLayeredExtractor(site, { parseProductUrl: () => null, sources: [jsonLdSource] }),
-  // replaced by extract/bestbuy
-  bestbuy: (site) => createLayeredExtractor(site, { parseProductUrl: () => null, sources: [jsonLdSource] }),
-  // replaced by extract/ebay
-  ebay: (site) => createLayeredExtractor(site, { parseProductUrl: () => null, sources: [jsonLdSource] }),
-  // replaced by extract/etsy
-  etsy: (site) => createLayeredExtractor(site, { parseProductUrl: () => null, sources: [jsonLdSource] }),
+  bestbuy: createBestBuyExtractor,
+  ebay: createEbayExtractor,
+  etsy: createEtsyExtractor,
 };
 
 /** A reader for every registered storefront, in registry order. Each owns a disjoint set of hosts. */
