@@ -7,10 +7,11 @@ import { createAuthRoutes } from "./auth-routes.ts";
 import { createComparisonRoutes } from "./comparison-routes.ts";
 import { createDecisionRoutes } from "./decision-routes.ts";
 import { toErrorResponse } from "./http-errors.ts";
+import { createPriceRoutes, type PriceRouteDependencies } from "./price-routes.ts";
 import { createProductRoutes, type ProductRouteDependencies } from "./product-routes.ts";
 import { requireUser, type SessionCookieOptions } from "./session-cookie.ts";
 
-export interface AppDependencies extends ProductRouteDependencies {
+export interface AppDependencies extends ProductRouteDependencies, PriceRouteDependencies {
   auth: AuthService;
   comparisons: ComparisonRepository;
   sessionCookie: SessionCookieOptions;
@@ -38,6 +39,7 @@ export function createApp(deps: AppDependencies): Hono {
   }
   app.use("/api/*", requireUser(deps.auth));
   app.route("/api", createProductRoutes(deps));
+  app.route("/api", createPriceRoutes(deps));
   app.route("/api", createComparisonRoutes(deps));
   app.notFound((c) => c.json({ error: "NotFound", message: `No route for ${c.req.method} ${c.req.path}` }, 404));
   app.onError((error, c) => {
