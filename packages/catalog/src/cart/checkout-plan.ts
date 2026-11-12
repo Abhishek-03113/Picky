@@ -5,7 +5,8 @@ import { isUnavailable } from "./cart-item-state.ts";
 import type { CartItem } from "./cart-types.ts";
 import { groupCartByStore } from "./group-cart-by-store.ts";
 
-export type SkippedReason = "out-of-stock" | "no-price";
+/** Why an item is left out of checkout. An item with no listed price still opens on its store. */
+export type SkippedReason = "out-of-stock";
 
 export interface CheckoutStep {
   source: ProductSource;
@@ -29,7 +30,8 @@ export interface CheckoutPlan {
 
 /**
  * Plans how to open the cart in each store: Amazon storefronts get one pre-filled cart link (no affiliate
- * tag), other stores get their product pages. Out-of-stock and unpriced items are skipped.
+ * tag), other stores get their product pages. Out-of-stock items are skipped; an item with no
+ * listed price still opens on its store, and only its subtotal leaves it out.
  *
  * @example buildCheckoutPlan(items).steps[0].urls // ["https://www.amazon.in/gp/aws/cart/add.html?ASIN.1=B0FQG1YHYR&Quantity.1=2"]
  */
@@ -42,7 +44,6 @@ export function buildCheckoutPlan(items: readonly CartItem[]): CheckoutPlan {
 
 function skipReason(item: CartItem): SkippedItem[] {
   if (isUnavailable(item)) return [{ item, reason: "out-of-stock" }];
-  if (item.product.snapshot.price === null) return [{ item, reason: "no-price" }];
   return [];
 }
 
