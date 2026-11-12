@@ -1,6 +1,7 @@
 import type { SQL } from "bun";
 import type { Hono } from "hono";
 import { AuthService } from "./auth/auth-service.ts";
+import { PostgresCartRepository } from "./carts/postgres-cart-repository.ts";
 import { bunPasswordHasher } from "./auth/password-hasher.ts";
 import { PostgresAccountRepository } from "./auth/postgres-account-repository.ts";
 import type { ApiConfig } from "./config/api-config.ts";
@@ -33,6 +34,7 @@ export async function composeApi(config: ApiConfig, logger: Logger, sql: SQL): P
     sessionCookie,
     repository,
     comparisons,
+    carts: new PostgresCartRepository(sql),
     ingestion,
     priceObservations,
     logger,
