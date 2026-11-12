@@ -13,6 +13,7 @@ import { extractAmazonListPrice, extractAmazonPrice, extractAmazonRating } from 
 import { extractAmazonSizeCharts } from "./amazon-size-charts.ts";
 import { extractAmazonSpecGroups } from "./amazon-specs.ts";
 import { canonicalAmazonUrl, parseAmazonProductUrl, type AmazonProductRef } from "./amazon-url.ts";
+import { extractAmazonVariant } from "./amazon-variant.ts";
 
 // Byline reads "Visit the Apple Store" or "Brand: Apple".
 const BYLINE_BRAND = /^(?:Visit the (.+?) Store|Brand:\s*(.+))$/;
@@ -73,7 +74,7 @@ export function extractAmazonProduct(
     specGroups,
     sizeCharts: extractAmazonSizeCharts(page),
     colorOptions: extractAmazonColorOptions(page, site, { price, availability, image: images[0] ?? null }),
-    variant: null,
+    variant: extractAmazonVariant(page),
     identifiers: NO_IDENTIFIERS,
     capturedAt: capturedAt.toISOString(),
   };
