@@ -2,6 +2,7 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { Link, getRouteApi } from "@tanstack/react-router";
 import type { ReactNode } from "react";
 import { currentUserQuery } from "../api/auth-queries.ts";
+import { cartLineCount, cartListQuery } from "../api/cart-queries.ts";
 import { comparisonListQuery } from "../api/comparison-queries.ts";
 import { EXTENSION_PATH, SIGN_IN_PATH } from "../auth/route-guards.ts";
 import { useSignOut } from "../hooks/use-session.ts";
@@ -20,10 +21,14 @@ export function BrandLink() {
 
 const rootRouteApi = getRouteApi("__root__");
 
-/** Saved and Comparisons links (Comparisons carries the number of saved comparisons), then Sign out. */
+/**
+ * Saved, Comparisons and Carts links (Comparisons carries the number of comparisons, Carts the number of
+ * items across every cart), then Sign out.
+ */
 export function MainNav() {
-  const { comparisonsClient } = rootRouteApi.useRouteContext();
+  const { comparisonsClient, cartsClient } = rootRouteApi.useRouteContext();
   const { data: comparisons } = useSuspenseQuery(comparisonListQuery(comparisonsClient));
+  const { data: carts } = useSuspenseQuery(cartListQuery(cartsClient));
   return (
     <nav aria-label="Main" className="main-nav">
       <Link to="/" className="nav-link" activeOptions={{ exact: true }} activeProps={{ "aria-current": "page" }}>
@@ -32,6 +37,10 @@ export function MainNav() {
       <Link to="/comparisons" className="nav-link" activeProps={{ "aria-current": "page" }}>
         Comparisons
         <span className="nav-count">{comparisons.length}</span>
+      </Link>
+      <Link to="/carts" className="nav-link" activeProps={{ "aria-current": "page" }}>
+        Carts
+        <span className="nav-count">{cartLineCount(carts)}</span>
       </Link>
       <SignOutButton />
     </nav>

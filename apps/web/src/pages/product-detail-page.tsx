@@ -2,6 +2,7 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { Link, getRouteApi } from "@tanstack/react-router";
 import { comparisonListQuery, productComparisonsQuery } from "../api/comparison-queries.ts";
 import { productDetailQuery } from "../api/product-queries.ts";
+import { AddToCartButton } from "../components/add-to-cart-button.tsx";
 import { AppBar, MainNav } from "../components/app-bar.tsx";
 import { ColorOptionsCard } from "../components/color-options-card.tsx";
 import { ChevronLeftIcon } from "../components/icons.tsx";
@@ -14,7 +15,7 @@ import { SpecSheet } from "../components/spec-sheet.tsx";
 
 const productRouteApi = getRouteApi("/products/$productId");
 
-/** One product as a spec sheet: summary on top, colours and size chart, then every spec group. */
+/** One product as a spec sheet: summary and "Add to cart" on top, colours and size chart, then every spec group. */
 export function ProductDetailPage() {
   const { productId } = productRouteApi.useParams();
   const { productsClient } = productRouteApi.useRouteContext();
@@ -33,6 +34,9 @@ export function ProductDetailPage() {
       </AppBar>
       <main className="page wide detail-page">
         <ProductSummary productId={productId} snapshot={snapshot} />
+        <div className="detail-cart">
+          <AddToCartButton productId={productId} title={snapshot.title} />
+        </div>
         <ProductComparisons
           productId={productId}
           suggestedName={snapshot.category ?? snapshot.brand ?? "New comparison"}
