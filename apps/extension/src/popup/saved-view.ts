@@ -6,14 +6,17 @@ export interface SavedModel {
   summary: SavedSummary;
   webBaseUrl: string;
   autoOpen: boolean;
+  showSavePill: boolean;
 }
 
 export interface SavedHandlers {
   onAutoOpenChange: (checked: boolean) => void;
+  onShowSavePillChange: (checked: boolean) => void;
   onViewSpecs: () => void;
 }
 
 const AUTO_OPEN_LABEL_ID = "auto-open-label";
+const SAVE_PILL_LABEL_ID = "save-pill-label";
 
 /** "54 details in 10 sections", singular-aware. */
 export function describeSpecCount(specCount: number, groupCount: number): string {
@@ -35,6 +38,7 @@ export function renderSavedView(dom: Dom, model: SavedModel, handlers: SavedHand
     renderViewSpecsButton(dom, handlers),
     renderOpenLink(dom, sheetUrl),
     renderAutoOpenRow(dom, model.autoOpen, handlers),
+    renderSavePillRow(dom, model.showSavePill, handlers),
   ]);
 }
 
@@ -108,6 +112,22 @@ function renderAutoOpenRow(dom: Dom, autoOpen: boolean, handlers: SavedHandlers)
       }),
       dom.el("span", { className: "muted-sm", text: "Don't show this again" }),
     ]),
+    toggle,
+  ]);
+}
+
+function renderSavePillRow(dom: Dom, showSavePill: boolean, handlers: SavedHandlers): HTMLElement {
+  const toggle = renderSwitch(dom, {
+    labelId: SAVE_PILL_LABEL_ID,
+    checked: showSavePill,
+    onChange: handlers.onShowSavePillChange,
+  });
+  return dom.el("div", { className: "setting-row setting-row-follow" }, [
+    dom.el("span", {
+      className: "setting-label",
+      attrs: { id: SAVE_PILL_LABEL_ID },
+      text: "Show the Save button on store pages",
+    }),
     toggle,
   ]);
 }

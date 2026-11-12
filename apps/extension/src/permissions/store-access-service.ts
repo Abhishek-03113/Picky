@@ -4,7 +4,7 @@ import { optionalStoreSites, storeOrigins } from "./store-sites.ts";
 
 /** What to run again once access is granted from a toast: the link read that asked for it. */
 export interface PermissionRetry {
-  action: "add" | "quicklook";
+  action: "add" | "quicklook" | "cart";
   url: string;
   label: string;
 }

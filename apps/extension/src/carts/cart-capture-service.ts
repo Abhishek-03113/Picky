@@ -1,8 +1,11 @@
+import { noStoreAccessMessage } from "../failure-hint.ts";
 import { describeSupportedProductUrls, isSupportedProductUrl, type ProductSnapshot } from "@picky/catalog";
 import type { CaptureResult } from "../capture-result.ts";
 import type { BadgeCounter } from "../link-capture/badge-counter.ts";
 import type { HtmlFetcher } from "../link-capture/html-fetcher.ts";
 import { titleFromProductUrl } from "../link-capture/product-link.ts";
+import type { PermissionRetry } from "../permissions/store-access-service.ts";
+import type { StoreAccess } from "../permissions/store-permissions.ts";
 import type { SnapshotReader } from "../link-capture/snapshot-reader.ts";
 import type { ToastMessage } from "../toast/toast-message.ts";
 import type { ToastPort } from "../toast/toast-port.ts";
@@ -20,6 +23,8 @@ export interface CartCaptureDependencies {
   badge: BadgeCounter;
   newToastId: () => string;
   log: (event: string, fields: Record<string, string | number>) => void;
+  /** Whether a link's store may be downloaded (beta stores need the shopper's OK first). Absent: every store is allowed. */
+  access?: { forUrl(url: string): Promise<StoreAccess> };
 }
 
 export interface CartAddJob {
@@ -45,6 +50,8 @@ export class CartCaptureService {
   async add(job: CartAddJob): Promise<void> {
     const id = this.deps.newToastId();
     if (!isSupportedProductUrl(job.url)) return this.rejectLink(job.url, job.tabId, id);
+    // The open page is read through activeTab or the store's content script; only downloads need access.
+    if (job.source === "link" && !(await this.checkAccess(job, id))) return;
     await this.deps.badge.begin();
     await this.deps.toasts.show(job.tabId, {
       kind: "reading",
@@ -61,6 +68,22 @@ export class CartCaptureService {
     } finally {
       await this.deps.badge.end();
     }
+  }
+
+  /** True when the link's store may be downloaded; otherwise shows the "Allow Picky on <Store>" toast (or a quiet notice). */
+  private async checkAccess(job: CartAddJob, id: string): Promise<boolean> {
+    const access: StoreAccess = (await this.deps.access?.forUrl(job.url)) ?? { kind: "allowed" };
+    if (access.kind === "allowed") return true;
+    this.deps.log("cart_capture.store_access", { url: job.url, source: access.site.source, access: access.kind });
+    const { source, label } = access.site;
+    const retry: PermissionRetry = { action: "cart", url: job.url, label: job.label };
+    await this.deps.toasts.show(
+      job.tabId,
+      access.kind === "ask"
+        ? { kind: "permission", id, source, storeLabel: label, retry }
+        : { kind: "failed", id, reason: noStoreAccessMessage(label) },
+    );
+    return false;
   }
 
   /** Refuses before any network request: the menu patterns are coarse. */

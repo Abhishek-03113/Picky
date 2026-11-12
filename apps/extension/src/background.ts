@@ -119,6 +119,8 @@ const storeAccess = new StoreAccessService({
   retry: async (retry, tabId) => {
     if (retry.action === "add") {
       await linkCapture.add({ url: retry.url, label: retry.label, target: { kind: "last" }, tabId, source: "link" });
+    } else if (retry.action === "cart") {
+      await cartCapture.add({ url: retry.url, label: retry.label, tabId, source: "link" });
     } else if (tabId !== null) {
       await linkCapture.quickLook(retry.url, tabId);
     }
@@ -135,6 +137,7 @@ const cartCapture = new CartCaptureService({
   badge: savesInFlight,
   newToastId: () => crypto.randomUUID(),
   log,
+  access: storeAccessCheck,
 });
 
 chrome.action.onClicked.addListener((tab) => void toggleQuickLook(tab, tabPort, log, "specs"));
