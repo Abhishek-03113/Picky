@@ -150,17 +150,19 @@ export class PostgresCartRepository implements CartRepository {
 
   async mergeItems(userId: string, id: string, lines: readonly CartMergeLine[]): Promise<CartMergeResult | null> {
     if (!isUuid(id)) return null;
-    return this.sql.begin(async (tx) => {
+    const counts = await this.sql.begin(async (tx) => {
       if (!(await lockCart(tx, userId, id))) return null;
-      const result: CartMergeResult = { added: 0, merged: 0 };
+      const tally = { added: 0, merged: 0 };
       for (const line of lines) {
         const inserted = await mergeLine(tx, userId, id, line);
-        if (inserted === true) result.added += 1;
-        if (inserted === false) result.merged += 1;
+        if (inserted === true) tally.added += 1;
+        if (inserted === false) tally.merged += 1;
       }
       await tx`UPDATE carts SET updated_at = now() WHERE id = ${id}`;
-      return result;
+      return tally;
     });
+    if (counts === null) return null;
+    return { cart: requireSummary(await this.findSummary(userId, id), id), ...counts };
   }
 
   async createShare(userId: string, id: string): Promise<string | null> {
@@ -282,7 +284,7 @@ async function insertShare(tx: SQL, userId: string, id: string): Promise<string>
 
 function requireSummary(summary: CatalogCartSummary | null, id: string): CatalogCartSummary {
   if (summary !== null) return summary;
-  throw new Error(`Cart ${id} vanished right after insert; expected one row`);
+  throw new Error(`Cart ${id} vanished right after it was written; expected one row`);
 }
 
 function toSummary(row: SummaryRow): CatalogCartSummary {

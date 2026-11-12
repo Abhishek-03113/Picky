@@ -16,8 +16,9 @@ export interface CartMergeLine {
   note: string | null;
 }
 
-/** How many lines a merge added as new and how many it folded into lines already there. */
+/** The cart after a merge, how many lines it added as new and how many it folded into lines already there. */
 export interface CartMergeResult {
+  cart: CatalogCartSummary;
   added: number;
   merged: number;
 }
