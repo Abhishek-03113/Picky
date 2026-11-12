@@ -95,3 +95,6 @@ export const ProductSnapshotSchema = z.object({
 type Same<A, B> = (<T>() => T extends A ? 1 : 2) extends <T>() => T extends B ? 1 : 2 ? true : false;
 type Assert<Condition extends true> = Condition;
 export type SchemaMatchesSnapshotType = Assert<Same<z.infer<typeof ProductSnapshotSchema>, ProductSnapshot>>;
+
+// Backup files are validated with the same zod, so they ship from this entry (`@picky/catalog/schema`).
+export * from "./cart/cart-backup-schema.ts";
