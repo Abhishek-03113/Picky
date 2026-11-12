@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Picky: Compare Products & See Every Detail",
   "short_name": "Picky",
-  "version": "1.3.0",
+  "version": "2.0.0",
   "description": "See every detail of {brands} products on one clean page. Save them and compare side by side.",
   "minimum_chrome_version": "116",
   "icons": {
