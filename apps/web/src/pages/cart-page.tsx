@@ -121,7 +121,7 @@ function CartItems({ cart, selected, onToggleSelected }: CartItemsProps) {
         <CartRemovedRow
           key={item.product.id}
           title={item.product.snapshot.title}
-          isRestoring={restoreItem.isPending && restoreItem.variables.productId === item.product.id}
+          isRestoring={restoreItem.isPending && restoreItem.variables?.productId === item.product.id}
           onUndo={() => undo(item)}
           onDismiss={() => forget(item.product.id)}
         />
