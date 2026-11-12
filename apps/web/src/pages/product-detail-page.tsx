@@ -32,7 +32,7 @@ export function ProductDetailPage() {
         <SourceLink source={snapshot.source} url={snapshot.url} />
       </AppBar>
       <main className="page wide detail-page">
-        <ProductSummary snapshot={snapshot} />
+        <ProductSummary productId={productId} snapshot={snapshot} />
         <ProductComparisons
           productId={productId}
           suggestedName={snapshot.category ?? snapshot.brand ?? "New comparison"}
