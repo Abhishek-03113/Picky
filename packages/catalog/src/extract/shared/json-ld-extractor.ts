@@ -1,5 +1,5 @@
 import type { PageNode } from "../../page/page-node.ts";
-import type { Highlight, ProductSnapshot, SpecGroup } from "../../product-snapshot.ts";
+import { NO_IDENTIFIERS, type Highlight, type ProductSnapshot, type SpecGroup } from "../../product-snapshot.ts";
 import type { SupportedSite } from "../../sites/shopping-sites.ts";
 import { ProductPageError } from "../product-page-error.ts";
 import type { SiteExtractor } from "../site-extractor.ts";
@@ -79,6 +79,8 @@ export function extractJsonLdProduct(
     specGroups,
     sizeCharts: [],
     colorOptions: [],
+    variant: null,
+    identifiers: NO_IDENTIFIERS,
     capturedAt: capturedAt.toISOString(),
   };
 }

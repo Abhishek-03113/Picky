@@ -2,6 +2,16 @@ export * from "./product-snapshot.ts";
 export * from "./sites/index.ts";
 export type { CatalogComparisonDetail, CatalogComparisonSummary } from "./comparison-types.ts";
 export type { CatalogUser } from "./user-types.ts";
+export type {
+  CartItem,
+  CartItemInput,
+  CatalogCartDetail,
+  CatalogCartSummary,
+  PriceHistory,
+  PriceObservation,
+  SharedCartItem,
+  SharedCartView,
+} from "./cart/cart-types.ts";
 export {
   describeSupportedProductUrls,
   extractProductSnapshot,

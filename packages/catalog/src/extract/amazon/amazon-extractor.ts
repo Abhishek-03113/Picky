@@ -1,5 +1,5 @@
 import { firstAttr, firstText, type PageNode } from "../../page/page-node.ts";
-import type { ProductSnapshot } from "../../product-snapshot.ts";
+import { NO_IDENTIFIERS, type ProductSnapshot } from "../../product-snapshot.ts";
 import type { SupportedSite } from "../../sites/shopping-sites.ts";
 import { textOrNull } from "../../text/normalize-text.ts";
 import { ProductPageError } from "../product-page-error.ts";
@@ -73,6 +73,8 @@ export function extractAmazonProduct(
     specGroups,
     sizeCharts: extractAmazonSizeCharts(page),
     colorOptions: extractAmazonColorOptions(page, site, { price, availability, image: images[0] ?? null }),
+    variant: null,
+    identifiers: NO_IDENTIFIERS,
     capturedAt: capturedAt.toISOString(),
   };
 }

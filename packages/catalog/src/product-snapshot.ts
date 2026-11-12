@@ -71,6 +71,15 @@ export interface ColorOption {
   image: string | null;
 }
 
+/** Ids that name the same product in every store; each is null when the page does not list it. */
+export interface ProductIdentifiers {
+  gtin: string | null;
+  mpn: string | null;
+  model: string | null;
+}
+
+export const NO_IDENTIFIERS: ProductIdentifiers = { gtin: null, mpn: null, model: null };
+
 /**
  * Everything Picky keeps about one product page at one moment.
  * Produced by the extension (live DOM) or the API (fetched HTML); both use the same extractor.
@@ -91,6 +100,9 @@ export interface ProductSnapshot {
   specGroups: SpecGroup[];
   sizeCharts: SizeChart[];
   colorOptions: ColorOption[];
+  /** The options selected on the page, e.g. "Blue, 256 GB"; null when the page shows none. */
+  variant: string | null;
+  identifiers: ProductIdentifiers;
   /** ISO 8601 date-time. */
   capturedAt: string;
 }
