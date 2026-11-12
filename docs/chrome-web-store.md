@@ -63,7 +63,7 @@ products, the right-click "Save to Picky" menu, and the web app's product or com
 > without leaving the page.
 > • Compare: put your shortlist side by side (Alt+Shift+V). Details that match fold away, clear wins
 > are marked, and matters of taste are left to you.
-> • Carts: add products to a named cart (Alt+Shift+C, or "Add to cart" in the panel and right-click menu).
+> • Carts: add products to a named cart (Alt+Shift+K, or "Add to cart" in the panel and right-click menu).
 > Set quantities, see totals per currency and compare the items you pick. A "Save to Picky" button on
 > product pages is movable and can be hidden per store or everywhere.
 > • Share a cart: send a link anyone can open without an account. It shows only the items, never your email or
