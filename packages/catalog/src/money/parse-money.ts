@@ -87,7 +87,9 @@ function normalizeSeparators(token: string): string {
   const decimal = decimalSeparator(token);
   const thousands = decimal === "," ? "." : ",";
   const withoutThousands = token.split(thousands).join("");
-  return decimal === null ? withoutThousands.split(",").join("").split(".").join("") : withoutThousands.replace(",", ".");
+  return decimal === null
+    ? withoutThousands.split(",").join("").split(".").join("")
+    : withoutThousands.replace(",", ".");
 }
 
 /** "." or "," when the token has a decimal part, else null (only thousands marks, or none). */
