@@ -19,7 +19,6 @@ const checkoutRouteApi = getRouteApi("/carts/$cartId/checkout");
 
 const SKIP_REASONS: Record<SkippedReason, string> = {
   "out-of-stock": "Out of stock",
-  "no-price": "Price not listed",
 };
 
 function doneKey(cartId: string): string {
