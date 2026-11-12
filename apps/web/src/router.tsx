@@ -7,6 +7,8 @@ import {
   type RouterHistory,
 } from "@tanstack/react-router";
 import type { AuthClient } from "./api/auth-client.ts";
+import { cartDetailQuery, cartListQuery } from "./api/cart-queries.ts";
+import type { CartsClient } from "./api/carts-client.ts";
 import { comparisonDetailQuery, comparisonListQuery, productComparisonsQuery } from "./api/comparison-queries.ts";
 import type { ComparisonsClient } from "./api/comparisons-client.ts";
 import type { ExtensionBridge } from "./api/extension-bridge.ts";
@@ -35,6 +37,8 @@ const ComparisonsIndexPage = lazyRouteComponent(
   () => import("./pages/comparisons-index-page.tsx"),
   "ComparisonsIndexPage",
 );
+const CartsIndexPage = lazyRouteComponent(() => import("./pages/carts-index-page.tsx"), "CartsIndexPage");
+const CartPage = lazyRouteComponent(() => import("./pages/cart-page.tsx"), "CartPage");
 const ProductDetailPage = lazyRouteComponent(() => import("./pages/product-detail-page.tsx"), "ProductDetailPage");
 const ExtensionPage = lazyRouteComponent(() => import("./pages/extension-page.tsx"), "ExtensionPage");
 const PrivacyPage = lazyRouteComponent(() => import("./pages/privacy-page.tsx"), "PrivacyPage");
@@ -46,6 +50,7 @@ export interface PickyRouterContext {
   authClient: AuthClient;
   productsClient: ProductsClient;
   comparisonsClient: ComparisonsClient;
+  cartsClient: CartsClient;
   /** Paste-a-link import goes through the Picky extension, which can fetch store pages. */
   extensionBridge: ExtensionBridge;
   config: AppConfig;
@@ -55,10 +60,14 @@ export interface PickyRouterContext {
 
 const rootRoute = createRootRouteWithContext<PickyRouterContext>()({
   beforeLoad: ({ context, location }) => requireSignedIn(context, location),
-  // Every signed-in page shows the comparison count in the app bar, so the list is loaded once at the root.
+  // Every signed-in page shows the comparison and cart counts in the app bar (and "Add to cart" reads the
+  // carts), so both lists are loaded once at the root.
   loader: async ({ context, location }) => {
     if (location.pathname === SIGN_IN_PATH || !(await isSignedIn(context))) return;
-    await context.queryClient.ensureQueryData(comparisonListQuery(context.comparisonsClient));
+    await Promise.all([
+      context.queryClient.ensureQueryData(comparisonListQuery(context.comparisonsClient)),
+      context.queryClient.ensureQueryData(cartListQuery(context.cartsClient)),
+    ]);
   },
   component: AppLayout,
   errorComponent: RouteErrorPanel,
@@ -105,6 +114,21 @@ const comparisonRoute = createRoute({
   component: ComparisonPage,
 });
 
+const cartsIndexRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/carts",
+  // The list is already loaded by the root loader; the index page reads it from the cache.
+  component: CartsIndexPage,
+});
+
+const cartRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/carts/$cartId",
+  loader: ({ context, params }) =>
+    context.queryClient.ensureQueryData(cartDetailQuery(context.cartsClient, params.cartId)),
+  component: CartPage,
+});
+
 const signInRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: SIGN_IN_PATH,
@@ -133,6 +157,8 @@ const routeTree = rootRoute.addChildren([
   productDetailRoute,
   comparisonsIndexRoute,
   comparisonRoute,
+  cartsIndexRoute,
+  cartRoute,
 ]);
 
 /**
@@ -140,7 +166,7 @@ const routeTree = rootRoute.addChildren([
  *
  * `history` defaults to the browser history; tests pass a memory history.
  *
- * @example createPickyRouter({ queryClient, authClient: createAuthClient(fetch, ""), productsClient, comparisonsClient, extensionBridge, config: readAppConfig(import.meta.env), os: "mac" })
+ * @example createPickyRouter({ queryClient, authClient: createAuthClient(fetch, ""), productsClient, comparisonsClient, cartsClient, extensionBridge, config: readAppConfig(import.meta.env), os: "mac" })
  */
 export function createPickyRouter(context: PickyRouterContext, history?: RouterHistory) {
   return createRouter({ routeTree, context, history, defaultPreload: "intent", defaultPreloadStaleTime: 0 });

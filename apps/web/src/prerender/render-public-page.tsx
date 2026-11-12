@@ -19,6 +19,7 @@ export async function renderPublicPage(path: string, config: AppConfig): Promise
     authClient: signedOutAuthClient,
     productsClient: unavailable("productsClient"),
     comparisonsClient: unavailable("comparisonsClient"),
+    cartsClient: unavailable("cartsClient"),
     extensionBridge: { isAvailable: () => false, importLink: unavailable("extensionBridge") },
     config,
     // Neutral key labels ("Alt + Shift + S"); the browser re-renders them for the visitor's own keyboard.

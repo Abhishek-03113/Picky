@@ -4,6 +4,7 @@ import { RouterProvider } from "@tanstack/react-router";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { createAuthClient } from "./api/auth-client.ts";
+import { createCartsClient } from "./api/carts-client.ts";
 import { createComparisonsClient } from "./api/comparisons-client.ts";
 import { createWindowExtensionBridge } from "./api/extension-bridge.ts";
 import { createProductsClient } from "./api/products-client.ts";
@@ -28,6 +29,7 @@ const router = createPickyRouter({
   authClient: rememberSignedIn(createAuthClient(fetch.bind(window), ""), window.localStorage),
   productsClient: createProductsClient(fetch.bind(window), ""),
   comparisonsClient: createComparisonsClient(fetch.bind(window), ""),
+  cartsClient: createCartsClient(fetch.bind(window), ""),
   extensionBridge: createWindowExtensionBridge(window, () => crypto.randomUUID()),
   config: readAppConfig(import.meta.env),
   os: detectOperatingSystem(navigator),

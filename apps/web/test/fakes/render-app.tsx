@@ -8,7 +8,19 @@ import { FakeComparisonsClient } from "./fake-comparisons-client.ts";
 import type { ComparisonsClient } from "../../src/api/comparisons-client.ts";
 import type { ExtensionBridge } from "../../src/api/extension-bridge.ts";
 import { FakeExtensionBridge } from "./fake-extension-bridge.ts";
+import type { CartsClient } from "../../src/api/carts-client.ts";
 import { createPickyRouter } from "../../src/router.tsx";
+
+/** No carts; any cart change fails loudly, since these renders never make one. */
+const emptyCartsClient: CartsClient = {
+  listCarts: async () => [],
+  getCart: async (id) => Promise.reject(new Error(`No cart ${id} in the empty fake`)),
+  createCart: async () => Promise.reject(new Error("The empty carts fake cannot create carts")),
+  renameCart: async () => Promise.reject(new Error("The empty carts fake cannot rename carts")),
+  deleteCart: async () => Promise.reject(new Error("The empty carts fake cannot delete carts")),
+  setItem: async () => Promise.reject(new Error("The empty carts fake cannot add items")),
+  removeItem: async () => Promise.reject(new Error("The empty carts fake cannot remove items")),
+};
 
 /** Renders the real router at `path` against fake clients (signed in, extension installed by default), after loaders have run. */
 export async function renderAppAt(
@@ -35,7 +47,16 @@ export async function renderAppWithRouter(
   const os = "windows" as const;
   const history = createMemoryHistory({ initialEntries: [path] });
   const router = createPickyRouter(
-    { queryClient, authClient, productsClient, comparisonsClient, extensionBridge, config, os },
+    {
+      queryClient,
+      authClient,
+      productsClient,
+      comparisonsClient,
+      cartsClient: emptyCartsClient,
+      extensionBridge,
+      config,
+      os,
+    },
     history,
   );
   await router.load();
