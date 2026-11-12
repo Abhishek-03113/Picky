@@ -116,9 +116,9 @@ build like any other:
 
 | Migration                 | Adds                       |
 | ------------------------- | -------------------------- |
-| `004_*` (carts)           | `carts` and `cart_items`   |
-| `005_*` (share links)     | `cart_shares`              |
-| `006_*` (price history)   | `price_observations`       |
+| `004_create_carts.sql`    | `carts` and `cart_items`   |
+| `005_create_cart_shares.sql` | `cart_shares`              |
+| `006_create_price_observations.sql` | `price_observations`       |
 
 All three are additive: they create tables and indexes and change or delete nothing that exists, so the
 previous web app and extension keep working against the new API.
