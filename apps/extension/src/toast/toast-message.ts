@@ -1,3 +1,5 @@
+import type { PermissionRetry } from "../permissions/store-access-service.ts";
+
 /** One in-page toast. `id` identifies a link capture, so "Reading…" is replaced by its result. Plain JSON. */
 export type ToastMessage =
   | { kind: "reading"; id: string; title: string; destination: string }
@@ -20,7 +22,12 @@ export type ToastMessage =
       /** Undo puts the quantity back to `previousQuantity`, or takes the item out when that is 0. */
       undo: { cartId: string; productId: string; previousQuantity: number };
     }
-  | { kind: "failed"; id: string; reason: string };
+  | { kind: "failed"; id: string; reason: string }
+  /**
+   * A link on a beta store Picky has no access to yet: "Allow Picky on <Store>" / "Not now". `retry` is the
+   * link read to run again once allowed.
+   */
+  | { kind: "permission"; id: string; source: string; storeLabel: string; retry: PermissionRetry | null };
 
 declare global {
   var pickyToast: ((message: ToastMessage) => void) | undefined;

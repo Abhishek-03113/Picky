@@ -14,6 +14,11 @@ export interface ColorOptionsReaderDependencies {
   reader: SnapshotReader;
   log: (event: string, fields: Record<string, string | number>) => void;
   timeoutMs?: number;
+  /**
+   * False for a colour page Picky may not download (a beta store not allowed yet): that colour keeps its
+   * swatch, and no permission prompt interrupts the save. Absent: every page may be downloaded.
+   */
+  canFetch?: (url: string) => Promise<boolean>;
 }
 
 /**
@@ -28,7 +33,9 @@ export class ColorOptionsReader {
 
   async fillIn(snapshot: ProductSnapshot): Promise<ProductSnapshot> {
     const unread = snapshot.colorOptions.filter((option) => !option.selected && option.price === null);
-    const toRead = unread.slice(0, MAX_COLOR_PAGES);
+    // Every colour of a product is on the snapshot's own store, so one check covers them all.
+    const fetchable = unread.length === 0 || ((await this.deps.canFetch?.(snapshot.url)) ?? true);
+    const toRead = fetchable ? unread.slice(0, MAX_COLOR_PAGES) : [];
     if (toRead.length === 0) return snapshot;
     const read = await mapInParallel(toRead, PARALLEL_READS, (option) => this.readOption(option));
     const byId = new Map(read.map((option) => [option.externalId, option]));

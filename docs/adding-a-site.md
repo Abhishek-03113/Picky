@@ -75,6 +75,9 @@ until the new `reader` has a factory in `READERS`. Pick the cheapest one that wo
   [`chrome-web-store.md`](chrome-web-store.md) and `apps/extension/store/promo.html` (re-render the
   promo PNGs). A test fails until the listing names the new domain and the promo tile names the store
   (the tile says "Amazon", not each Amazon country).
-- Bump `version` in `apps/extension/public/manifest.json`. A new host permission makes Chrome disable
-  the extension for existing users until they accept it, so say why in the release notes.
+- Bump `version` in `apps/extension/public/manifest.json`. A new required host permission makes Chrome
+  disable the extension for existing users until they accept it, so say why in the release notes. A site
+  with `status: "beta"` avoids that: its host becomes an optional host permission, asked the first time
+  Picky must download a page there ("Allow Picky on <Store>" toast), and its Alt+click and Save pill
+  scripts are registered at runtime once allowed (`apps/extension/src/permissions/`).
 - Update `LAST_UPDATED` on the privacy page: its store list changed.

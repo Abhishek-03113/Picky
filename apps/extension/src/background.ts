@@ -21,6 +21,12 @@ import { MenuRefresher } from "./link-capture/menu-refresher.ts";
 import { isExtensionRequest } from "./messaging/messages.ts";
 import { routeRequest } from "./message-router.ts";
 import { serveCaptureRequests } from "./serve-capture-requests.ts";
+import { StoreAccessService } from "./permissions/store-access-service.ts";
+import { ChromeStorePermissions, DeclinedStores, StoreAccessCheck } from "./permissions/store-permissions.ts";
+import { ChromeStoreScriptRegistry, StoreScriptSync } from "./permissions/store-scripts.ts";
+import { optionalStoreForUrl } from "./permissions/store-sites.ts";
+import { PageMarks } from "./save-pill/page-marks.ts";
+import { SavePillService } from "./save-pill/save-pill-service.ts";
 import { SettingsStore } from "./settings.ts";
 import { sendSnapshot } from "./snapshot-sender.ts";
 import { ChromeQuickLookTabPort } from "./quicklook/chrome-quicklook-tab-port.ts";
@@ -38,14 +44,27 @@ import { ChromeToastPort } from "./toast/toast-port.ts";
 declare const __PICKY_CAPTURE_CONFIG__: CaptureConfig;
 const config = __PICKY_CAPTURE_CONFIG__;
 const browser = new ChromeBrowserPort("page-capture.js");
-const settings = new SettingsStore(new ChromeKeyValueStorage());
+const storage = new ChromeKeyValueStorage();
+const settings = new SettingsStore(storage);
 const log = (event: string, fields: Record<string, string | number>) =>
   console.log(JSON.stringify({ time: new Date().toISOString(), event, ...fields }));
 const htmlFetcher = new FetchHtmlFetcher(fetch);
 const snapshotReader = new ChromeSnapshotReader("offscreen.html");
+// Beta stores are optional host permissions (decision D6): Picky asks the first time it must download a
+// page there, and runs its store scripts there only once allowed. Amazon and Flipkart are never asked.
+const storePermissions = new ChromeStorePermissions();
+const declinedStores = new DeclinedStores(storage);
+const storeAccessCheck = new StoreAccessCheck(storePermissions, declinedStores, optionalStoreForUrl);
+const storeScriptRegistry = new ChromeStoreScriptRegistry();
+const storeScripts = new StoreScriptSync(storePermissions, storeScriptRegistry, log);
 // Every save path (popup, Quick Look, context menu, web paste) goes through post, so each stored
 // product carries its other colours' prices and photos, read from those colours' own pages.
-const colorOptions = new ColorOptionsReader({ fetcher: htmlFetcher, reader: snapshotReader, log });
+const colorOptions = new ColorOptionsReader({
+  fetcher: htmlFetcher,
+  reader: snapshotReader,
+  log,
+  canFetch: (url) => storeAccessCheck.canFetch(url),
+});
 const post = async (snapshot: Parameters<typeof sendSnapshot>[2]) =>
   sendSnapshot(fetch, config.apiBaseUrl, await colorOptions.fillIn(snapshot));
 const comparisons = new HttpComparisonsClient(fetch, config.apiBaseUrl);
@@ -85,6 +104,26 @@ const linkCapture = new LinkCaptureService({
   newToastId: () => crypto.randomUUID(),
   onComparisonsChanged: refreshMenu,
   log,
+  access: storeAccessCheck,
+  onPageSaved: (url, productId) => savePill.pageSaved(url, productId),
+});
+const savePill = new SavePillService({ marks: new PageMarks(storage), linkCapture, cart, log });
+const storeAccess = new StoreAccessService({
+  permissions: storePermissions,
+  declined: declinedStores,
+  registry: storeScriptRegistry,
+  openGrantPage: async (source) => {
+    const url = chrome.runtime.getURL(`grant.html?source=${encodeURIComponent(source)}`);
+    await chrome.windows.create({ url, type: "popup", width: 420, height: 280 });
+  },
+  retry: async (retry, tabId) => {
+    if (retry.action === "add") {
+      await linkCapture.add({ url: retry.url, label: retry.label, target: { kind: "last" }, tabId, source: "link" });
+    } else if (tabId !== null) {
+      await linkCapture.quickLook(retry.url, tabId);
+    }
+  },
+  log,
 });
 const cartCapture = new CartCaptureService({
   fetcher: htmlFetcher,
@@ -107,11 +146,22 @@ chrome.commands.onCommand.addListener((command, tab) => {
 
 chrome.runtime.onInstalled.addListener(({ reason }) => {
   refreshMenu();
+  void storeScripts.syncAll();
   const welcomeUrl = welcomePageUrl(reason, config.webBaseUrl);
   if (welcomeUrl !== null) void chrome.tabs.create({ url: welcomeUrl });
 });
-chrome.runtime.onStartup.addListener(refreshMenu);
+chrome.runtime.onStartup.addListener(() => {
+  refreshMenu();
+  void storeScripts.syncAll();
+});
 refreshMenu();
+
+// A store allowed or removed anywhere (the toast, grant.html, chrome://extensions site access).
+chrome.permissions.onAdded.addListener(({ origins = [] }) => {
+  void storeScripts.syncOrigins(origins);
+  void storeAccess.granted(origins);
+});
+chrome.permissions.onRemoved.addListener(({ origins = [] }) => void storeScripts.syncOrigins(origins));
 
 // Right-click on a product link downloads it; right-click on an open product page reads its DOM.
 // "Quick Look" on a link shows the linked product over the current page without saving it;
@@ -137,6 +187,8 @@ chrome.runtime.onMessage.addListener((message: unknown, sender, sendResponse) =>
     quickLook,
     cart,
     linkCapture,
+    storeAccess,
+    savePill,
     openQuickLook: (tabId: number) => toggleQuickLook({ id: tabId }, tabPort, log, "compare"),
     openCart: (tabId: number) => toggleQuickLook({ id: tabId }, tabPort, log, "cart"),
   };

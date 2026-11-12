@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Allow Picky</title>
+    <link rel="stylesheet" href="popup.css" />
+    <style>
+      body {
+        margin: 0;
+        background: var(--ez-surface);
+        color: var(--ez-label);
+        font-family: var(--ez-font-sans);
+      }
+      .grant {
+        padding: 24px;
+        max-width: 360px;
+      }
+      .grant h1 {
+        margin: 0 0 8px;
+        font-size: 17px;
+        font-weight: 600;
+      }
+      .grant p {
+        margin: 0 0 20px;
+        font-size: 13px;
+        line-height: 1.45;
+        color: var(--ez-label-secondary);
+      }
+      .grant-actions {
+        display: flex;
+        gap: 8px;
+        justify-content: flex-end;
+      }
+      .grant-button {
+        padding: 7px 14px;
+        border: 0;
+        border-radius: var(--ez-radius-full);
+        background: var(--ez-fill);
+        color: var(--ez-label);
+        font: inherit;
+        font-size: 13px;
+        cursor: pointer;
+      }
+      .grant-primary {
+        background: var(--ez-blue);
+        color: var(--ez-on-accent);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script src="grant.js"></script>
+  </body>
+</html>

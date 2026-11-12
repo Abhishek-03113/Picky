@@ -5,6 +5,7 @@ import type {
   CatalogProduct,
   ProductSnapshot,
 } from "@picky/catalog";
+import type { PermissionRetry } from "../permissions/store-access-service.ts";
 
 /** What Quick Look shows: every comparison, the selected one in full. Plain JSON: it crosses worlds. */
 export interface QuickLookState {
@@ -65,7 +66,31 @@ export type ToastActionRequest =
   /** Takes back an "Add to cart": back to `previousQuantity`, or out of the cart when that is 0. */
   | { type: "toast:undo-cart"; cartId: string; productId: string; previousQuantity: number };
 
-export type ExtensionRequest = QuickLookRequest | CartRequest | LinkAddRequest | WebImportRequest | ToastActionRequest;
+/**
+ * The permission toast's buttons → service worker. "Allow" asks Chrome for the store's host permission from
+ * the click, then runs `retry`; "Not now" stops Picky asking on that store.
+ */
+export type PermissionRequest =
+  | { type: "permission:allow"; source: string; retry: PermissionRetry | null }
+  | { type: "permission:decline"; source: string };
+
+/** Save pill (content script on store product pages) → service worker. The pill sends its own URL and title. */
+export type SavePillRequest =
+  /** Same as the right-click "Save to Picky" on the page. */
+  | { type: "pill:save"; url: string; title: string }
+  /** "Saved · Add to cart": one more of the saved product in the last-used cart. */
+  | { type: "pill:add-to-cart"; url: string; productId: string }
+  /** "In cart × n": opens the Picky panel on the Cart view. */
+  | { type: "pill:open-cart" };
+
+export type ExtensionRequest =
+  | QuickLookRequest
+  | CartRequest
+  | LinkAddRequest
+  | WebImportRequest
+  | ToastActionRequest
+  | PermissionRequest
+  | SavePillRequest;
 
 export type ExtensionResponse<Body> = { ok: true; body: Body } | { ok: false; message: string };
 
@@ -85,6 +110,11 @@ const REQUEST_TYPES: ReadonlySet<string> = new Set([
   "toast:undo",
   "toast:open-cart",
   "toast:undo-cart",
+  "permission:allow",
+  "permission:decline",
+  "pill:save",
+  "pill:add-to-cart",
+  "pill:open-cart",
 ]);
 
 /**

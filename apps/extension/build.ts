@@ -14,6 +14,7 @@ const config = resolveCaptureConfig(Bun.env);
 const SPEC_SHEET_CSS_PATHS = ["src/popup/spec-sheet.css", "src/popup/spec-sheet-wide.css"] as const;
 const quickLookCss = await shadowStylesheet(["src/quicklook/quicklook.css", ...SPEC_SHEET_CSS_PATHS]);
 const toastCss = await shadowStylesheet(["src/toast/toast.css"]);
+const savePillCss = await shadowStylesheet(["src/save-pill/save-pill.css"]);
 
 // The service worker is an ES module (manifest "type": "module"); files given to
 // chrome.scripting.executeScript must be classic scripts, hence IIFE.
@@ -24,11 +25,14 @@ const BUNDLES = [
   { entry: "src/quicklook/quicklook-entry.ts", name: "quicklook.js", format: "iife" },
   { entry: "src/toast/toast-entry.ts", name: "toast.js", format: "iife" },
   { entry: "src/link-capture/link-alt-click-entry.ts", name: "link-alt-click.js", format: "iife" },
+  // Runs on every store product page, so it bundles registry data only (no readers, no zod).
+  { entry: "src/save-pill/save-pill-entry.ts", name: "save-pill.js", format: "iife" },
+  { entry: "src/permissions/grant-entry.ts", name: "grant.js", format: "iife" },
   { entry: "src/link-capture/offscreen-entry.ts", name: "offscreen.js", format: "iife" },
   { entry: "src/web-bridge/web-bridge-entry.ts", name: "web-bridge.js", format: "iife" },
 ] as const;
 
-// Shadow-DOM surfaces (Quick Look, toasts) ship their own stylesheet as a string baked into the bundle.
+// Shadow-DOM surfaces (Quick Look, toasts, the Save pill) ship their own stylesheet as a string baked into the bundle.
 async function shadowStylesheet(ownCssPaths: readonly string[]): Promise<string> {
   const tokensPath = fileURLToPath(import.meta.resolve("@picky/ui-tokens/tokens.css"));
   const ownCss = await Promise.all(ownCssPaths.map((path) => Bun.file(join(import.meta.dir, path)).text()));
@@ -49,6 +53,7 @@ async function buildBundle(bundle: (typeof BUNDLES)[number]): Promise<void> {
       __PICKY_CAPTURE_CONFIG__: JSON.stringify(config),
       __PICKY_QUICKLOOK_CSS__: JSON.stringify(quickLookCss),
       __PICKY_TOAST_CSS__: JSON.stringify(toastCss),
+      __PICKY_SAVE_PILL_CSS__: JSON.stringify(savePillCss),
     },
   });
   if (!result.success) throw new AggregateError(result.logs, `Bundling ${bundle.entry} failed`);
@@ -66,7 +71,8 @@ async function writePopupStylesheet(): Promise<void> {
 }
 
 async function writeManifest(): Promise<void> {
-  // Store hosts, the Alt+click script's matches and the description's store list come from the site registry.
+  // Store hosts (required and optional), the store scripts' matches and the description's store list come
+  // from the site registry.
   const manifest = withSiteFields(await Bun.file(join(import.meta.dir, "public/manifest.json")).json());
   manifest.host_permissions = mergeHostPermissions(manifest.host_permissions, apiHostPermission(config));
   // The web app's origin is only known at build time, so its bridge script is added here.
