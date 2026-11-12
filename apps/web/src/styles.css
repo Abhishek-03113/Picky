@@ -8,6 +8,7 @@
 @import "./styles/guide.css";
 @import "./styles/home.css";
 @import "./styles/variants.css";
+@import "./styles/cart-extras.css";
 
 *,
 *::before,

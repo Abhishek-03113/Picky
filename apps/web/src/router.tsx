@@ -10,6 +10,8 @@ import type { AuthClient } from "./api/auth-client.ts";
 import { cartDetailQuery, cartListQuery } from "./api/cart-queries.ts";
 import type { CartsClient } from "./api/carts-client.ts";
 import { comparisonDetailQuery, comparisonListQuery, productComparisonsQuery } from "./api/comparison-queries.ts";
+import type { CartSharingClient } from "./api/cart-sharing-client.ts";
+import type { PricesClient } from "./api/price-queries.ts";
 import type { ComparisonsClient } from "./api/comparisons-client.ts";
 import type { ExtensionBridge } from "./api/extension-bridge.ts";
 import { productDetailQuery, productListQuery } from "./api/product-queries.ts";
@@ -42,6 +44,8 @@ const CartPage = lazyRouteComponent(() => import("./pages/cart-page.tsx"), "Cart
 const ProductDetailPage = lazyRouteComponent(() => import("./pages/product-detail-page.tsx"), "ProductDetailPage");
 const ExtensionPage = lazyRouteComponent(() => import("./pages/extension-page.tsx"), "ExtensionPage");
 const PrivacyPage = lazyRouteComponent(() => import("./pages/privacy-page.tsx"), "PrivacyPage");
+const SharedCartPage = lazyRouteComponent(() => import("./pages/shared-cart-page.tsx"), "SharedCartPage");
+const CheckoutPage = lazyRouteComponent(() => import("./pages/checkout-page.tsx"), "CheckoutPage");
 const SignInPage = lazyRouteComponent(() => import("./pages/sign-in-page.tsx"), "SignInPage");
 
 /** Dependencies handed to every route through router context, instead of module-level singletons. */
@@ -51,6 +55,8 @@ export interface PickyRouterContext {
   productsClient: ProductsClient;
   comparisonsClient: ComparisonsClient;
   cartsClient: CartsClient;
+  cartSharingClient: CartSharingClient;
+  pricesClient: PricesClient;
   /** Paste-a-link import goes through the Picky extension, which can fetch store pages. */
   extensionBridge: ExtensionBridge;
   config: AppConfig;
@@ -129,6 +135,21 @@ const cartRoute = createRoute({
   component: CartPage,
 });
 
+const sharedCartRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/c/$slug",
+  validateSearch: (raw: Record<string, unknown>): { save?: boolean } => (raw["save"] === "1" || raw["save"] === 1 || raw["save"] === true ? { save: true } : {}),
+  component: SharedCartPage,
+});
+
+const checkoutRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/carts/$cartId/checkout",
+  loader: ({ context, params }) =>
+    context.queryClient.ensureQueryData(cartDetailQuery(context.cartsClient, params.cartId)),
+  component: CheckoutPage,
+});
+
 const signInRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: SIGN_IN_PATH,
@@ -153,6 +174,8 @@ const routeTree = rootRoute.addChildren([
   signInRoute,
   extensionRoute,
   privacyRoute,
+  sharedCartRoute,
+  checkoutRoute,
   productListRoute,
   productDetailRoute,
   comparisonsIndexRoute,
