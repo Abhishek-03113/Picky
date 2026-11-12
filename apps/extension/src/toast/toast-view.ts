@@ -1,10 +1,12 @@
 import { failureHint } from "../failure-hint.ts";
 import { Dom } from "../popup/dom.ts";
-import { addedDetail, type ToastMessage } from "./toast-message.ts";
+import { addedDetail, cartAddedDetail, type ToastMessage } from "./toast-message.ts";
 
 export interface ToastActions {
   openQuickLook(): void;
   undo(comparisonId: string, productId: string): void;
+  openCart(): void;
+  undoCart(undo: Extract<ToastMessage, { kind: "cart-added" }>["undo"]): void;
   dismiss(): void;
 }
 
@@ -37,9 +39,21 @@ function addedToast(dom: Dom, message: Extract<ToastMessage, { kind: "added" }>,
   return [badge(dom, "ok"), lines(dom, `Saved ${message.title}`, addedDetail(message), [row])];
 }
 
+function cartAddedToast(
+  dom: Dom,
+  message: Extract<ToastMessage, { kind: "cart-added" }>,
+  actions: ToastActions,
+): HTMLElement[] {
+  const row = dom.el("div", { className: "toast-actions" }, [
+    linkButton(dom, "Open cart", () => actions.openCart()),
+    linkButton(dom, "Undo", () => actions.undoCart(message.undo)),
+  ]);
+  return [badge(dom, "ok"), lines(dom, `Added to ${message.cartName}`, cartAddedDetail(message), [row])];
+}
+
 /**
- * One toast card for a message: spinner while reading, a check with Quick Look / Undo when added,
- * an alert with the reason when failed.
+ * One toast card for a message: spinner while reading, a check with See details / Undo when saved (or
+ * Open cart / Undo when added to a cart), an alert with the reason when failed.
  *
  * @example stack.append(toastView(dom, message, actions))
  */
@@ -52,6 +66,7 @@ export function toastView(dom: Dom, message: ToastMessage, actions: ToastActions
 
 function toastContent(dom: Dom, message: ToastMessage, actions: ToastActions): Node[] {
   if (message.kind === "added") return addedToast(dom, message, actions);
+  if (message.kind === "cart-added") return cartAddedToast(dom, message, actions);
   if (message.kind === "failed")
     return [badge(dom, "fail"), lines(dom, "Couldn't save that product", failureHint(message.reason))];
   return [badge(dom, "spin"), lines(dom, `Saving ${message.title}…`, `To ${message.destination}. Keep browsing.`)];

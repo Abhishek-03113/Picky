@@ -5,6 +5,7 @@ import { adaptChromePort } from "./chrome-duplex-port.ts";
 import { ChromeBrowserPort } from "./chrome-browser-port.ts";
 import { ChromeKeyValueStorage } from "./chrome-key-value-storage.ts";
 import { CartBadge } from "./carts/cart-badge.ts";
+import { CartCaptureService } from "./carts/cart-capture-service.ts";
 import { CartService } from "./carts/cart-service.ts";
 import { HttpCartsClient } from "./carts/http-carts-client.ts";
 import { HttpComparisonsClient } from "./comparisons/http-comparisons-client.ts";
@@ -61,6 +62,8 @@ const cart = new CartService({
   badge,
   webBaseUrl: config.webBaseUrl,
 });
+const savesInFlight = new BadgeCounter(badge);
+const toasts = new ChromeToastPort("toast.js", log);
 
 const quickLook = new QuickLookService({
   comparisons,
@@ -77,10 +80,21 @@ const linkCapture = new LinkCaptureService({
   showQuickLook: (tabId, snapshot) => tabPort.injectAndShowProduct(tabId, snapshot),
   comparisons,
   settings,
-  toasts: new ChromeToastPort("toast.js", log),
-  badge: new BadgeCounter(badge),
+  toasts,
+  badge: savesInFlight,
   newToastId: () => crypto.randomUUID(),
   onComparisonsChanged: refreshMenu,
+  log,
+});
+const cartCapture = new CartCaptureService({
+  fetcher: htmlFetcher,
+  reader: snapshotReader,
+  capturePage: (tabId) => browser.capturePageInTab(tabId),
+  sendSnapshot: post,
+  cart,
+  toasts,
+  badge: savesInFlight,
+  newToastId: () => crypto.randomUUID(),
   log,
 });
 
@@ -100,7 +114,8 @@ chrome.runtime.onStartup.addListener(refreshMenu);
 refreshMenu();
 
 // Right-click on a product link downloads it; right-click on an open product page reads its DOM.
-// "Quick Look" on a link shows the linked product over the current page without saving it.
+// "Quick Look" on a link shows the linked product over the current page without saving it;
+// "Add to cart" saves it and puts it in the last-used cart.
 chrome.contextMenus.onClicked.addListener((info, tab) => {
   const click = menuClickFromItem(info.menuItemId);
   if (click === null) return;
@@ -111,7 +126,9 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
   const url = click.source === "page" ? info.pageUrl : info.linkUrl;
   if (url === undefined) return;
   const label = click.source === "page" ? (tab?.title ?? "") : "";
-  void linkCapture.add({ url, label, target: click.target, tabId: tab?.id ?? null, source: click.source });
+  const tabId = tab?.id ?? null;
+  if (click.action === "cart") return void cartCapture.add({ url, label, tabId, source: click.source });
+  void linkCapture.add({ url, label, target: click.target, tabId, source: click.source });
 });
 
 chrome.runtime.onMessage.addListener((message: unknown, sender, sendResponse) => {

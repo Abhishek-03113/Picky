@@ -6,6 +6,7 @@ import { toastView } from "./toast-view.ts";
 const AUTO_DISMISS_MS: Readonly<Record<ToastMessage["kind"], number | null>> = {
   reading: null,
   added: 9000,
+  "cart-added": 9000,
   failed: 12000,
 };
 
@@ -34,6 +35,11 @@ export class ToastStack {
       openQuickLook: () => this.send({ type: "toast:quicklook" }),
       undo: (comparisonId, productId) => {
         this.send({ type: "toast:undo", comparisonId, productId });
+        this.remove(message.id);
+      },
+      openCart: () => this.send({ type: "toast:open-cart" }),
+      undoCart: (undo) => {
+        this.send({ type: "toast:undo-cart", ...undo });
         this.remove(message.id);
       },
       dismiss: () => this.remove(message.id),
