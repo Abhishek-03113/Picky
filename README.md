@@ -28,6 +28,8 @@ Picky sits between discovering a product and buying it.
 2. **Understand** each product with every detail on one clean page, without the store's offers and ads.
 3. **Compare** your shortlist. See what the products share, where they differ, and where one clearly wins.
 4. **Decide** with confidence. The buyer always makes the final call.
+5. **Buy** when you are ready. Put the products you want in a cart, share it if someone else is helping you choose,
+   and go to each store to check out.
 
 ## Who it's for
 
@@ -44,8 +46,24 @@ priorities vary (price, battery, performance, weight, reliability, one specific 
   layout each time.
 - **Comparison where you shop.** When you look at a new product, Picky shows how it stacks up against your shortlist.
   There is no need to remember which tab held the other one or to build your own spreadsheet.
+- **Carts.** Keep named carts in your account, starting with "My cart". Set quantities, see items grouped by store
+  and totals for each currency (never converted), and compare the items you select.
+- **Share a cart.** A share link (`/c/<slug>`) opens without an account and shows only the cart name and its items:
+  title, image, price, store, quantity, variant and the store link. It never shows your email or notes. You can turn a
+  link off at any time, and anyone who opens it can save a copy.
+- **Checkout, without Picky in the middle.** A checklist per store. Amazon gets one cart link, and other stores open
+  the product pages. There are no affiliate tags, and Picky never sees payment details.
+- **Price history.** Each time you save a product, Picky records its price, and the details and cart pages show a trend
+  line and one plain line about it. Prices are recorded only from pages you save. Picky does not fetch store pages in
+  the background and has no price alerts.
+- **Import, export and backup.** Bring in a cart from a share link, code or Picky file. Export a cart as CSV or Picky
+  JSON, or back up everything and restore it later.
 - **Yours to keep.** Research doesn't vanish when a tab closes. Come back to it whenever you like, and organise it
   by category, store, brand or price.
+
+Picky works with Amazon and Flipkart. Walmart, Target, Best Buy, eBay and Etsy are in Beta: they work, but
+have been tested on fewer pages. The extension asks for access to a Beta store only the first time it needs it in the
+background, such as saving from a link. Saving the page you have open works without it.
 
 ## Comparison is the heart of the product
 

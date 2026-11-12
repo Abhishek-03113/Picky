@@ -109,6 +109,35 @@ Pointing it straight at the API domain would leave it signed out. The build deri
 - To create a login, run `bun run user:create [email] [file]` with `DATABASE_URL` pointing at the
   target database. It writes the generated password to a git-ignored `*.credentials.json` file.
 
+### Picky 2.0 rollout
+
+Version 2.0 adds carts, share links and price history. It ships three migrations, which run on the next API
+build like any other:
+
+| Migration                 | Adds                       |
+| ------------------------- | -------------------------- |
+| `004_*` (carts)           | `carts` and `cart_items`   |
+| `005_*` (share links)     | `cart_shares`              |
+| `006_*` (price history)   | `price_observations`       |
+
+All three are additive: they create tables and indexes and change or delete nothing that exists, so the
+previous web app and extension keep working against the new API.
+
+Roll out in this order:
+
+1. **API.** Deploy `picky-api` and check `/health`. The new tables exist from this point.
+2. **Web.** Deploy `picky-web`, which adds the cart, checkout and `/c/<slug>` pages.
+3. **Extension.** Upload the 2.0.0 zip to the Chrome Web Store (step 6). Review can take days, so the web app
+   and API must already work for people still on 1.x.
+
+The shared-cart route is public on purpose. `GET /api/shared-carts/:slug` needs no session, is rate-limited,
+and answers with `X-Robots-Tag: noindex`. It returns only the cart name and items (title, image, price, store,
+quantity, variant, store link), never the owner's email or notes. Turning a link off makes the route stop
+answering for it. If you front the API with a proxy or WAF, do not require authentication on this route.
+
+Price history is recorded only when a shopper's browser saves a product. Nothing on the server fetches store
+pages, so no cron job or background worker is needed.
+
 ### 7. Custom domains (optional)
 
 If you add domains such as `picky.in`, `app.picky.in` and `api.picky.in`, update `WEB_ORIGIN`,
