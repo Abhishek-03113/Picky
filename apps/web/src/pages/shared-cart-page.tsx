@@ -1,6 +1,7 @@
 import { formatMoney, pluralize, sourceLabel, sumByCurrency, type Money, type SharedCartItem } from "@picky/catalog";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { getRouteApi, useNavigate } from "@tanstack/react-router";
+import { isProductSource } from "@picky/catalog/sites";
 import { useEffect, useRef } from "react";
 import { currentUserQuery } from "../api/auth-queries.ts";
 import { ApiRequestError } from "../api/json-requester.ts";
@@ -10,6 +11,11 @@ import { ExternalLinkIcon } from "../components/icons.tsx";
 import { usePageTitle } from "../hooks/use-page-title.ts";
 
 const sharedCartRouteApi = getRouteApi("/c/$slug");
+
+/** A shared link may name a store this version of Picky does not know; show its id as the API sent it. */
+function storeLabel(source: string): string {
+  return isProductSource(source) ? sourceLabel(source) : source;
+}
 
 interface StoreLines {
   source: string;
@@ -21,7 +27,7 @@ interface StoreLines {
 function groupByStore(items: readonly SharedCartItem[]): StoreLines[] {
   const groups = new Map<string, StoreLines>();
   for (const item of items) {
-    const group = groups.get(item.source) ?? { source: item.source, label: sourceLabel(item.source), items: [] };
+    const group = groups.get(item.source) ?? { source: item.source, label: storeLabel(item.source), items: [] };
     group.items.push(item);
     groups.set(item.source, group);
   }
@@ -89,7 +95,9 @@ export function SharedCartPage() {
       </AppBar>
       <main className="page narrow shared-cart">
         {shared.isPending && <p className="subtle">Loading the cart…</p>}
-        {shared.isError && <NoLongerShared notFound={shared.error instanceof ApiRequestError && shared.error.status === 404} />}
+        {shared.isError && (
+          <NoLongerShared notFound={shared.error instanceof ApiRequestError && shared.error.status === 404} />
+        )}
         {shared.data !== undefined && (
           <>
             <div className="page-head-text">
@@ -187,7 +195,7 @@ function OpenInStores({ items }: { items: readonly SharedCartItem[] }) {
             <a href={item.url} target="_blank" rel="noreferrer">
               {item.title}
             </a>
-            <span className="hint">{` · ${sourceLabel(item.source)}`}</span>
+            <span className="hint">{` · ${storeLabel(item.source)}`}</span>
           </li>
         ))}
       </ul>

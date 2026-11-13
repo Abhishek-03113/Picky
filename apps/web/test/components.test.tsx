@@ -15,6 +15,7 @@ import { SpecGroupCard } from "../src/components/spec-group-card.tsx";
 import { SpecGroupNav } from "../src/components/spec-group-nav.tsx";
 import { SpecSheet } from "../src/components/spec-sheet.tsx";
 import { StoreFilterControl } from "../src/components/store-filter.tsx";
+import { renderInApp } from "./fakes/render-app.tsx";
 import { inr, makeSnapshot } from "./fakes/product-fixtures.ts";
 
 const group = { title: "At a glance", specs: [{ label: "Brand", value: "Apple" }] };
@@ -31,15 +32,17 @@ describe("PriceBlock", () => {
 });
 
 describe("PriceCard", () => {
-  test("shows availability dot, word and the capture caveat", () => {
-    const html = renderToStaticMarkup(<PriceCard snapshot={makeSnapshot()} />);
+  test("shows availability dot, word and the capture caveat", async () => {
+    const html = await renderInApp(<PriceCard productId="p1" snapshot={makeSnapshot()} />);
     expect(html).toContain("availability-dot in-stock");
     expect(html).toContain("<strong>In stock</strong>");
     expect(html).toContain("Prices change often, so save it again from the store to update.");
   });
 
-  test("omits availability when the page had none", () => {
-    const html = renderToStaticMarkup(<PriceCard snapshot={makeSnapshot({ availability: null, price: null })} />);
+  test("omits availability when the page had none", async () => {
+    const html = await renderInApp(
+      <PriceCard productId="p1" snapshot={makeSnapshot({ availability: null, price: null })} />,
+    );
     expect(html).not.toContain("availability-dot");
     expect(html).toContain("Price not shown");
   });
@@ -133,7 +136,7 @@ describe("StoreFilterControl", () => {
 });
 
 describe("ProductSummary", () => {
-  test("copes with a product that has no price, rating, images, highlights or brand", () => {
+  test("copes with a product that has no price, rating, images, highlights or brand", async () => {
     const bare = makeSnapshot({
       price: null,
       listPrice: null,
@@ -143,7 +146,7 @@ describe("ProductSummary", () => {
       highlights: [],
       brand: null,
     });
-    const html = renderToStaticMarkup(<ProductSummary snapshot={bare} />);
+    const html = await renderInApp(<ProductSummary productId="p1" snapshot={bare} />);
     expect(html).toContain("Price not shown");
     expect(html).toContain("No product image");
     expect(html).not.toContain("rating-note");

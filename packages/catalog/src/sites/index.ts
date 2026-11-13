@@ -2,6 +2,7 @@
 // so the extension's content scripts can import it without pulling in extractors or zod.
 export type { ShoppingSite } from "./shopping-site.ts";
 export {
+  isProductSource,
   PRODUCT_SOURCES,
   SHOPPING_SITES,
   shoppingSite,
