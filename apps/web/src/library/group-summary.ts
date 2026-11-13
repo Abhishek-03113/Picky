@@ -7,34 +7,45 @@ import {
 } from "@picky/catalog";
 import type { ProductGroup } from "./group-products.ts";
 
-/**
- * Cheapest and dearest price in a group; null when no product has a price. Mixed currencies are not
- * ranked against each other: the first product's currency wins, as everything on the shelf is INR today.
- *
- * @example priceRange(products) // { min: { amount: 19990, currency: "INR" }, max: { amount: 34499, currency: "INR" } }
- */
-export function priceRange(products: readonly CatalogProductSummary[]): { min: Money; max: Money } | null {
-  const prices = products.flatMap((product) => (product.price === null ? [] : [product.price]));
-  const first = prices[0];
-  if (first === undefined) return null;
-  const amounts = prices.filter((price) => price.currency === first.currency).map((price) => price.amount);
-  return {
-    min: { amount: Math.min(...amounts), currency: first.currency },
-    max: { amount: Math.max(...amounts), currency: first.currency },
-  };
+export interface CurrencyPriceRange {
+  min: Money;
+  max: Money;
 }
 
 /**
- * The grey line under a section title: "7 products · ₹19,990 – ₹34,499".
+ * Cheapest and dearest price per currency, in order of first appearance; empty when no product has a
+ * price. Currencies are never converted or ranked against each other, like the cart's per-currency totals.
+ *
+ * @example priceRanges(products) // [{ min: { amount: 79999, currency: "INR" }, max: { amount: 124900, currency: "INR" } }, { min: { amount: 35.5, currency: "USD" }, max: { amount: 399.99, currency: "USD" } }]
+ */
+export function priceRanges(products: readonly CatalogProductSummary[]): CurrencyPriceRange[] {
+  const ranges = new Map<string, CurrencyPriceRange>();
+  for (const { price } of products) {
+    if (price === null) continue;
+    const range = ranges.get(price.currency);
+    if (range === undefined) {
+      ranges.set(price.currency, { min: price, max: price });
+    } else {
+      if (price.amount < range.min.amount) range.min = price;
+      if (price.amount > range.max.amount) range.max = price;
+    }
+  }
+  return [...ranges.values()];
+}
+
+function formatRange({ min, max }: CurrencyPriceRange): string {
+  return min.amount === max.amount ? formatMoney(min) : `${formatMoney(min)} – ${formatMoney(max)}`;
+}
+
+/**
+ * The grey line under a section title: one price range per currency present.
  *
  * @example groupMeta(group) // "1 product · ₹29,999"
+ * @example groupMeta(mixedGroup) // "4 products · ₹79,999 – ₹1,24,900 · $35.50 – $399.99"
  */
 export function groupMeta(group: ProductGroup): string {
   const count = pluralize(group.products.length, "product");
-  const range = priceRange(group.products);
-  if (range === null) return count;
-  if (range.min.amount === range.max.amount) return `${count} · ${formatMoney(range.min)}`;
-  return `${count} · ${formatMoney(range.min)} – ${formatMoney(range.max)}`;
+  return [count, ...priceRanges(group.products).map(formatRange)].join(" · ");
 }
 
 export type GroupAction =
