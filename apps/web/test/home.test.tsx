@@ -1,4 +1,4 @@
-import { supportedStoresText } from "@picky/catalog/sites";
+import { shoppingStores, supportedStoresText } from "@picky/catalog/sites";
 import { describe, expect, test } from "bun:test";
 import { renderToStaticMarkup } from "react-dom/server";
 import { BeforeAfter } from "../src/components/home/before-after.tsx";
@@ -114,6 +114,8 @@ describe("homepage sections", () => {
   test("principles and supported sites", () => {
     expect(render(<Features />).match(/<dt>/g)).toHaveLength(4);
     const sites = render(<SupportedSites />);
-    expect(sites.match(/<li>.*?<\/li>/g)?.map((item) => item.replace(/<[^>]+>/g, ""))).toEqual(["Amazon", "Flipkart"]);
+    expect(sites.match(/<li>.*?<\/li>/g)?.map((item) => item.replace(/<[^>]+>/g, ""))).toEqual(
+      shoppingStores().map((store) => store.name),
+    );
   });
 });

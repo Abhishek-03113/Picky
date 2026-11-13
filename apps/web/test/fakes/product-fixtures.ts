@@ -22,6 +22,8 @@ export function makeSnapshot(overrides: Partial<ProductSnapshot> = {}): ProductS
     ],
     sizeCharts: [],
     colorOptions: [],
+    variant: null,
+    identifiers: { gtin: null, mpn: null, model: null },
     capturedAt: "2026-10-05T06:14:00Z",
     ...overrides,
   };
