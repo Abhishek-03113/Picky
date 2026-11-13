@@ -5,6 +5,7 @@ import { EmailTakenError } from "../src/auth/account-repository.ts";
 import { hashSessionToken } from "../src/auth/auth-service.ts";
 import { PostgresAccountRepository } from "../src/auth/postgres-account-repository.ts";
 import { applyMigrations, loadMigrationFiles } from "../src/db/migrate.ts";
+import { resetDatabase } from "./support/reset-database.ts";
 
 // Integration test; skipped unless PICKY_TEST_DATABASE_URL is set (see postgres-product-repository.test.ts).
 const TEST_DATABASE_URL = Bun.env.PICKY_TEST_DATABASE_URL;
@@ -16,7 +17,7 @@ describe.skipIf(!TEST_DATABASE_URL)("PostgresAccountRepository", () => {
   const later = new Date("2026-10-06T10:00:00Z");
 
   beforeAll(async () => {
-    await sql`DROP TABLE IF EXISTS comparison_products, comparisons, products, sessions, users, schema_migrations`;
+    await resetDatabase(sql);
     await applyMigrations(sql, await loadMigrationFiles(join(import.meta.dir, "../src/db/migrations")));
   });
   afterAll(() => sql.close());

@@ -47,6 +47,11 @@ export class InMemoryProductRepository implements ProductRepository {
       .map(summarizeProduct);
   }
 
+  /** Every product the user has, oldest first. */
+  listOwnedProducts(userId: string): CatalogProduct[] {
+    return this.owned(userId);
+  }
+
   private owned(userId: string): CatalogProduct[] {
     return [...this.productsByKey.values()].filter((owned) => owned.userId === userId).map((owned) => owned.product);
   }
