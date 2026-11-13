@@ -1,4 +1,12 @@
-import { formatMoney, pluralize, sourceLabel, sumByCurrency, type Money, type SharedCartItem } from "@picky/catalog";
+import {
+  formatMoney,
+  nameStorefrontsApart,
+  pluralize,
+  sourceLabel,
+  sumByCurrency,
+  type Money,
+  type SharedCartItem,
+} from "@picky/catalog";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { getRouteApi, useNavigate } from "@tanstack/react-router";
 import { isProductSource } from "@picky/catalog/sites";
@@ -8,6 +16,7 @@ import { ApiRequestError } from "../api/json-requester.ts";
 import { SIGN_IN_PATH } from "../auth/route-guards.ts";
 import { AppBar, BrandLink, PublicNav } from "../components/app-bar.tsx";
 import { ExternalLinkIcon } from "../components/icons.tsx";
+import { currencyTotalLabel } from "../format/currency-total-label.ts";
 import { usePageTitle } from "../hooks/use-page-title.ts";
 
 const sharedCartRouteApi = getRouteApi("/c/$slug");
@@ -24,14 +33,14 @@ interface StoreLines {
 }
 
 /** Items grouped by store, stores in the order they first appear. */
-function groupByStore(items: readonly SharedCartItem[]): StoreLines[] {
+export function groupByStore(items: readonly SharedCartItem[]): StoreLines[] {
   const groups = new Map<string, StoreLines>();
   for (const item of items) {
     const group = groups.get(item.source) ?? { source: item.source, label: storeLabel(item.source), items: [] };
     group.items.push(item);
     groups.set(item.source, group);
   }
-  return [...groups.values()];
+  return nameStorefrontsApart([...groups.values()]);
 }
 
 function totalsOf(items: readonly SharedCartItem[]): Money[] {
@@ -159,7 +168,7 @@ function StoreSection({ group }: { group: StoreLines }) {
                 {item.availability !== null && ` · ${item.availability}`}
               </span>
               <a href={item.url} target="_blank" rel="noreferrer" className="shared-item-link">
-                View on {group.label} <ExternalLinkIcon size={14} />
+                View on {storeLabel(item.source)} <ExternalLinkIcon size={14} />
               </a>
             </div>
           </li>
@@ -169,13 +178,13 @@ function StoreSection({ group }: { group: StoreLines }) {
   );
 }
 
-function Totals({ items }: { items: readonly SharedCartItem[] }) {
+export function Totals({ items }: { items: readonly SharedCartItem[] }) {
   const totals = totalsOf(items);
   return (
     <section className="card cart-totals-card" aria-label="Totals">
       {totals.map((total) => (
         <p key={total.currency} className="cart-total-line">
-          <span>Total</span>
+          <span>{currencyTotalLabel(total.currency, pricedLineCount(items, total.currency))}</span>
           <strong>{formatMoney(total)}</strong>
         </p>
       ))}
@@ -183,6 +192,11 @@ function Totals({ items }: { items: readonly SharedCartItem[] }) {
       <p className="hint">Before delivery and tax. Prices may have changed.</p>
     </section>
   );
+}
+
+/** Lines priced in `currency`: the lines that make up that total. */
+function pricedLineCount(items: readonly SharedCartItem[], currency: string): number {
+  return items.filter((item) => item.price?.currency === currency).length;
 }
 
 function OpenInStores({ items }: { items: readonly SharedCartItem[] }) {

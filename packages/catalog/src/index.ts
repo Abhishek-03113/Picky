@@ -12,7 +12,7 @@ export type {
   SharedCartItem,
   SharedCartView,
 } from "./cart/cart-types.ts";
-export { groupCartByStore, type CartStoreGroup } from "./cart/group-cart-by-store.ts";
+export { groupCartByStore, nameStorefrontsApart, type CartStoreGroup } from "./cart/group-cart-by-store.ts";
 export { cartSavings, cartTotals, type CartSavings, type CartTotals } from "./cart/cart-totals.ts";
 export { isUnavailable, lineTotal } from "./cart/cart-item-state.ts";
 export { sumByCurrency } from "./cart/money-sums.ts";
@@ -26,6 +26,7 @@ export {
 } from "./cart/checkout-plan.ts";
 export {
   describePriceTrend,
+  observationsSinceAdded,
   priceRange,
   sameCurrencyObservations,
   sparklinePoints,
