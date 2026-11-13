@@ -19,6 +19,12 @@ describe("search metadata for public pages", () => {
     }
   });
 
+  test("the homepage title leads with the two main stores", () => {
+    expect(pageHeadTags(publicPage("/"), context)).toContain(
+      "<title>Compare Amazon, Flipkart and more, side by side · Picky</title>",
+    );
+  });
+
   test("head tags carry the title, canonical URL and link-preview tags", () => {
     const tags = pageHeadTags(publicPage("/extension"), context);
     expect(tags).toContain(`<title>${publicPage("/extension").name} · Picky</title>`);
