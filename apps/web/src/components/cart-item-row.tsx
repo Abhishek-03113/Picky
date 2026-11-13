@@ -28,12 +28,7 @@ export function CartItemRow({ item, selected, onToggleSelected, onQuantityChange
   return (
     <li className={unavailable ? "cart-row is-unavailable" : "cart-row"}>
       <label className="cart-row-tick">
-        <input
-          type="checkbox"
-          checked={selected}
-          aria-label={`Select ${snapshot.title}`}
-          onChange={onToggleSelected}
-        />
+        <input type="checkbox" checked={selected} aria-label={`Select ${snapshot.title}`} onChange={onToggleSelected} />
       </label>
       <span className="cart-row-photo">
         {image === undefined ? <BoxIcon size={32} /> : <img src={image} alt="" loading="lazy" />}
@@ -54,7 +49,7 @@ export function CartItemRow({ item, selected, onToggleSelected, onQuantityChange
       </div>
       <div className="cart-row-price">
         <LinePrice item={item} />
-        <PriceTrend productId={product.id} priceWhenAdded={item.priceWhenAdded} />
+        <PriceTrend productId={product.id} priceWhenAdded={item.priceWhenAdded} addedAt={item.addedAt} />
       </div>
     </li>
   );
