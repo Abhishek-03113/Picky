@@ -1,6 +1,7 @@
 import { detectOperatingSystem } from "@picky/catalog";
 import { MutationCache, QueryCache, QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { RouterProvider } from "@tanstack/react-router";
+import { inject as injectWebAnalytics } from "@vercel/analytics";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { createAuthClient } from "./api/auth-client.ts";
@@ -33,6 +34,10 @@ const router = createPickyRouter({
   os: detectOperatingSystem(navigator),
 });
 const onApiError = createSessionExpiryHandler(queryClient, router);
+
+// Vercel Web Analytics: privacy-friendly page views, no cookies. It follows client-side route changes on its own,
+// and only reports from a Vercel deployment (in development it logs to the console instead).
+injectWebAnalytics({ mode: import.meta.env.PROD ? "production" : "development" });
 
 const rootElement = document.getElementById("root");
 if (rootElement === null) throw new Error('Missing <div id="root"> in index.html; expected the Vite entry markup');
