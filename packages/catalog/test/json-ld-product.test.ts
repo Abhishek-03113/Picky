@@ -27,6 +27,10 @@ describe("readJsonLdProduct", () => {
       price: { amount: 84999, currency: "INR" },
       availability: "In stock",
       rating: { average: 4.6, count: 28430 },
+      gtin: null,
+      mpn: null,
+      model: null,
+      caseQuantity: null,
     });
   });
 

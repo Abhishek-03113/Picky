@@ -56,13 +56,21 @@ describe("SHOPPING_SITES", () => {
 
   test("shoppingStores groups storefronts by store name, in registry order", () => {
     const stores = shoppingStores();
-    expect(stores.map((store) => store.name)).toEqual(["Amazon", "Flipkart"]);
+    expect(stores.map((store) => store.name)).toEqual([
+      "Amazon",
+      "Flipkart",
+      "Walmart",
+      "Target",
+      "Best Buy",
+      "eBay",
+      "Etsy",
+    ]);
     expect(stores[0]?.sites.map((site) => site.source)).toEqual(["amazon.in", "amazon.com"]);
   });
 
   test("shoppingSite looks a source up and refuses unknown ones", () => {
     expect(shoppingSite("amazon.com").currency).toBe("USD");
-    expect(() => shoppingSite("ebay.com" as ProductSource)).toThrow('Unknown product source "ebay.com"');
+    expect(() => shoppingSite("amazon.co.uk" as ProductSource)).toThrow('Unknown product source "amazon.co.uk"');
   });
 });
 
@@ -79,6 +87,11 @@ describe("site URLs", () => {
       "https://www.amazon.in/*",
       "https://www.amazon.com/*",
       "https://www.flipkart.com/*",
+      "https://www.walmart.com/*",
+      "https://www.target.com/*",
+      "https://www.bestbuy.com/*",
+      "https://www.ebay.com/*",
+      "https://www.etsy.com/*",
     ]);
     expect(productLinkPatterns()).toContain("https://www.amazon.com/*/gp/product/*");
     expect(productLinkPatterns()).toContain("https://www.flipkart.com/*/p/*");
@@ -96,14 +109,24 @@ describe("site URLs", () => {
 
 describe("site copy", () => {
   test("lists every store, and every company once", () => {
-    expect(supportedStoresText()).toBe("Amazon and Flipkart");
-    expect(supportedStoresText("or")).toBe("Amazon or Flipkart");
-    expect(storeBrandsText("or")).toBe("Amazon or Flipkart");
+    expect(supportedStoresText()).toBe("Amazon, Flipkart, Walmart, Target, Best Buy, eBay and Etsy");
+    expect(supportedStoresText("or")).toBe("Amazon, Flipkart, Walmart, Target, Best Buy, eBay or Etsy");
+    expect(storeBrandsText("or")).toBe("Amazon, Flipkart, Walmart, Target, Best Buy, eBay or Etsy");
   });
 
   test("names Amazon's domains where copy must say exactly where Picky works", () => {
-    expect(supportedDomainsText()).toBe("Amazon (amazon.in and amazon.com) and Flipkart");
-    expect(storeNamesWithDomains()).toEqual(["Amazon (amazon.in and amazon.com)", "Flipkart"]);
+    expect(supportedDomainsText()).toBe(
+      "Amazon (amazon.in and amazon.com), Flipkart, Walmart, Target, Best Buy, eBay and Etsy",
+    );
+    expect(storeNamesWithDomains()).toEqual([
+      "Amazon (amazon.in and amazon.com)",
+      "Flipkart",
+      "Walmart",
+      "Target",
+      "Best Buy",
+      "eBay",
+      "Etsy",
+    ]);
   });
 
   test("formatList handles short lists", () => {
