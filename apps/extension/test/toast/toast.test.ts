@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import type { ToastActionRequest } from "../../src/messaging/messages.ts";
+import type { PermissionRequest, ToastActionRequest } from "../../src/messaging/messages.ts";
 import { ToastStack } from "../../src/toast/toast-host.ts";
 import { addedDetail, type ToastMessage } from "../../src/toast/toast-message.ts";
 import { createTestDom } from "../popup/support.ts";
@@ -15,7 +15,7 @@ const ADDED: Extract<ToastMessage, { kind: "added" }> = {
 
 function setup() {
   const { root } = createTestDom();
-  const sent: ToastActionRequest[] = [];
+  const sent: (ToastActionRequest | PermissionRequest)[] = [];
   return { root, sent, stack: new ToastStack(root, (request) => void sent.push(request)) };
 }
 

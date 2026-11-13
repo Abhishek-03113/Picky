@@ -1,6 +1,7 @@
 import { describe, expect, test } from "bun:test";
 import type { CatalogProduct } from "@picky/catalog";
 import { QuickLookController } from "../../src/quicklook/quicklook-controller.ts";
+import { FakeCartApi } from "../fakes/fake-cart-api.ts";
 import { FakeQuickLookApi } from "../fakes/fake-quicklook-api.ts";
 import { createTestDom } from "../popup/support.ts";
 import { buildCatalogProduct, buildSnapshot } from "../support/build-snapshot.ts";
@@ -46,16 +47,18 @@ function setup(options: { page?: typeof THIS_PAGE | null; comparisons?: number; 
     c2: [],
   });
   if (options.fail) api.failNext = options.fail;
+  const cartApi = new FakeCartApi();
   const closed = { count: 0 };
   const controller = new QuickLookController({
     container: root,
     api,
+    cartApi,
     readPage: () => (options.page === undefined ? THIS_PAGE : options.page),
     onClose: () => void (closed.count += 1),
     activeElement: () => root.ownerDocument.activeElement,
     os: "windows",
   });
-  return { root, api, controller, closed, dom };
+  return { root, api, cartApi, controller, closed, dom };
 }
 
 const text = (root: HTMLElement, selector: string): string[] =>

@@ -107,7 +107,7 @@ const linkCapture = new LinkCaptureService({
   access: storeAccessCheck,
   onPageSaved: (url, productId) => savePill.pageSaved(url, productId),
 });
-const savePill = new SavePillService({ marks: new PageMarks(storage), linkCapture, cart, log });
+const savePill: SavePillService = new SavePillService({ marks: new PageMarks(storage), linkCapture, cart, log });
 const storeAccess = new StoreAccessService({
   permissions: storePermissions,
   declined: declinedStores,
