@@ -6,6 +6,7 @@ import { PostgresComparisonRepository } from "../src/comparisons/postgres-compar
 import { applyMigrations, loadMigrationFiles } from "../src/db/migrate.ts";
 import { PostgresProductRepository } from "../src/products/postgres-product-repository.ts";
 import { buildSampleSnapshot } from "./support/sample-snapshot.ts";
+import { resetDatabase } from "./support/reset-database.ts";
 
 // Integration test; skipped unless PICKY_TEST_DATABASE_URL is set (see postgres-product-repository.test.ts).
 // Each file rebuilds the schema in beforeAll; bun runs test files one after another, so they do not race.
@@ -22,7 +23,7 @@ describe.skipIf(!TEST_DATABASE_URL)("PostgresComparisonRepository", () => {
   let secondId = "";
 
   beforeAll(async () => {
-    await sql`DROP TABLE IF EXISTS comparison_products, comparisons, products, sessions, users, schema_migrations`;
+    await resetDatabase(sql);
     await applyMigrations(sql, await loadMigrationFiles(join(import.meta.dir, "../src/db/migrations")));
     user = (await accounts.createUser("me@example.com", "hash")).id;
     other = (await accounts.createUser("other@example.com", "hash")).id;

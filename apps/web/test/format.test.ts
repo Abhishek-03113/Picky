@@ -1,3 +1,4 @@
+import { shoppingStores } from "@picky/catalog/sites";
 import { describe, expect, test } from "bun:test";
 import { formatCapturedLabel, formatUpdatedLabel } from "../src/format/format-relative-date.ts";
 import { storeFilterOptions } from "../src/format/source-label.ts";
@@ -25,9 +26,9 @@ describe("source labels", () => {
   test("build the store filter from the stores, one segment for every Amazon storefront", () => {
     expect(storeFilterOptions()).toEqual([
       { value: "all", label: "All" },
-      { value: "Amazon", label: "Amazon" },
-      { value: "Flipkart", label: "Flipkart" },
+      ...shoppingStores().map((store) => ({ value: store.name, label: store.name })),
     ]);
+    expect(storeFilterOptions().filter((option) => option.label === "Amazon")).toHaveLength(1);
   });
 });
 

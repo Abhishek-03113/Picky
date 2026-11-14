@@ -1,6 +1,6 @@
 import type { SiteExtractor } from "../../src/extract/site-extractor.ts";
 import type { PageNode } from "../../src/page/page-node.ts";
-import type { ProductSnapshot, ProductSource } from "../../src/product-snapshot.ts";
+import { NO_IDENTIFIERS, type ProductSnapshot, type ProductSource } from "../../src/product-snapshot.ts";
 
 /** SiteExtractor owning URLs on one host; returns a minimal snapshot titled with the page's <h1>. */
 export class FakeSiteExtractor implements SiteExtractor {
@@ -35,6 +35,8 @@ export class FakeSiteExtractor implements SiteExtractor {
       specGroups: [],
       sizeCharts: [],
       colorOptions: [],
+      variant: null,
+      identifiers: NO_IDENTIFIERS,
       capturedAt: capturedAt.toISOString(),
     };
   }

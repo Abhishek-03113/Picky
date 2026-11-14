@@ -139,3 +139,13 @@ export function shoppingSite(source: ProductSource): SupportedSite {
   if (site === undefined) throw new RangeError(`Unknown product source "${source}"`);
   return site;
 }
+
+/**
+ * Whether a string read from outside (an API reply, a stored row) names a store Picky reads.
+ *
+ * @example isProductSource("flipkart.com") // true
+ * @example isProductSource("example.org") // false
+ */
+export function isProductSource(source: string): source is ProductSource {
+  return SITES_BY_SOURCE.has(source);
+}

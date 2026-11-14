@@ -7,6 +7,8 @@ export function buildSnapshot(): ProductSnapshot {
     url: "https://www.amazon.in/dp/B0FQG1YHYR",
     title: "Apple iPhone 17",
     brand: "Apple",
+    variant: null,
+    identifiers: { gtin: null, mpn: null, model: null },
     category: null,
     price: null,
     listPrice: null,

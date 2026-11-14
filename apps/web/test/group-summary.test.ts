@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
 import type { CatalogComparisonSummary } from "@picky/catalog";
-import { groupAction, groupMeta, priceRange } from "../src/library/group-summary.ts";
+import { groupAction, groupMeta, priceRanges } from "../src/library/group-summary.ts";
 import type { ProductGroup } from "../src/library/group-products.ts";
 import { inr, makeSummary } from "./fakes/product-fixtures.ts";
 
@@ -16,14 +16,28 @@ const comparison = (id: string, productIds: string[]): CatalogComparisonSummary 
   updatedAt: "u",
 });
 
-describe("priceRange", () => {
+const usd = (amount: number) => ({ amount, currency: "USD" });
+
+describe("priceRanges", () => {
   test("is the cheapest and dearest price, ignoring unpriced products", () => {
     const products = [makeSummary({ price: inr(30) }), makeSummary({ price: null }), makeSummary({ price: inr(10) })];
-    expect(priceRange(products)).toEqual({ min: inr(10), max: inr(30) });
+    expect(priceRanges(products)).toEqual([{ min: inr(10), max: inr(30) }]);
   });
 
-  test("is null when nothing has a price", () => {
-    expect(priceRange([makeSummary({ price: null })])).toBeNull();
+  test("is empty when nothing has a price", () => {
+    expect(priceRanges([makeSummary({ price: null })])).toEqual([]);
+  });
+
+  test("keeps one range per currency, in order of first appearance", () => {
+    const products = [
+      makeSummary({ price: usd(35.5) }),
+      makeSummary({ price: inr(500) }),
+      makeSummary({ price: usd(100) }),
+    ];
+    expect(priceRanges(products)).toEqual([
+      { min: usd(35.5), max: usd(100) },
+      { min: inr(500), max: inr(500) },
+    ]);
   });
 });
 
@@ -36,6 +50,23 @@ describe("groupMeta", () => {
   test("collapses an equal range and drops it when there are no prices", () => {
     expect(groupMeta(group(makeSummary({ price: inr(500) })))).toBe("1 product · ₹500");
     expect(groupMeta(group(makeSummary({ price: null })))).toBe("1 product");
+  });
+
+  test("shows a range per currency without comparing across them", () => {
+    const meta = groupMeta(
+      group(
+        makeSummary({ price: inr(124900) }),
+        makeSummary({ price: inr(79999) }),
+        makeSummary({ price: usd(399.99) }),
+        makeSummary({ price: usd(35.5) }),
+      ),
+    );
+    expect(meta).toBe("4 products · ₹79,999 – ₹1,24,900 · $35.50 – $399.99");
+  });
+
+  test("collapses a currency that has a single price", () => {
+    const meta = groupMeta(group(makeSummary({ price: usd(35.5) }), makeSummary({ price: inr(500) })));
+    expect(meta).toBe("2 products · $35.50 · ₹500");
   });
 });
 

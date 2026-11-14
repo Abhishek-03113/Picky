@@ -1,9 +1,11 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { RouterProvider, createMemoryHistory } from "@tanstack/react-router";
+import { RouterContextProvider, RouterProvider, createMemoryHistory } from "@tanstack/react-router";
+import type { ReactElement } from "react";
 import { renderToString } from "react-dom/server";
 import type { AuthClient } from "../../src/api/auth-client.ts";
 import { FakeAuthClient } from "./fake-auth-client.ts";
 import type { ProductsClient } from "../../src/api/products-client.ts";
+import { FakeProductsClient } from "./fake-products-client.ts";
 import { FakeComparisonsClient } from "./fake-comparisons-client.ts";
 import type { ComparisonsClient } from "../../src/api/comparisons-client.ts";
 import type { ExtensionBridge } from "../../src/api/extension-bridge.ts";
@@ -62,6 +64,30 @@ export async function renderAppWithRouter(
   authClient: AuthClient = new FakeAuthClient(),
   extensionBridge: ExtensionBridge = new FakeExtensionBridge(),
 ) {
+  const { queryClient, router } = createTestRouter(
+    path,
+    productsClient,
+    comparisonsClient,
+    authClient,
+    extensionBridge,
+  );
+  await router.load();
+  const html = renderToString(
+    <QueryClientProvider client={queryClient}>
+      <RouterProvider router={router} />
+    </QueryClientProvider>,
+  );
+  return { html, router };
+}
+
+/** The real router at `path` over fake clients, not yet loaded. */
+function createTestRouter(
+  path: string,
+  productsClient: ProductsClient,
+  comparisonsClient: ComparisonsClient,
+  authClient: AuthClient,
+  extensionBridge: ExtensionBridge,
+) {
   const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } });
   const config = { extensionUrl: "https://store.example/picky" };
   // Windows: the keys most tests expect spelled out ("Alt + Shift + S"); Mac labels are tested on their own.
@@ -82,11 +108,27 @@ export async function renderAppWithRouter(
     },
     history,
   );
+  return { queryClient, router };
+}
+
+/**
+ * Renders one component inside the app's router and query context, for components that read the router
+ * context (the price trend) without being a page of their own.
+ *
+ * @example const html = await renderInApp(<PriceCard productId="p1" snapshot={makeSnapshot()} />)
+ */
+export async function renderInApp(element: ReactElement): Promise<string> {
+  const { queryClient, router } = createTestRouter(
+    "/",
+    new FakeProductsClient(),
+    new FakeComparisonsClient(),
+    new FakeAuthClient(),
+    new FakeExtensionBridge(),
+  );
   await router.load();
-  const html = renderToString(
+  return renderToString(
     <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
+      <RouterContextProvider router={router}>{element}</RouterContextProvider>
     </QueryClientProvider>,
   );
-  return { html, router };
 }

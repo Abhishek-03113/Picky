@@ -5,6 +5,7 @@ import { PostgresAccountRepository } from "../src/auth/postgres-account-reposito
 import { applyMigrations, loadMigrationFiles } from "../src/db/migrate.ts";
 import { likePattern, PostgresProductRepository } from "../src/products/postgres-product-repository.ts";
 import { buildSampleSnapshot } from "./support/sample-snapshot.ts";
+import { resetDatabase } from "./support/reset-database.ts";
 
 // Integration test against a real, throwaway database. Skipped unless PICKY_TEST_DATABASE_URL is set
 // (the repo-root .env sets it to the docker-compose Postgres).
@@ -18,7 +19,7 @@ describe.skipIf(!TEST_DATABASE_URL)("PostgresProductRepository + migrations", ()
   let bob = "";
 
   beforeAll(async () => {
-    await sql`DROP TABLE IF EXISTS comparison_products, comparisons, products, sessions, users, schema_migrations`;
+    await resetDatabase(sql);
   });
   afterAll(() => sql.close());
 
@@ -28,6 +29,9 @@ describe.skipIf(!TEST_DATABASE_URL)("PostgresProductRepository + migrations", ()
       "001_create_products.sql",
       "002_create_comparisons.sql",
       "003_add_users.sql",
+      "004_create_carts.sql",
+      "005_create_cart_shares.sql",
+      "006_create_price_observations.sql",
     ]);
     expect(await applyMigrations(sql, migrations)).toEqual([]);
     alice = (await accounts.createUser("alice@example.com", "hash")).id;

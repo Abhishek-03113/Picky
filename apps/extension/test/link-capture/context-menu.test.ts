@@ -13,10 +13,11 @@ const titles = (entries: readonly MenuEntry[], context: MenuEntry["context"]) =>
   entries.filter((entry) => entry.context === context).map((entry) => entry.title);
 
 describe("buildMenuEntries", () => {
-  test("links get a flat list: See details, then the last-used comparison first, others, Just save it and New", () => {
+  test("links get a flat list: See details, Add to cart, then the last-used comparison first, others, Just save it and New", () => {
     const entries = buildMenuEntries(COMPARISONS, "c2");
     expect(titles(entries, "link")).toEqual([
       "See details",
+      "Add to cart",
       "",
       "Add to Monitors (last used)",
       "Add to Home && office",
@@ -30,8 +31,14 @@ describe("buildMenuEntries", () => {
     );
   });
   test("keeps order and omits the targets separator when nothing is remembered or nothing exists", () => {
-    expect(titles(buildMenuEntries(COMPARISONS, null), "link")[2]).toBe("Add to Home && office");
-    expect(titles(buildMenuEntries([], null), "link")).toEqual(["See details", "", "Just save it", "New comparison…"]);
+    expect(titles(buildMenuEntries(COMPARISONS, null), "link")[3]).toBe("Add to Home && office");
+    expect(titles(buildMenuEntries([], null), "link")).toEqual([
+      "See details",
+      "Add to cart",
+      "",
+      "Just save it",
+      "New comparison…",
+    ]);
   });
   test("the open page gets one Add to Picky root with the same targets, under unique ids", () => {
     const entries = buildMenuEntries(COMPARISONS, "c2");
@@ -43,8 +50,11 @@ describe("buildMenuEntries", () => {
       "",
       "Just save it",
       "New comparison…",
+      "Add to cart",
     ]);
-    expect(page.slice(1).every((entry) => entry.parentId === "picky:page:add")).toBe(true);
+    // Add to cart sits beside the root as a second top-level item; everything else hangs off the root.
+    expect(page.slice(1, -1).every((entry) => entry.parentId === "picky:page:add")).toBe(true);
+    expect(page.at(-1)?.parentId).toBeUndefined();
     expect(new Set(entries.map((entry) => entry.id)).size).toBe(entries.length);
   });
 });
@@ -70,6 +80,10 @@ describe("menuClickFromItem", () => {
       target: { kind: "library" },
       source: "page",
     });
+  });
+  test("maps Add to cart on a link and on the open page", () => {
+    expect(menuClickFromItem("picky:cart")).toEqual({ action: "cart", source: "link" });
+    expect(menuClickFromItem("picky:page:cart")).toEqual({ action: "cart", source: "page" });
   });
   test("maps the Quick Look root to a look without saving", () => {
     expect(menuClickFromItem("picky:quicklook")).toEqual({ action: "quicklook" });
@@ -104,7 +118,13 @@ describe("MenuRefresher", () => {
       async () => null,
       (event) => void logged.push(event),
     ).refresh();
-    expect(titles(menu.menus[0] ?? [], "link")).toEqual(["See details", "", "Just save it", "New comparison…"]);
+    expect(titles(menu.menus[0] ?? [], "link")).toEqual([
+      "See details",
+      "Add to cart",
+      "",
+      "Just save it",
+      "New comparison…",
+    ]);
     expect(logged).toEqual(["menu.comparisons_unavailable"]);
   });
 });

@@ -1,3 +1,4 @@
+import { supportedStoresText } from "@picky/catalog/sites";
 import { describe, expect, test } from "bun:test";
 import { ApiRequestError } from "../src/api/json-requester.ts";
 import { importErrorMessage, routeErrorMessage } from "../src/format/shopper-error.ts";
@@ -18,7 +19,7 @@ describe("routeErrorMessage", () => {
 describe("importErrorMessage", () => {
   test("a link that is not a product page names the stores to paste from", () => {
     expect(importErrorMessage("https://example.com/")).toBe(
-      "That link isn't a product. Paste a link to one product on Amazon or Flipkart.",
+      `That link isn't a product. Paste a link to one product on ${supportedStoresText("or")}.`,
     );
   });
 

@@ -8,6 +8,7 @@ import {
   pluralize,
 } from "@picky/catalog";
 import { Link } from "@tanstack/react-router";
+import { currencyTotalLabel } from "../format/currency-total-label.ts";
 
 interface CartSummaryCardProps {
   cartId: string;
@@ -27,7 +28,7 @@ export function CartSummaryCard({ cartId, items }: CartSummaryCardProps) {
       {totals.length === 0 && <p className="subtle">No prices listed yet.</p>}
       {totals.map((total) => (
         <p key={total.currency} className="cart-summary-line">
-          <span>{`Items in ${currencySymbol(total.currency)} (${pricedLineCount(items, total.currency)})`}</span>
+          <span>{currencyTotalLabel(total.currency, pricedLineCount(items, total.currency))}</span>
           <strong>{formatMoney(total)}</strong>
         </p>
       ))}
@@ -61,14 +62,4 @@ function SavingLines({ amounts, label }: { amounts: readonly Money[]; label: str
 /** In-stock lines priced in `currency`: the lines that make up that total. */
 function pricedLineCount(items: readonly CartItem[], currency: string): number {
   return items.filter((item) => !isUnavailable(item) && item.product.snapshot.price?.currency === currency).length;
-}
-
-/**
- * The sign shoppers read for a currency: "₹" for INR, "$" for USD; the code itself when there is none.
- *
- * @example currencySymbol("INR") // "₹"
- */
-function currencySymbol(currency: string): string {
-  const parts = new Intl.NumberFormat("en-IN", { style: "currency", currency }).formatToParts(0);
-  return parts.find((part) => part.type === "currency")?.value ?? currency;
 }

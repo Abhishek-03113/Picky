@@ -23,12 +23,30 @@ export function sameCurrencyObservations(observations: readonly PriceObservation
 }
 
 /**
+ * The observations the "since you added it" caption speaks about: the last check at or before `addedAt`
+ * (the price the shopper added it at) and every check after it, oldest first. Earlier drops are left out,
+ * so a line drawn from this window slopes the same way as the caption reads.
+ *
+ * @example observationsSinceAdded([day1At100, day2At80, day4At80], "2026-10-03T00:00:00Z") // [day2At80, day4At80]
+ */
+export function observationsSinceAdded(observations: readonly PriceObservation[], addedAt: string): PriceObservation[] {
+  const series = sameCurrencyObservations(observations);
+  const added = Date.parse(addedAt);
+  const firstAfter = series.findIndex((observation) => Date.parse(observation.observedAt) > added);
+  const anchor = (firstAfter === -1 ? series.length : firstAfter) - 1;
+  return series.slice(Math.max(anchor, 0));
+}
+
+/**
  * A plain, factual line about how the price moved; no advice. Tone is "none" with fewer than two
  * observations in the latest price's currency.
  *
  * @example describePriceTrend(observations, { amount: 5000, currency: "INR" }) // { tone: "down", text: "₹1,200 less than when you added it" }
  */
-export function describePriceTrend(observations: readonly PriceObservation[], priceWhenAdded: Money | null): PriceTrend {
+export function describePriceTrend(
+  observations: readonly PriceObservation[],
+  priceWhenAdded: Money | null,
+): PriceTrend {
   const series = sameCurrencyObservations(observations);
   const latest = series.at(-1);
   if (latest === undefined || series.length < 2) return NO_TREND;
@@ -86,7 +104,10 @@ export function sparklinePoints(observations: readonly PriceObservation[], width
   const [low, high] = [Math.min(...amounts), Math.max(...amounts)];
   return series
     .map((_, index) => {
-      const x = lastTime === firstTime ? (index / (series.length - 1)) * width : ((times[index]! - firstTime) / (lastTime - firstTime)) * width;
+      const x =
+        lastTime === firstTime
+          ? (index / (series.length - 1)) * width
+          : ((times[index]! - firstTime) / (lastTime - firstTime)) * width;
       const y = high === low ? height / 2 : height - ((amounts[index]! - low) / (high - low)) * height;
       return `${round(x)},${round(y)}`;
     })

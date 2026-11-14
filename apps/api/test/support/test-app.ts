@@ -3,7 +3,10 @@ import type { DecisionModel } from "../../src/decisions/decision-model.ts";
 import { createApp } from "../../src/http/create-app.ts";
 import { ProductIngestion } from "../../src/products/product-ingestion.ts";
 import { InMemoryAccountRepository } from "../fakes/in-memory-account-repository.ts";
+import { InMemoryCartRepository } from "../fakes/in-memory-cart-repository.ts";
 import { InMemoryComparisonRepository } from "../fakes/in-memory-comparison-repository.ts";
+import { InMemoryLibrarySnapshotReader } from "../fakes/in-memory-library-snapshot-reader.ts";
+import { InMemoryPriceObservationRepository } from "../fakes/in-memory-price-observation-repository.ts";
 import { InMemoryProductRepository } from "../fakes/in-memory-product-repository.ts";
 import { plainPasswordHasher } from "../fakes/plain-password-hasher.ts";
 import { RecordingLogger } from "../fakes/recording-logger.ts";
@@ -22,12 +25,16 @@ export interface TestAppOptions {
 export function createTestApp({ decisionModel }: TestAppOptions = {}) {
   const accounts = new InMemoryAccountRepository();
   const repository = new InMemoryProductRepository();
+  const priceObservations = new InMemoryPriceObservationRepository(repository);
   const logger = new RecordingLogger();
   const app = createApp({
     auth: new AuthService(accounts, plainPasswordHasher, () => TEST_NOW),
     repository,
     comparisons: new InMemoryComparisonRepository(repository),
-    ingestion: new ProductIngestion(repository),
+    carts: new InMemoryCartRepository(repository),
+    library: new InMemoryLibrarySnapshotReader(repository),
+    ingestion: new ProductIngestion(repository, priceObservations),
+    priceObservations,
     logger,
     sessionCookie: { secure: true },
     webOrigin: "http://web.test",
@@ -50,7 +57,7 @@ export function createTestApp({ decisionModel }: TestAppOptions = {}) {
     return sessionCookieOf(response);
   }
 
-  return { app, accounts, repository, logger, send, signUp };
+  return { app, accounts, repository, priceObservations, logger, send, signUp };
 }
 
 /**

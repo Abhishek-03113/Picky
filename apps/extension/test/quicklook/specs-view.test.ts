@@ -6,6 +6,7 @@ import type { OverlayActions } from "../../src/quicklook/overlay-actions.ts";
 import { overlayView } from "../../src/quicklook/overlay-view.ts";
 import { QuickLookController } from "../../src/quicklook/quicklook-controller.ts";
 import { INITIAL_MODEL, showsSpecs, type QuickLookModel } from "../../src/quicklook/quicklook-model.ts";
+import { FakeCartApi } from "../fakes/fake-cart-api.ts";
 import { FakeQuickLookApi } from "../fakes/fake-quicklook-api.ts";
 import { createTestDom } from "../popup/support.ts";
 import { buildSpecSnapshot } from "../support/build-spec-snapshot.ts";
@@ -23,6 +24,7 @@ function setup(page: ProductSnapshot | null = PAGE) {
   const controller = new QuickLookController({
     container: root,
     api,
+    cartApi: new FakeCartApi(),
     readPage: () => page,
     onClose: () => void (closed.count += 1),
     os: "windows",
@@ -56,6 +58,18 @@ class RecordingActions implements OverlayActions {
   }
   retry(): void {
     this.calls.push("retry");
+  }
+  addPageToCart(): void {
+    this.calls.push("cart add");
+  }
+  selectCart(cartId: string): void {
+    this.calls.push(`cart select ${cartId}`);
+  }
+  setCartQuantity(productId: string, quantity: number): void {
+    this.calls.push(`cart quantity ${productId} ${quantity}`);
+  }
+  retryCart(): void {
+    this.calls.push("cart retry");
   }
 }
 
@@ -118,7 +132,10 @@ describe("QuickLookController.setView", () => {
     await controller.open("compare");
     controller.setView("specs");
     expect(root.querySelector(".spec-view")).toBeNull();
-    expect(root.querySelector('[aria-label="View"]')).toBeNull();
+    expect([...root.querySelectorAll('[aria-label="View"] .segment')].map((n) => n.textContent)).toEqual([
+      "Compare",
+      "Cart",
+    ]);
   });
 
   test("keeps focus on the View segment that was activated", async () => {
@@ -147,13 +164,17 @@ describe("headerView", () => {
     expect([...header.querySelectorAll('[aria-label="View"] .segment')].map((n) => n.textContent)).toEqual([
       "Details",
       "Compare",
+      "Cart",
     ]);
   });
 
-  test("has no View switch off a product page", () => {
+  test("off a product page the View switch offers only Compare and Cart", () => {
     const { dom } = createTestDom();
     const header = headerView(dom, modelWith({ pageSnapshot: null }), new RecordingActions());
-    expect(header.querySelector('[aria-label="View"]')).toBeNull();
+    expect([...header.querySelectorAll('[aria-label="View"] .segment')].map((n) => n.textContent)).toEqual([
+      "Compare",
+      "Cart",
+    ]);
     expect(header.querySelector(".picker")).not.toBeNull();
   });
 
@@ -197,10 +218,11 @@ describe("overlayView signed out", () => {
 });
 
 describe("overlayView in the specs view", () => {
-  test("renders this page's spec sheet inside the scroll body, with sticky tools", () => {
+  test("renders this page's spec sheet inside the scroll body, with sticky tools and Add to cart above it", () => {
     const { dom } = createTestDom();
     const view = overlayView(dom, modelWith({ view: "specs" }), new RecordingActions(), SHOWN);
-    expect(view.querySelector(".body > .spec-view .spec-sheet-tools")).not.toBeNull();
+    expect(view.querySelector(".body > .details > .spec-view .spec-sheet-tools")).not.toBeNull();
+    expect(view.querySelector(".body > .details > .details-actions .add")?.textContent).toContain("Add to cart");
     expect(labels(view as HTMLElement)).toEqual(["Size", "Type", "Capacity", "Color"]);
   });
 

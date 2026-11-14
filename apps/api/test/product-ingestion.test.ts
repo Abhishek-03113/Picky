@@ -1,5 +1,6 @@
 import { describe, expect, test } from "bun:test";
 import { InvalidSnapshotError, ProductIngestion } from "../src/products/product-ingestion.ts";
+import { InMemoryPriceObservationRepository } from "./fakes/in-memory-price-observation-repository.ts";
 import { InMemoryProductRepository } from "./fakes/in-memory-product-repository.ts";
 import { buildSampleSnapshot } from "./support/sample-snapshot.ts";
 
@@ -7,7 +8,10 @@ const USER_ID = "user-1";
 
 function createIngestion() {
   const repository = new InMemoryProductRepository();
-  return { repository, ingestion: new ProductIngestion(repository) };
+  return {
+    repository,
+    ingestion: new ProductIngestion(repository, new InMemoryPriceObservationRepository(repository)),
+  };
 }
 
 describe("ProductIngestion.ingestSnapshot", () => {

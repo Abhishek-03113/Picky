@@ -130,6 +130,13 @@ describe("storeSearchUrl", () => {
   });
   test("is null for a store without a search page, and only searchable stores are listed", () => {
     expect(storeSearchUrl(shoppingSite("amazon.in"), snapshotWith("X", []))).toBeNull();
-    expect(searchableSites().map((site) => site.source)).toEqual(["flipkart.com"]);
+    expect(searchableSites().map((site) => site.source)).toEqual([
+      "flipkart.com",
+      "walmart.com",
+      "target.com",
+      "bestbuy.com",
+      "ebay.com",
+      "etsy.com",
+    ]);
   });
 });

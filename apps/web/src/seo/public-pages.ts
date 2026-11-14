@@ -1,4 +1,4 @@
-import { supportedStoresText } from "@picky/catalog/sites";
+import { shoppingStores, supportedStoresText } from "@picky/catalog/sites";
 import { EXTENSION_PATH, PRIVACY_PATH } from "../auth/route-guards.ts";
 import { pageTitle } from "../format/page-title.ts";
 
@@ -12,18 +12,23 @@ export interface PublicPage {
 }
 
 const STORES = supportedStoresText();
+/** The two lead stores, for titles that have no room for the full list. */
+const MAIN_STORES = shoppingStores()
+  .slice(0, 2)
+  .map((store) => store.name)
+  .join(", ");
 
 /** The public pages, homepage first. Sign-in and every signed-in page stay out of search results. */
 export const PUBLIC_PAGES: readonly PublicPage[] = [
   {
     path: "/",
-    name: `Compare ${STORES} products side by side`,
-    description: `Picky saves products as you browse ${STORES}, shows every detail on one clean page, and points out where your shortlist really differs. Free.`,
+    name: `Compare ${MAIN_STORES} and more, side by side`,
+    description: `Save products from ${STORES} to Picky, see every detail on one clean page and compare your shortlist. Free.`,
   },
   {
     path: EXTENSION_PATH,
-    name: `Chrome extension for ${STORES}`,
-    description: `Save ${STORES} products to Picky in one click and see every detail on one clean page. Free for Chrome, Edge and Brave.`,
+    name: `Chrome extension for ${MAIN_STORES} and more`,
+    description: `Save ${STORES} products to Picky in one click and see every detail on one clean page. Free for Chrome.`,
   },
   {
     path: PRIVACY_PATH,
