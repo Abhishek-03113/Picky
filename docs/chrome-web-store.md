@@ -51,8 +51,9 @@ products, the right-click "Save to Picky" menu, and the web app's product or com
 
 **Description** (paste as is):
 
-> Picky shows every detail of an Amazon or Flipkart product on one clean page, without the offers and
-> ads, and helps you compare the products on your shortlist.
+> Picky shows every detail of a product on one clean page, without the offers and ads, and helps you
+> compare, group and buy the products on your shortlist. It works on Amazon and Flipkart, and on Walmart,
+> Target, Best Buy, eBay and Etsy (Beta).
 >
 > • See every detail: click the Picky button (or press Alt+Shift+S) on any product page. Full specs, in
 > clear sections you can search. No account needed.
@@ -62,17 +63,26 @@ products, the right-click "Save to Picky" menu, and the web app's product or com
 > without leaving the page.
 > • Compare: put your shortlist side by side (Alt+Shift+V). Details that match fold away, clear wins
 > are marked, and matters of taste are left to you.
+> • Carts: add products to a named cart (Alt+Shift+K, or "Add to cart" in the panel and right-click menu).
+> Set quantities, see totals per currency and compare the items you pick. A "Save to Picky" button on
+> product pages is movable and can be hidden per store or everywhere.
+> • Share a cart: send a link anyone can open without an account. It shows only the items, never your email or
+> notes, and you can turn it off.
+> • Price history: when you save a product, Picky records its price, so you can see the trend. It never
+> checks prices in the background.
+> • Checkout your way: a checklist per store. Picky adds no affiliate tags and never sees payment details.
 > • Saved on any device: your products and comparisons live in your free Picky account.
 >
-> Picky works only on Amazon (amazon.in and amazon.com), Flipkart and the Picky website. It looks at a
-> page only when you ask, shows no ads and sells nothing. Picky is not affiliated with Amazon or Flipkart.
+> Picky works only on Amazon (amazon.in and amazon.com), Flipkart, Walmart, Target, Best Buy, eBay, Etsy
+> and the Picky website. It looks at a page only when you ask, shows no ads and sells nothing. Picky is
+> not affiliated with any of these stores.
 
 ## 3. Privacy practices tab
 
 **Single purpose:**
 
-> Picky shows every detail of a product page on Amazon (amazon.in and amazon.com) and Flipkart on one
-> clean page, which the user can save to their Picky account and compare.
+> Picky shows every detail of a product page on Amazon (amazon.in and amazon.com), Flipkart, Walmart,
+> Target, Best Buy, eBay and Etsy on one clean page, which the user can save to their Picky account, compare and collect in carts.
 
 **Permission justifications** (the same text as `PERMISSION_JUSTIFICATIONS`):
 
@@ -83,6 +93,7 @@ products, the right-click "Save to Picky" menu, and the web app's product or com
 | `storage`          | Keeps a few preferences on the device, such as the comparison the user picked last.                                                                 |
 | `contextMenus`     | Adds "Save to Picky" and "See details" to the right-click menu on Amazon (amazon.in and amazon.com) and Flipkart.                                         |
 | `offscreen`        | Parses a product page downloaded from a link (Alt+click or right-click) in an offscreen document, because the service worker has no DOM.           |
+| Optional host permissions | walmart.com, target.com, bestbuy.com, ebay.com and etsy.com (the Beta stores). Not granted at install. Requested the first time Picky needs to download one of that store's product links in the background, such as saving from a link or the Save button. Saving the page the user has open works without it. |
 | Host permissions   | amazon.in, amazon.com and flipkart.com: download a product link the user Alt+clicked or right-clicked, in their browser. The Picky web domain: save products to the user's account and read their comparisons. |
 | Content scripts    | On amazon.in, amazon.com and flipkart.com, a small listener that only reacts to Alt+click on a product link. On the Picky web domain, a bridge so the web app's "paste a link" field can ask the extension to read that link. |
 
@@ -113,7 +124,8 @@ purposes unrelated to the single purpose, and not used to determine creditworthi
 
 ## Common rejection reasons this setup avoids
 
-- **Excessive permissions:** no `tabs`, no `<all_urls>`; host access is the three stores plus Picky.
+- **Excessive permissions:** no `tabs`, no `<all_urls>`; install-time host access is Amazon, Flipkart and Picky.
+  The Beta stores are optional and asked for only when needed.
 - **Missing or mismatched privacy policy:** `/privacy` lists exactly the data above.
 - **Remote code / obfuscation:** bundles are minified (whitespace and syntax only; names are kept, so the
   code stays readable) and contain no `eval`.

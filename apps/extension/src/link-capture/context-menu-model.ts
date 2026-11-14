@@ -12,14 +12,22 @@ export interface MenuEntry {
   context: MenuContext;
 }
 
-/** A clicked item: "Add to Picky" (where the product goes and how it is read), or "Quick Look" on a link. */
-export type MenuClick = { action: "add"; target: AddTarget; source: MenuContext } | { action: "quicklook" };
+/**
+ * A clicked item: "Add to Picky" (where the product goes and how it is read), "Add to cart" (into the
+ * last-used cart), or "Quick Look" on a link.
+ */
+export type MenuClick =
+  | { action: "add"; target: AddTarget; source: MenuContext }
+  | { action: "cart"; source: MenuContext }
+  | { action: "quicklook" };
 
 const COMPARISON_PREFIX = "picky:cmp:";
 const LIBRARY_ID = "picky:library";
 const NEW_ID = "picky:new";
 // A look at a linked product without saving it. Links only: on a product page the toolbar's Quick Look shows it.
 const QUICKLOOK_ID = "picky:quicklook";
+// Into the last-used cart; on the page menu it is a second top-level item ("picky:page:cart").
+const CART_ID = "picky:cart";
 // The page menu repeats the add items under ids with this prefix, since every menu id must be unique.
 const PAGE_ID_PREFIX = "picky:page:";
 const PAGE_ROOT_ID = "picky:page:add";
@@ -45,11 +53,12 @@ function comparisonTitles(
 
 /**
  * The right-click menus. Chrome shows an extension with several top-level items as one submenu under its
- * name, so the link menu is flat and reads as "Picky ▸ Quick Look | Add to Monitors (last used) | … |
- * Library only | New comparison…". The page menu has a single "Add to Picky ▸" root with the same targets.
+ * name, so the link menu is flat and reads as "Picky ▸ See details | Add to cart | Add to Monitors (last
+ * used) | … | Just save it | New comparison…". The page menu has a "Save to Picky ▸" root with the same
+ * targets, and an "Add to cart" item beside it.
  *
  * @example buildMenuEntries(comparisons, "c1").filter((e) => e.context === "link").map((e) => e.title)
- * // ["Quick Look", "", "Add to Monitors (last used)", "Add to Home office", "", "Library only", "New comparison…"]
+ * // ["See details", "Add to cart", "", "Add to Monitors (last used)", "Add to Home office", "", "Just save it", "New comparison…"]
  */
 export function buildMenuEntries(
   comparisons: readonly CatalogComparisonSummary[],
@@ -70,6 +79,7 @@ function linkMenuEntries(comparisons: readonly CatalogComparisonSummary[], lastU
   );
   return [
     item(QUICKLOOK_ID, "See details"),
+    item(CART_ID, "Add to cart"),
     item("picky:separator:quicklook", "", "separator"),
     ...comparisonItems,
     ...(comparisonItems.length > 0 ? [item("picky:separator:targets", "", "separator")] : []),
@@ -95,6 +105,7 @@ function pageMenuEntries(comparisons: readonly CatalogComparisonSummary[], lastU
     ...(comparisonItems.length > 0 ? [child("separator", "", "separator")] : []),
     child("library", "Just save it"),
     child("new", "New comparison…"),
+    { id: `${PAGE_ID_PREFIX}cart`, title: "Add to cart", kind: "normal", context: "page" },
   ];
 }
 
@@ -102,12 +113,14 @@ function pageMenuEntries(comparisons: readonly CatalogComparisonSummary[], lastU
  * What a clicked menu item means, or null for the page root, separators and foreign items.
  *
  * @example menuClickFromItem("picky:page:library") // { action: "add", target: { kind: "library" }, source: "page" }
+ * @example menuClickFromItem("picky:page:cart") // { action: "cart", source: "page" }
  */
 export function menuClickFromItem(menuItemId: string | number): MenuClick | null {
   const id = String(menuItemId);
   if (id === QUICKLOOK_ID) return { action: "quicklook" };
   const source: MenuContext = id.startsWith(PAGE_ID_PREFIX) ? "page" : "link";
   const linkId = source === "page" ? `picky:${id.slice(PAGE_ID_PREFIX.length)}` : id;
+  if (linkId === CART_ID) return { action: "cart", source };
   const target = addTargetFromMenuItem(linkId);
   return target === null ? null : { action: "add", target, source };
 }

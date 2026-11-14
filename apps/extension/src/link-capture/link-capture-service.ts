@@ -1,6 +1,9 @@
 import { describeSupportedProductUrls, isSupportedProductUrl, type ProductSnapshot } from "@picky/catalog";
 import type { CaptureResult } from "../capture-result.ts";
 import type { ComparisonsClient } from "../comparisons/comparisons-client.ts";
+import { noStoreAccessMessage } from "../failure-hint.ts";
+import type { PermissionRetry } from "../permissions/store-access-service.ts";
+import type { StoreAccess } from "../permissions/store-permissions.ts";
 import { comparisonNameFor } from "../snapshot-category.ts";
 import type { ToastMessage } from "../toast/toast-message.ts";
 import type { ToastPort } from "../toast/toast-port.ts";
@@ -29,6 +32,13 @@ export interface LinkCaptureDependencies {
   newToastId: () => string;
   onComparisonsChanged: () => void;
   log: (event: string, fields: Record<string, string | number>) => void;
+  /**
+   * Whether a link's store may be downloaded (beta stores need the shopper's OK first). Absent: every
+   * store is allowed, as for required stores.
+   */
+  access?: { forUrl(url: string): Promise<StoreAccess> };
+  /** Told when the open page was saved, so its Save pill turns to "Saved". */
+  onPageSaved?: (url: string, productId: string) => Promise<void>;
 }
 
 export interface LinkAddJob {
@@ -63,9 +73,18 @@ interface Placement {
 export class LinkCaptureService {
   constructor(private readonly deps: LinkCaptureDependencies) {}
 
-  async add(job: LinkAddJob): Promise<void> {
+  /** Resolves to the saved product's id, or null when nothing was saved (the toast says why). */
+  async add(job: LinkAddJob): Promise<string | null> {
     const id = this.deps.newToastId();
-    if (!isSupportedProductUrl(job.url)) return this.rejectLink(job.url, job.tabId, id);
+    if (!isSupportedProductUrl(job.url)) {
+      await this.rejectLink(job.url, job.tabId, id);
+      return null;
+    }
+    // The open page is read through activeTab or the store's content script; only downloads need access.
+    if (job.source === "link") {
+      const retry: PermissionRetry = { action: "add", url: job.url, label: job.label };
+      if (!(await this.checkAccess(job.url, job.tabId, id, retry))) return null;
+    }
     await this.deps.badge.begin();
     await this.deps.toasts.show(job.tabId, {
       kind: "reading",
@@ -74,14 +93,35 @@ export class LinkCaptureService {
       destination: describeTarget(job.target),
     });
     try {
-      await this.deps.toasts.show(job.tabId, await this.captureAndPlace(job, id));
+      const { productId, toast } = await this.captureAndPlace(job, id);
+      await this.deps.toasts.show(job.tabId, toast);
+      return productId;
     } catch (error) {
       const reason = error instanceof Error ? error.message : String(error);
       this.deps.log("link_capture.failed", { url: job.url, reason });
       await this.deps.toasts.show(job.tabId, { kind: "failed", id, reason });
+      return null;
     } finally {
       await this.deps.badge.end();
     }
+  }
+
+  /**
+   * True when the link's store may be downloaded. Otherwise shows the "Allow Picky on <Store>" toast (or,
+   * after a "Not now", a quiet notice) and resolves to false.
+   */
+  private async checkAccess(url: string, tabId: number | null, id: string, retry: PermissionRetry): Promise<boolean> {
+    const access: StoreAccess = (await this.deps.access?.forUrl(url)) ?? { kind: "allowed" };
+    if (access.kind === "allowed") return true;
+    this.deps.log("link_capture.store_access", { url, source: access.site.source, access: access.kind });
+    const { source, label } = access.site;
+    await this.deps.toasts.show(
+      tabId,
+      access.kind === "ask"
+        ? { kind: "permission", id, source, storeLabel: label, retry }
+        : { kind: "failed", id, reason: noStoreAccessMessage(label) },
+    );
+    return false;
   }
 
   /** Refuses before any network request: the menu patterns are coarse and an Alt+click target is page-controlled. */
@@ -99,6 +139,8 @@ export class LinkCaptureService {
     if (!isSupportedProductUrl(url)) {
       throw new Error(`"${url}" is not a product link; expected ${describeSupportedProductUrls()}`);
     }
+    const access: StoreAccess = (await this.deps.access?.forUrl(url)) ?? { kind: "allowed" };
+    if (access.kind !== "allowed") throw new Error(noStoreAccessMessage(access.site.label));
     const { productId, snapshot } = await this.readLink(url);
     this.deps.log("link_capture.imported", { url, productId, externalId: snapshot.externalId });
     return productId;
@@ -110,6 +152,8 @@ export class LinkCaptureService {
    */
   async quickLook(url: string, tabId: number): Promise<void> {
     if (!isSupportedProductUrl(url)) return this.rejectLink(url, tabId, this.deps.newToastId());
+    const retry: PermissionRetry = { action: "quicklook", url, label: "" };
+    if (!(await this.checkAccess(url, tabId, this.deps.newToastId(), retry))) return;
     await this.deps.badge.begin();
     try {
       const snapshot = await this.deps.reader.read(await this.deps.fetcher.fetchHtml(url), url);
@@ -130,8 +174,9 @@ export class LinkCaptureService {
     this.deps.onComparisonsChanged();
   }
 
-  private async captureAndPlace(job: LinkAddJob, id: string): Promise<ToastMessage> {
+  private async captureAndPlace(job: LinkAddJob, id: string): Promise<{ productId: string; toast: ToastMessage }> {
     const { productId, snapshot } = await this.capture(job);
+    if (job.source === "page") await this.deps.onPageSaved?.(job.url, productId);
     const placement = await this.place(productId, snapshot, job.target);
     this.deps.log("link_capture.added", {
       url: job.url,
@@ -139,7 +184,7 @@ export class LinkCaptureService {
       productId,
       externalId: snapshot.externalId,
     });
-    return {
+    const toast: ToastMessage = {
       kind: "added",
       id,
       title: snapshot.title,
@@ -147,6 +192,7 @@ export class LinkCaptureService {
       placement: placement === null ? null : { comparisonName: placement.comparisonName, count: placement.count },
       undo: placement === null ? null : { comparisonId: placement.comparisonId, productId },
     };
+    return { productId, toast };
   }
 
   private async capture(job: LinkAddJob): Promise<CapturedProduct> {

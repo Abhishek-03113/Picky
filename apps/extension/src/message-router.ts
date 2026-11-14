@@ -1,12 +1,22 @@
-import type { ExtensionRequest, ExtensionResponse, QuickLookRequest } from "./messaging/messages.ts";
+import type { CartService } from "./carts/cart-service.ts";
+import type { CartRequest, ExtensionRequest, ExtensionResponse, QuickLookRequest } from "./messaging/messages.ts";
 import type { LinkCaptureService } from "./link-capture/link-capture-service.ts";
+import type { StoreAccessService } from "./permissions/store-access-service.ts";
+import type { SavePillService } from "./save-pill/save-pill-service.ts";
 import type { QuickLookService } from "./quicklook/quicklook-service.ts";
 
 export interface RouterDependencies {
   quickLook: Pick<QuickLookService, "init" | "select" | "add" | "remove">;
+  cart: Pick<CartService, "init" | "select" | "addSnapshot" | "setQuantity" | "remove" | "undoAdd">;
   linkCapture: Pick<LinkCaptureService, "add" | "importLink" | "undo">;
   /** Opens Quick Look in the tab a toast button was pressed in. */
   openQuickLook: (tabId: number) => Promise<void>;
+  /** Opens the Picky panel on the Cart view in the tab a toast's "Open cart" was pressed in. */
+  openCart: (tabId: number) => Promise<void>;
+  /** The permission toast's Allow / Not now. Absent: those requests are refused. */
+  storeAccess?: Pick<StoreAccessService, "allow" | "decline">;
+  /** The Save pill's buttons. Absent: those requests are refused. */
+  savePill?: Pick<SavePillService, "save" | "addToCart">;
 }
 
 /**
@@ -41,6 +51,26 @@ function dispatch(
       return deps.linkCapture.undo(request.comparisonId, request.productId);
     case "toast:quicklook":
       return sender.tabId === null ? Promise.resolve() : deps.openQuickLook(sender.tabId);
+    case "toast:undo-cart":
+      return deps.cart.undoAdd(request.cartId, request.productId, request.previousQuantity);
+    case "toast:open-cart":
+    case "pill:open-cart":
+      return sender.tabId === null ? Promise.resolve() : deps.openCart(sender.tabId);
+    case "permission:allow":
+      // Called before any await, so Chrome still sees the toast click that sent it.
+      return wired(deps.storeAccess, request.type).allow(request.source, sender.tabId, request.retry);
+    case "permission:decline":
+      return wired(deps.storeAccess, request.type).decline(request.source);
+    case "pill:save":
+      return Promise.resolve(startPillSave(request.url, request.title, sender.tabId, deps));
+    case "pill:add-to-cart":
+      return wired(deps.savePill, request.type).addToCart(request.url, request.productId);
+    case "cart:init":
+    case "cart:select":
+    case "cart:add":
+    case "cart:set-quantity":
+    case "cart:remove":
+      return dispatchCart(request, deps.cart);
     default:
       return dispatchQuickLook(request, deps.quickLook);
   }
@@ -57,6 +87,31 @@ function dispatchQuickLook(request: QuickLookRequest, quickLook: RouterDependenc
     case "quicklook:remove":
       return quickLook.remove(request.comparisonId, request.productId);
   }
+}
+
+function dispatchCart(request: CartRequest, cart: RouterDependencies["cart"]): Promise<unknown> {
+  switch (request.type) {
+    case "cart:init":
+      return cart.init();
+    case "cart:select":
+      return cart.select(request.cartId);
+    case "cart:add":
+      return cart.addSnapshot(request.cartId, request.snapshot);
+    case "cart:set-quantity":
+      return cart.setQuantity(request.cartId, request.productId, request.quantity);
+    case "cart:remove":
+      return cart.remove(request.cartId, request.productId);
+  }
+}
+
+function wired<Service>(service: Service | undefined, type: string): Service {
+  if (service === undefined) throw new Error(`No handler for "${type}" in this worker`);
+  return service;
+}
+
+/** Replies at once like a link add: the pill follows the save through page marks, the toast reports it. */
+function startPillSave(url: string, title: string, tabId: number | null, deps: RouterDependencies): void {
+  void wired(deps.savePill, "pill:save").save(url, title, tabId);
 }
 
 /** Replies at once and keeps working: a link fetch can take seconds and the toast reports progress. */

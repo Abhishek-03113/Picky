@@ -17,9 +17,11 @@ export interface PopupViewContext {
   /** Site being read, e.g. "amazon.in"; shown in the header while capturing. */
   hostLabel: string | null;
   autoOpen: boolean;
+  showSavePill: boolean;
   onDismissWelcome: () => void;
   onRetry: () => void;
   onAutoOpenChange: (checked: boolean) => void;
+  onShowSavePillChange: (checked: boolean) => void;
   onViewSpecs: () => void;
   onBackToSaved: () => void;
   /** Reads another colour's listing when it is picked in the specs view; null shows saved data only. */
@@ -48,7 +50,7 @@ export function renderPopupView(dom: Dom, state: PopupState, context: PopupViewC
         { libraryUrl },
         renderSavedView(
           dom,
-          { summary: state.summary, webBaseUrl: context.webBaseUrl, autoOpen: context.autoOpen },
+          { summary: state.summary, webBaseUrl: context.webBaseUrl, autoOpen: context.autoOpen, showSavePill: context.showSavePill },
           context,
         ),
       );

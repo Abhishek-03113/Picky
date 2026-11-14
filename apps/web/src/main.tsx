@@ -5,7 +5,10 @@ import { inject as injectWebAnalytics } from "@vercel/analytics";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { createAuthClient } from "./api/auth-client.ts";
+import { createCartsClient } from "./api/carts-client.ts";
+import { createCartSharingClient } from "./api/cart-sharing-client.ts";
 import { createComparisonsClient } from "./api/comparisons-client.ts";
+import { createPricesClient } from "./api/price-queries.ts";
 import { createWindowExtensionBridge } from "./api/extension-bridge.ts";
 import { createProductsClient } from "./api/products-client.ts";
 import { createSessionExpiryHandler } from "./auth/session-expiry.ts";
@@ -29,6 +32,9 @@ const router = createPickyRouter({
   authClient: rememberSignedIn(createAuthClient(fetch.bind(window), ""), window.localStorage),
   productsClient: createProductsClient(fetch.bind(window), ""),
   comparisonsClient: createComparisonsClient(fetch.bind(window), ""),
+  cartsClient: createCartsClient(fetch.bind(window), ""),
+  cartSharingClient: createCartSharingClient(fetch.bind(window), ""),
+  pricesClient: createPricesClient(fetch.bind(window), ""),
   extensionBridge: createWindowExtensionBridge(window, () => crypto.randomUUID()),
   config: readAppConfig(import.meta.env),
   os: detectOperatingSystem(navigator),

@@ -27,10 +27,12 @@ export function createTestContext(): { context: PopupViewContext; clicks: Record
     os: "windows",
     hostLabel: "amazon.in",
     autoOpen: true,
+    showSavePill: true,
     readColor: null,
     onDismissWelcome: () => void (clicks.dismissed += 1),
     onRetry: () => void (clicks.retried += 1),
     onAutoOpenChange: (checked) => void clicks.autoOpenChanges.push(checked),
+    onShowSavePillChange: () => undefined,
     onViewSpecs: () => void (clicks.viewedSpecs += 1),
     onBackToSaved: () => void (clicks.backedToSaved += 1),
   };

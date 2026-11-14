@@ -36,4 +36,9 @@ export interface ShoppingSite<Source extends string = string, Reader extends str
    * comparisons, so a product saved elsewhere can be looked up there.
    */
   readonly searchUrl?: string;
+  /**
+   * "beta": read from pages Picky could not capture as fixtures yet; shown as Beta in store lists.
+   * Absent for stores read from captured pages.
+   */
+  readonly status?: "beta";
 }

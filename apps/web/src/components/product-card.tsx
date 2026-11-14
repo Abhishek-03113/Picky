@@ -2,6 +2,7 @@ import { type CatalogProductSummary, formatMoney, sourceLabel } from "@picky/cat
 import { Link } from "@tanstack/react-router";
 import type { MouseEvent } from "react";
 import { formatCapturedLabel } from "../format/format-relative-date.ts";
+import { AddToCartButton } from "./add-to-cart-button.tsx";
 import { BoxIcon, CheckIcon } from "./icons.tsx";
 
 interface ProductCardProps {
@@ -19,14 +20,16 @@ export interface CardSelection {
   onToggle: () => void;
 }
 
-/** One product in the library, linking to its spec sheet. */
+/** One product in the library, linking to its spec sheet, with "Add to cart" under it. */
 export function ProductCard({ product, now, selection }: ProductCardProps) {
-  const link = <CardLink product={product} now={now} selection={selection} />;
-  if (selection === undefined) return link;
   return (
-    <div className={selection.selected ? "card-frame selected" : "card-frame"}>
-      {link}
-      <SelectionTick title={product.title} selection={selection} />
+    <div className={selection?.selected === true ? "card-frame with-cart selected" : "card-frame with-cart"}>
+      <CardLink product={product} now={now} selection={selection} />
+      {selection !== undefined && <SelectionTick title={product.title} selection={selection} />}
+      {/* Outside the card link: a button inside a link would open the product instead. */}
+      <div className="product-card-actions">
+        <AddToCartButton productId={product.id} title={product.title} />
+      </div>
     </div>
   );
 }

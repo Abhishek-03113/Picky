@@ -14,7 +14,14 @@ const fixtures = await Promise.all((await store.listNames()).map((name) => store
 
 // amazon.com shares the amazon.in extractor and has unit tests, but no captured page yet: capture one with
 // `bun run fixtures:capture https://www.amazon.com/dp/<ASIN> <slug>` and drop it from this list.
-const SOURCES_WITHOUT_FIXTURES: ReadonlySet<ProductSource> = new Set(["amazon.com"]);
+const SOURCES_WITHOUT_FIXTURES: ReadonlySet<ProductSource> = new Set([
+  "amazon.com",
+  "walmart.com",
+  "target.com",
+  "bestbuy.com",
+  "ebay.com",
+  "etsy.com",
+]);
 
 test("there is at least one fixture per supported source", () => {
   const expected = PRODUCT_SOURCES.filter((source) => !SOURCES_WITHOUT_FIXTURES.has(source));

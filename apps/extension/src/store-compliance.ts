@@ -18,6 +18,7 @@ export interface StoreManifest {
   background?: { service_worker?: string };
   permissions?: string[];
   host_permissions?: string[];
+  optional_host_permissions?: string[];
   content_scripts?: { matches: string[]; js: string[] }[];
 }
 
@@ -109,7 +110,11 @@ function referencedFileProblems(manifest: StoreManifest, paths: ReadonlySet<stri
 
 function permissionProblems(manifest: StoreManifest): string[] {
   const unexplained = (manifest.permissions ?? []).filter((permission) => !(permission in PERMISSION_JUSTIFICATIONS));
-  const hosts = [...(manifest.host_permissions ?? []), ...contentScriptMatches(manifest)];
+  const hosts = [
+    ...(manifest.host_permissions ?? []),
+    ...(manifest.optional_host_permissions ?? []),
+    ...contentScriptMatches(manifest),
+  ];
   return [
     ...unexplained.map((permission) => `permission "${permission}" has no store justification`),
     ...hosts.filter((host) => BROAD_HOSTS.has(host)).map((host) => `host pattern "${host}" is broader than needed`),
@@ -137,7 +142,12 @@ function codeProblems(files: readonly PackageFile[]): string[] {
 
 function releaseProblems(manifest: StoreManifest): string[] {
   const homepage = typeof manifest.homepage_url === "string" ? [manifest.homepage_url] : [];
-  const origins = new Set([...(manifest.host_permissions ?? []), ...contentScriptMatches(manifest), ...homepage]);
+  const origins = new Set([
+    ...(manifest.host_permissions ?? []),
+    ...(manifest.optional_host_permissions ?? []),
+    ...contentScriptMatches(manifest),
+    ...homepage,
+  ]);
   const notPublic = [...origins]
     .filter((origin) => !isPublicHttps(origin))
     .map((origin) => `${origin} is not a public https origin; build with PICKY_WEB_URL=https://<your web domain>`);

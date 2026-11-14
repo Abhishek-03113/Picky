@@ -1,12 +1,23 @@
 import { COMPARE_SHORTCUT, QUICK_LOOK_SHORTCUT, shortcutKeyLabels, type OperatingSystem } from "@picky/catalog";
 import { Dom } from "../popup/dom.ts";
-import { showsSpecs, type QuickLookModel } from "./quicklook-model.ts";
+import { effectiveView, showsSpecs, type QuickLookModel } from "./quicklook-model.ts";
 
 /** One hint: a key cap per key, then what it does. */
 function hint(dom: Dom, keys: readonly string[], text: string): HTMLElement {
   return dom.el("span", { className: "hint" }, [
     ...keys.flatMap((key) => [dom.el("kbd", { className: "kbd", text: key }), " "]),
     text,
+  ]);
+}
+
+/** The Cart view's hints: Return adds this page (only on a product page), the arrows switch carts. */
+function cartFooter(dom: Dom, model: QuickLookModel, os: OperatingSystem): HTMLElement {
+  const addHint = model.pageSnapshot === null ? [] : [hint(dom, shortcutKeyLabels(["Enter"], os), "add to cart")];
+  return dom.el("footer", { className: "footer" }, [
+    hint(dom, ["Esc"], "close"),
+    ...addHint,
+    hint(dom, ["←", "→"], "switch cart"),
+    hint(dom, shortcutKeyLabels(QUICK_LOOK_SHORTCUT, os), "details"),
   ]);
 }
 
@@ -24,6 +35,7 @@ export function footerView(dom: Dom, model: QuickLookModel, os: OperatingSystem)
       hint(dom, ["Esc"], "close"),
       hint(dom, shortcutKeyLabels(COMPARE_SHORTCUT, os), "compare"),
     ]);
+  if (effectiveView(model) === "cart") return cartFooter(dom, model, os);
   const state = model.state;
   const hints = [
     hint(dom, ["Esc"], "close"),
