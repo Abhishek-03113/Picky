@@ -1,15 +1,18 @@
 import { Dom } from "../popup/dom.ts";
-import type { ToastActionRequest } from "../messaging/messages.ts";
+import type { PermissionRequest, ToastActionRequest } from "../messaging/messages.ts";
 import type { ToastMessage } from "./toast-message.ts";
 import { toastView } from "./toast-view.ts";
 
 const AUTO_DISMISS_MS: Readonly<Record<ToastMessage["kind"], number | null>> = {
   reading: null,
   added: 9000,
+  "cart-added": 9000,
   failed: 12000,
+  // Long enough to read and decide; ignoring it is not a "Not now", so the next link asks again.
+  permission: 20000,
 };
 
-type SendAction = (request: ToastActionRequest) => void;
+type SendAction = (request: ToastActionRequest | PermissionRequest) => void;
 
 /**
  * The toast stack in a closed shadow root. Showing a message with an existing id replaces that toast,
@@ -36,7 +39,20 @@ export class ToastStack {
         this.send({ type: "toast:undo", comparisonId, productId });
         this.remove(message.id);
       },
+      openCart: () => this.send({ type: "toast:open-cart" }),
+      undoCart: (undo) => {
+        this.send({ type: "toast:undo-cart", ...undo });
+        this.remove(message.id);
+      },
       dismiss: () => this.remove(message.id),
+      allowStore: (source, retry) => {
+        this.send({ type: "permission:allow", source, retry });
+        this.remove(message.id);
+      },
+      declineStore: (source) => {
+        this.send({ type: "permission:decline", source });
+        this.remove(message.id);
+      },
     });
     this.stack.append(card);
     const delay = AUTO_DISMISS_MS[message.kind];

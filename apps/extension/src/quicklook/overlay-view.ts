@@ -1,18 +1,28 @@
-import type { OperatingSystem } from "@picky/catalog";
+import type { OperatingSystem, ProductSnapshot } from "@picky/catalog";
 import { Dom } from "../popup/dom.ts";
+import { cartButton, cartView } from "./cart-view.ts";
 import { footerView } from "./footer-view.ts";
 import { headerView } from "./header-view.ts";
 import { matrixView } from "./matrix-view.ts";
 import { emptyComparisonView, emptyView, failedView, loadingView, signedOutView } from "./notice-view.ts";
 import type { OverlayActions } from "./overlay-actions.ts";
 import { renderSpecSheetContent } from "../popup/specs/spec-sheet-view.ts";
-import { showsSpecs, thisPageColumn, type QuickLookModel } from "./quicklook-model.ts";
+import { effectiveView, selectedCartName, showsSpecs, thisPageColumn, type QuickLookModel } from "./quicklook-model.ts";
 import { failureHint } from "../failure-hint.ts";
+
+/** The details view: "Add to cart" for this page above its spec sheet. */
+function detailsContent(dom: Dom, page: ProductSnapshot, model: QuickLookModel, actions: OverlayActions): HTMLElement {
+  return dom.el("div", { className: "details" }, [
+    dom.el("div", { className: "details-actions" }, [cartButton(dom, model, actions, "details")]),
+    renderSpecSheetContent(dom, page, actions.readColor),
+  ]);
+}
 
 function bodyContent(dom: Dom, model: QuickLookModel, actions: OverlayActions): HTMLElement {
   // The page snapshot is already in the model, so specs render without waiting for the comparison API.
-  if (model.pageSnapshot !== null && showsSpecs(model))
-    return renderSpecSheetContent(dom, model.pageSnapshot, actions.readColor);
+  if (model.pageSnapshot !== null && showsSpecs(model)) return detailsContent(dom, model.pageSnapshot, model, actions);
+  // The cart loads on its own, so it never waits for the comparisons either.
+  if (effectiveView(model) === "cart") return cartView(dom, model, actions);
   if (model.status === "loading") return loadingView(dom);
   if (model.status === "failed") return failedView(dom, model.message ?? "unknown error", actions);
   const state = model.state;
@@ -23,8 +33,18 @@ function bodyContent(dom: Dom, model: QuickLookModel, actions: OverlayActions): 
 }
 
 function errorBanner(dom: Dom, model: QuickLookModel): HTMLElement[] {
-  if (model.status !== "ready" || model.message === null || showsSpecs(model)) return [];
-  return [dom.el("p", { className: "banner", text: failureHint(model.message), attrs: { role: "alert" } })];
+  // Specs show only cart failures ("Add to cart" is their one action); the cart's own screen shows a first-load failure.
+  const forCompare = effectiveView(model) === "compare";
+  const status = forCompare ? model.status : model.cartStatus;
+  const message = forCompare ? model.message : model.cartMessage;
+  if (status !== "ready" || message === null) return [];
+  return [dom.el("p", { className: "banner", text: failureHint(message), attrs: { role: "alert" } })];
+}
+
+function dialogLabel(model: QuickLookModel): string {
+  if (effectiveView(model) === "cart") return selectedCartName(model) ?? "cart";
+  const state = model.state;
+  return state?.comparisons.find((comparison) => comparison.id === state.selectedId)?.name ?? "comparison";
 }
 
 /**
@@ -42,8 +62,7 @@ export function overlayView(
   actions: OverlayActions,
   { entering, os }: { entering: boolean; os: OperatingSystem },
 ): HTMLElement {
-  const label =
-    model.state?.comparisons.find((comparison) => comparison.id === model.state?.selectedId)?.name ?? "comparison";
+  const label = dialogLabel(model);
   const backdrop = dom.el("div", { className: "backdrop", attrs: { "aria-hidden": "true" } });
   backdrop.addEventListener("click", () => actions.close());
   const body = dom.el("div", { className: "body" }, [...errorBanner(dom, model), bodyContent(dom, model, actions)]);

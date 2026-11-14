@@ -122,6 +122,14 @@ export function PlusIcon({ size }: IconProps) {
   );
 }
 
+export function MinusIcon({ size }: IconProps) {
+  return (
+    <StrokeIcon size={size} strokeWidth={2.4}>
+      <path d="M5 12h14" />
+    </StrokeIcon>
+  );
+}
+
 export function CloseIcon({ size }: IconProps) {
   return (
     <StrokeIcon size={size} strokeWidth={2.4}>

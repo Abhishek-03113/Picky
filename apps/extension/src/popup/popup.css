@@ -424,6 +424,11 @@ p {
   justify-content: space-between;
   gap: var(--ez-space-12);
 }
+.setting-row-follow {
+  margin-top: 0;
+  border-top: 0;
+  padding-top: 12px;
+}
 .setting-label {
   font-size: 15px;
 }

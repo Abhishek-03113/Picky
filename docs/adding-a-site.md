@@ -28,6 +28,11 @@ Add an entry to `SITE_LIST` in [`packages/catalog/src/sites/shopping-sites.ts`](
 
 Order matters only for display (store filter, lists).
 
+**Beta stores.** A store whose reader was written without captured pages gets `status: "beta"`.
+Store lists show it as Beta, and its source goes in `SOURCES_WITHOUT_FIXTURES` (step 3). Drop the
+flag once a real page is captured as a fixture and the reader passes it. Beta entries go after the
+established stores in `SITE_LIST`, so those stay first in every list.
+
 ## 2. Give it a page reader
 
 TypeScript now fails in [`packages/catalog/src/extract/site-extractors.ts`](../packages/catalog/src/extract/site-extractors.ts)
@@ -38,6 +43,15 @@ until the new `reader` has a factory in `READERS`. Pick the cheapest one that wo
   `createJsonLdExtractor(site, rules)` from `extract/shared/json-ld-extractor.ts`. `rules` needs only
   `parseProductUrl`; add `readSpecGroups` / `readHighlights` when the spec table is in the page rather
   than the JSON-LD. `extract/flipkart/` is the worked example.
+- **The page states the product in several places** (JSON-LD, page-state JSON, its own widgets, meta
+  tags): use `createLayeredExtractor(site, rules)` from `extract/shared/layered-reader.ts`. `rules`
+  gives `parseProductUrl` and `sources`, most trusted first; each field (title, price, list price,
+  images, rating, …) comes from the first source that has it. Ready-made sources are `jsonLdSource`,
+  `metaSource` and `microdataSource`; write the store's own with `namedSource("<store>-…", (page) => …)`,
+  using `readEmbeddedJson` (`extract/shared/embedded-json.ts`) for `__NEXT_DATA__` style state and
+  `jsonAt` / `jsonText` / `jsonNumber` (`extract/shared/json-path.ts`) to walk it with every step
+  guarded. Add `readSpecGroups`, `readHighlights` and `readVariant` as the page allows.
+  `extract/walmart/` and `extract/target/` are worked examples.
 - **No JSON-LD**: write a reader over the page's own markup, as `extract/amazon/` does. Put it in
   `extract/<store>/`, keep it pure (it runs in the browser and on the server), and reuse
   `extract/shared/` for spec tables, breadcrumbs and money.
@@ -61,6 +75,9 @@ until the new `reader` has a factory in `READERS`. Pick the cheapest one that wo
   [`chrome-web-store.md`](chrome-web-store.md) and `apps/extension/store/promo.html` (re-render the
   promo PNGs). A test fails until the listing names the new domain and the promo tile names the store
   (the tile says "Amazon", not each Amazon country).
-- Bump `version` in `apps/extension/public/manifest.json`. A new host permission makes Chrome disable
-  the extension for existing users until they accept it, so say why in the release notes.
+- Bump `version` in `apps/extension/public/manifest.json`. A new required host permission makes Chrome
+  disable the extension for existing users until they accept it, so say why in the release notes. A site
+  with `status: "beta"` avoids that: its host becomes an optional host permission, asked the first time
+  Picky must download a page there ("Allow Picky on <Store>" toast), and its Alt+click and Save pill
+  scripts are registered at runtime once allowed (`apps/extension/src/permissions/`).
 - Update `LAST_UPDATED` on the privacy page: its store list changed.

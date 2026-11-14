@@ -13,7 +13,7 @@ import { publicPage } from "../seo/public-pages.ts";
 
 /** Where privacy questions and deletion requests go; also linked from the Chrome Web Store listing. */
 export const PRIVACY_CONTACT_URL = "https://github.com/Abhishek-03113/Picky/issues";
-const LAST_UPDATED = "2 November 2026";
+const LAST_UPDATED = "12 November 2026";
 // "Amazon (amazon.in and amazon.com), Flipkart and the Picky website": exactly where the extension works.
 const STORES_AND_PICKY = formatList([...storeNamesWithDomains(), "the Picky website"], "and");
 // Every company and store name that belongs to someone else: "Amazon and Flipkart".
@@ -62,6 +62,14 @@ export function PrivacyPage() {
               <strong>Comparisons you create.</strong> The names you give your comparisons and the products in them.
             </li>
             <li>
+              <strong>Carts.</strong> The names you give your carts, the products in them, quantities, variants and any
+              notes you write.
+            </li>
+            <li>
+              <strong>Price history.</strong> The price of a product on the day you save it, kept so Picky can show how
+              it has changed.
+            </li>
+            <li>
               <strong>Extension preferences.</strong> A few settings, such as the comparison you used last, kept on your
               own device.
             </li>
@@ -75,6 +83,36 @@ export function PrivacyPage() {
             <li>Seeing a product's details without saving it happens entirely in your browser. Nothing is stored.</li>
             <li>It saves a product to your account only when you choose to save it.</li>
             <li>It does not track the sites you visit or collect your browsing history.</li>
+            <li>
+              Some stores are optional. The extension asks for access to one the first time it needs to download a
+              product link from it in the background, such as saving from a link. Saving the page you have open does
+              not need it, and you can remove the access in your browser at any time.
+            </li>
+          </ul>
+
+          <h2>Share links</h2>
+          <ul>
+            <li>You choose whether to share a cart. Nothing is shared until you create a link.</li>
+            <li>
+              Anyone with the link can open it without an account. It shows only the cart&apos;s name and its items:
+              title, image, price, store, quantity, variant and the store link.
+            </li>
+            <li>It never shows your email address or your notes.</li>
+            <li>
+              Search engines are asked not to list shared carts, but anyone you give the link to can pass it on.
+            </li>
+            <li>You can turn a link off at any time. It then stops working for everyone.</li>
+            <li>A person who opens a link can save a copy to their own account. Their copy is theirs, not yours.</li>
+          </ul>
+
+          <h2>Price history</h2>
+          <ul>
+            <li>Picky records a price only when your browser saves a product to your account.</li>
+            <li>Picky does not visit store pages in the background to check prices, and it has no price alerts.</li>
+            <li>
+              Checking out happens on the store&apos;s own site. Picky never sees your payment details, and it adds no
+              affiliate tags to links.
+            </li>
           </ul>
 
           <h2>How we use your information</h2>

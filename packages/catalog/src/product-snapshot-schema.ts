@@ -78,6 +78,15 @@ export const ProductSnapshotSchema = z.object({
   // Rows stored before size charts and colours existed lack these keys; defaults keep them readable.
   sizeCharts: z.array(SizeChartSchema).default([]),
   colorOptions: z.array(ColorOptionSchema).default([]),
+  // Rows stored before 2.0 lack these keys.
+  variant: z.string().min(1).nullable().default(null),
+  identifiers: z
+    .object({
+      gtin: z.string().min(1).nullable().default(null),
+      mpn: z.string().min(1).nullable().default(null),
+      model: z.string().min(1).nullable().default(null),
+    })
+    .default({ gtin: null, mpn: null, model: null }),
   capturedAt: z.iso.datetime(),
 });
 
@@ -86,3 +95,6 @@ export const ProductSnapshotSchema = z.object({
 type Same<A, B> = (<T>() => T extends A ? 1 : 2) extends <T>() => T extends B ? 1 : 2 ? true : false;
 type Assert<Condition extends true> = Condition;
 export type SchemaMatchesSnapshotType = Assert<Same<z.infer<typeof ProductSnapshotSchema>, ProductSnapshot>>;
+
+// Backup files are validated with the same zod, so they ship from this entry (`@picky/catalog/schema`).
+export * from "./cart/cart-backup-schema.ts";

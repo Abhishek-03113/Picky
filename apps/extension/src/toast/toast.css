@@ -70,6 +70,10 @@
   background: var(--ez-green-soft);
   color: var(--ez-green-text);
 }
+.toast-badge-ask {
+  color: var(--ez-blue);
+  background: var(--ez-blue-soft);
+}
 .toast-badge-fail {
   background: var(--ez-red);
   color: var(--ez-on-accent);

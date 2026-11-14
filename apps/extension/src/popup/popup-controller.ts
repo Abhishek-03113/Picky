@@ -35,6 +35,7 @@ export function hostLabelOf(url: string): string | null {
 export class PopupController {
   private readonly dom: Dom;
   private autoOpen = false;
+  private showSavePill = true;
   /** The last saved capture, kept so Back from the spec view can return to it. */
   private lastSummary: SavedSummary | null = null;
   private hostLabel: string | null = null;
@@ -46,6 +47,7 @@ export class PopupController {
   async start(): Promise<void> {
     const settings = await this.deps.settings.load();
     this.autoOpen = settings.autoOpenSheet;
+    this.showSavePill = settings.showSavePill;
     if (settings.firstRunDismissed) return this.capture();
     this.show({ kind: "welcome" });
   }
@@ -77,9 +79,11 @@ export class PopupController {
       os: this.deps.os,
       hostLabel: this.hostLabel,
       autoOpen: this.autoOpen,
+      showSavePill: this.showSavePill,
       onDismissWelcome: () => void this.dismissWelcome(),
       onRetry: () => void this.capture(),
       onAutoOpenChange: (checked) => void this.saveAutoOpen(checked),
+      onShowSavePillChange: (checked) => void this.saveShowSavePill(checked),
       onViewSpecs: () => this.showSummaryAs("specs"),
       onBackToSaved: () => this.showSummaryAs("saved"),
       readColor: this.deps.readColor ?? null,
@@ -94,6 +98,12 @@ export class PopupController {
   private async dismissWelcome(): Promise<void> {
     await this.deps.settings.dismissFirstRun();
     await this.capture();
+  }
+
+  /** Turning it on also clears "Hide everywhere" (SettingsStore.setShowSavePill); per-store hides stay. */
+  private async saveShowSavePill(checked: boolean): Promise<void> {
+    this.showSavePill = checked;
+    await this.deps.settings.setShowSavePill(checked);
   }
 
   private async saveAutoOpen(checked: boolean): Promise<void> {

@@ -1,6 +1,7 @@
 import type { CatalogProduct } from "@picky/catalog";
 import { Link } from "@tanstack/react-router";
 import { ratingLine, shortProductName } from "../comparison/comparison-labels.ts";
+import { AddToCartButton } from "./add-to-cart-button.tsx";
 import { BoxIcon, CloseIcon } from "./icons.tsx";
 
 interface ComparisonProductHeaderProps {
@@ -8,7 +9,7 @@ interface ComparisonProductHeaderProps {
   onRemove: () => void;
 }
 
-/** A matrix column head: image, brand, name (links to the spec sheet), rating and a remove button. */
+/** A matrix column head: image, brand, name (links to the spec sheet), rating, "Add to cart" and a remove button. */
 export function ComparisonProductHeader({ product, onRemove }: ComparisonProductHeaderProps) {
   const { snapshot } = product;
   const name = shortProductName(snapshot.title, snapshot.brand);
@@ -38,6 +39,7 @@ export function ComparisonProductHeader({ product, onRemove }: ComparisonProduct
         {name}
       </Link>
       <span className="mx-head-rating">{ratingLine(snapshot.rating)}</span>
+      <AddToCartButton productId={product.id} title={snapshot.title} />
     </div>
   );
 }

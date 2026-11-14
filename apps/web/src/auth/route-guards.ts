@@ -12,6 +12,8 @@ export const PRIVACY_PATH = "/privacy";
  * Pages anyone may open. "/" is the library when signed in and the homepage when signed out, so a
  * shared Picky link explains the product before it asks for an account.
  */
+/** A shared cart link (/c/<slug>) is for people without an account, so it is public too. */
+const SHARED_CART_PREFIX = "/c/";
 const PUBLIC_PATHS: ReadonlySet<string> = new Set(["/", SIGN_IN_PATH, EXTENSION_PATH, PRIVACY_PATH]);
 
 interface GuardContext {
@@ -38,7 +40,7 @@ export async function requireSignedIn(
   context: GuardContext,
   location: { pathname: string; href: string },
 ): Promise<void> {
-  if (PUBLIC_PATHS.has(location.pathname)) return;
+  if (PUBLIC_PATHS.has(location.pathname) || location.pathname.startsWith(SHARED_CART_PREFIX)) return;
   if (!(await isSignedIn(context))) throw redirect({ to: SIGN_IN_PATH, search: { redirect: location.href } });
 }
 

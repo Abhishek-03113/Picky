@@ -1,6 +1,7 @@
 import type { OperatingSystem, ProductSnapshot } from "@picky/catalog";
+import type { CartApi } from "../carts/cart-api.ts";
 import type { ReadColorOption } from "../link-capture/color-page-reader.ts";
-import type { QuickLookState } from "../messaging/messages.ts";
+import type { CartState, QuickLookState } from "../messaging/messages.ts";
 import { Dom } from "../popup/dom.ts";
 import { focusableControls, nextFocusTarget } from "./focus-trap.ts";
 import type { OverlayActions } from "./overlay-actions.ts";
@@ -9,6 +10,7 @@ import type { QuickLookApi } from "./quicklook-api.ts";
 import {
   INITIAL_MODEL,
   effectiveView,
+  neighbourCartId,
   neighbourComparisonId,
   showsSpecs,
   type QuickLookModel,
@@ -21,6 +23,8 @@ export interface QuickLookControllerDependencies {
   /** Reads the live tab, or returns null when it is not a product page. */
   readPage: () => ProductSnapshot | null;
   api: QuickLookApi;
+  /** The Cart view and "Add to cart"; loaded on demand, independently of the comparisons. */
+  cartApi: CartApi;
   /** Asks the host to remove the overlay. */
   onClose: () => void;
   /** The element focused inside the shadow root (closed roots hide it from outside, so the host passes it). */
@@ -54,12 +58,14 @@ export class QuickLookController implements OverlayActions {
 
   /**
    * Loads the model and renders it on `view` (specs by default; compare when the page is not a product).
+   * The cart loads too when the panel opens on it.
    *
    * @example await controller.open("compare")
    */
   async open(view: QuickLookView = "specs"): Promise<void> {
     this.model = { ...INITIAL_MODEL, view, pageSnapshot: this.deps.readPage() };
     this.render();
+    if (view === "cart") void this.loadCart(() => this.deps.cartApi.init());
     await this.load(() => this.deps.api.init());
   }
 
@@ -89,9 +95,31 @@ export class QuickLookController implements OverlayActions {
     void this.load(() => this.deps.api.remove(selectedId, productId));
   }
 
+  addPageToCart(): void {
+    const page = this.model.pageSnapshot;
+    if (page === null || this.model.cartBusy) return;
+    void this.loadCart(() => this.deps.cartApi.add(this.model.cart?.selectedId ?? null, page));
+  }
+
+  selectCart(cartId: string): void {
+    void this.loadCart(() => this.deps.cartApi.select(cartId));
+  }
+
+  setCartQuantity(productId: string, quantity: number): void {
+    const cartId = this.model.cart?.selectedId;
+    if (cartId === undefined || cartId === null || this.model.cartBusy) return;
+    void this.loadCart(() => this.deps.cartApi.setQuantity(cartId, productId, quantity));
+  }
+
+  retryCart(): void {
+    this.model = { ...this.model, cartStatus: "loading", cartMessage: null };
+    this.render();
+    void this.loadCart(() => this.deps.cartApi.init());
+  }
+
   /**
-   * Switches between the comparison matrix and this page's spec sheet. Asking for "specs" on a page
-   * with no snapshot is ignored: there is nothing to show.
+   * Switches between this page's spec sheet, the comparison matrix and the cart. Asking for "specs" on a
+   * page with no snapshot is ignored: there is nothing to show. The cart loads the first time it is shown.
    *
    * @example controller.setView("specs") // no-op on a search page
    */
@@ -99,6 +127,7 @@ export class QuickLookController implements OverlayActions {
     if (view === "specs" && this.model.pageSnapshot === null) return;
     this.model = { ...this.model, view };
     this.render({ keepScroll: false });
+    if (view === "cart" && this.model.cartStatus === "idle") void this.loadCart(() => this.deps.cartApi.init());
   }
 
   /** The view on screen, after the no-page fallback; the host compares it with the requested view to toggle. */
@@ -113,10 +142,14 @@ export class QuickLookController implements OverlayActions {
     if (event.key === "Tab") return this.trapTab(active, event.shiftKey);
     // The compare shortcuts act on controls the specs view hides, so they must not fire blind there.
     if (showsSpecs(this.model)) return false;
+    const inCart = effectiveView(this.model) === "cart";
     const tag = active?.tagName ?? "";
-    if (event.key === "Enter" && !CONTROL_KEYS_IGNORED_ON.has(tag)) return this.run(() => this.addPage());
-    if ((event.key === "ArrowLeft" || event.key === "ArrowRight") && !ARROW_KEYS_IGNORED_ON.has(tag))
-      return this.switchBy(event.key === "ArrowRight" ? 1 : -1);
+    if (event.key === "Enter" && !CONTROL_KEYS_IGNORED_ON.has(tag))
+      return this.run(() => (inCart ? this.addPageToCart() : this.addPage()));
+    if ((event.key === "ArrowLeft" || event.key === "ArrowRight") && !ARROW_KEYS_IGNORED_ON.has(tag)) {
+      const step = event.key === "ArrowRight" ? 1 : -1;
+      return inCart ? this.switchCartBy(step) : this.switchBy(step);
+    }
     return false;
   }
 
@@ -131,6 +164,30 @@ export class QuickLookController implements OverlayActions {
     if (next === null) return false;
     this.select(next);
     return true;
+  }
+
+  private switchCartBy(step: 1 | -1): boolean {
+    const cart = this.model.cart;
+    const next = cart === null ? null : neighbourCartId(cart, step);
+    if (next === null) return false;
+    this.selectCart(next);
+    return true;
+  }
+
+  /** Like `load`, for the cart: its own busy flag and message, so the two never block each other. */
+  private async loadCart(request: () => Promise<CartState>): Promise<void> {
+    const cartStatus = this.model.cart === null ? "loading" : this.model.cartStatus;
+    this.model = { ...this.model, cartStatus, cartBusy: true, cartMessage: null };
+    this.render();
+    try {
+      this.model = { ...this.model, cartStatus: "ready", cart: await request(), cartBusy: false };
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      console.warn("picky.quicklook.cart_failed", message);
+      const failedStatus = this.model.cart === null ? "failed" : "ready";
+      this.model = { ...this.model, cartStatus: failedStatus, cartMessage: message, cartBusy: false };
+    }
+    this.render();
   }
 
   private trapTab(active: Element | null, backwards: boolean): boolean {

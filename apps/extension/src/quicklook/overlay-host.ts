@@ -1,5 +1,7 @@
 import { detectOperatingSystem, type ProductSnapshot } from "@picky/catalog";
 import { capturePage } from "../capture-page.ts";
+import type { CartApi } from "../carts/cart-api.ts";
+import { ChromeCartApi } from "../carts/chrome-cart-api.ts";
 import { colorPageReader, type ReadColorOption } from "../link-capture/color-page-reader.ts";
 import { ChromeQuickLookApi } from "./chrome-quicklook-api.ts";
 import { QuickLookController } from "./quicklook-controller.ts";
@@ -12,6 +14,8 @@ export interface OverlayHostDependencies {
   document: Document;
   stylesheet: string;
   api: QuickLookApi;
+  /** The cart's messages to the service worker; defaults to chrome.runtime. */
+  cartApi?: CartApi;
   /** Reads the live tab; defaults to the real page, injectable so tests need no product page. */
   readPage?: () => ProductSnapshot | null;
   /** Reads another colour's listing; defaults to fetching it from this page (same origin, the user's cookies). */
@@ -91,6 +95,7 @@ export class QuickLookOverlay {
     const controller = new QuickLookController({
       container,
       api: this.deps.api,
+      cartApi: this.deps.cartApi ?? new ChromeCartApi(),
       readPage,
       onClose: close,
       activeElement: () => root.activeElement,

@@ -5,7 +5,7 @@ import { PriceCard } from "./price-card.tsx";
 import { RatingNote } from "./rating-note.tsx";
 
 /** Top of the spec sheet: gallery on one side; brand, title, rating, price and highlights on the other. */
-export function ProductSummary({ snapshot }: { snapshot: ProductSnapshot }) {
+export function ProductSummary({ productId, snapshot }: { productId: string; snapshot: ProductSnapshot }) {
   return (
     <section className="summary">
       <ImageGallery images={snapshot.images} alt={snapshot.title} />
@@ -18,7 +18,7 @@ export function ProductSummary({ snapshot }: { snapshot: ProductSnapshot }) {
           <h1>{snapshot.title}</h1>
           <RatingNote rating={snapshot.rating} />
         </div>
-        <PriceCard snapshot={snapshot} />
+        <PriceCard productId={productId} snapshot={snapshot} />
         <HighlightList highlights={snapshot.highlights} />
       </div>
     </section>
