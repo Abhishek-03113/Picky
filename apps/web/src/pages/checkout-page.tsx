@@ -80,7 +80,9 @@ export function CheckoutPage() {
               <CheckoutStoreRow
                 key={step.source}
                 step={step}
-                items={cart.items.filter((item) => item.product.snapshot.source === step.source && !isSkipped(plan, item))}
+                items={cart.items.filter(
+                  (item) => item.product.snapshot.source === step.source && !isSkipped(plan, item),
+                )}
                 done={doneSources.includes(step.source)}
                 onToggleDone={(done) => toggle(step.source, done)}
               />
@@ -132,7 +134,9 @@ function SidePanel({ plan }: { plan: CheckoutPlan }) {
       {plan.steps.map((step) => (
         <p key={step.source} className="cart-total-line">
           <span>{step.label}</span>
-          <strong>{step.subtotals.length === 0 ? "Price not listed" : step.subtotals.map(formatMoney).join(" + ")}</strong>
+          <strong>
+            {step.subtotals.length === 0 ? "Price not listed" : step.subtotals.map(formatMoney).join(" + ")}
+          </strong>
         </p>
       ))}
       <p className="hint">Items total, before delivery and tax. Each store shows its final amount.</p>

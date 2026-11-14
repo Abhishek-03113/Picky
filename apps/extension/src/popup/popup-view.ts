@@ -50,7 +50,12 @@ export function renderPopupView(dom: Dom, state: PopupState, context: PopupViewC
         { libraryUrl },
         renderSavedView(
           dom,
-          { summary: state.summary, webBaseUrl: context.webBaseUrl, autoOpen: context.autoOpen, showSavePill: context.showSavePill },
+          {
+            summary: state.summary,
+            webBaseUrl: context.webBaseUrl,
+            autoOpen: context.autoOpen,
+            showSavePill: context.showSavePill,
+          },
           context,
         ),
       );

@@ -158,7 +158,9 @@ async function exportCart(c: SignedInContext, deps: CartRouteDependencies): Prom
   const id = c.req.param("id") ?? "";
   const format = c.req.query("format") ?? "json";
   if (!isExportFormat(format)) {
-    throw new BadRequestError(`Export format "${format}" is not supported; expected one of ${EXPORT_FORMATS.join(", ")}`);
+    throw new BadRequestError(
+      `Export format "${format}" is not supported; expected one of ${EXPORT_FORMATS.join(", ")}`,
+    );
   }
   const cart = await deps.carts.findCart(userIdOf(c), id);
   if (cart === null) return cartNotFound(c, id);
@@ -174,7 +176,10 @@ function isExportFormat(format: string): format is (typeof EXPORT_FORMATS)[numbe
 
 // Header-safe: ASCII letters, digits and dashes only, so a cart name never breaks the quoted filename.
 function exportFileName(cartName: string): string {
-  const slug = cartName.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+  const slug = cartName
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
   return `picky-${slug || "cart"}`;
 }
 

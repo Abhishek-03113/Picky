@@ -1,10 +1,4 @@
-import {
-  type CartItem,
-  type CatalogCartDetail,
-  formatList,
-  groupCartByStore,
-  pluralize,
-} from "@picky/catalog";
+import { type CartItem, type CatalogCartDetail, formatList, groupCartByStore, pluralize } from "@picky/catalog";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { Link, getRouteApi } from "@tanstack/react-router";
 import { useState } from "react";
@@ -89,7 +83,13 @@ function CartHead({ cart, selectedProductIds }: { cart: CatalogCartDetail; selec
 /** "3 items from 2 stores", or "3 items from Amazon" when they all come from one. */
 function cartSubtitle(items: readonly CartItem[]): string {
   const groups = groupCartByStore(items);
-  const stores = groups.length === 1 ? formatList(groups.map((group) => group.label), "and") : pluralize(groups.length, "store");
+  const stores =
+    groups.length === 1
+      ? formatList(
+          groups.map((group) => group.label),
+          "and",
+        )
+      : pluralize(groups.length, "store");
   return `${pluralize(items.length, "item")} from ${stores}`;
 }
 

@@ -81,7 +81,11 @@ export class SavePillView {
   }
 
   private menuItem(label: string, onClick: () => void): HTMLButtonElement {
-    const item = this.dom.el("button", { className: "pill-menu-item", text: label, attrs: { type: "button", role: "menuitem" } });
+    const item = this.dom.el("button", {
+      className: "pill-menu-item",
+      text: label,
+      attrs: { type: "button", role: "menuitem" },
+    });
     item.addEventListener("click", () => {
       this.toggleMenu(false);
       onClick();

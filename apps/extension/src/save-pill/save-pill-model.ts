@@ -3,10 +3,7 @@ import type { PageMark } from "./page-marks.ts";
 
 /** What the pill offers on a product page. */
 export type PillState =
-  | { kind: "save" }
-  | { kind: "reading" }
-  | { kind: "saved"; productId: string }
-  | { kind: "in-cart"; quantity: number };
+  { kind: "save" } | { kind: "reading" } | { kind: "saved"; productId: string } | { kind: "in-cart"; quantity: number };
 
 /** A "reading" mark older than this is from a save the worker never finished (it was stopped mid-way). */
 const STALE_READING_MS = 2 * 60_000;

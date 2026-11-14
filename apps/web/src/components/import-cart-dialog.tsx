@@ -84,7 +84,11 @@ export function ImportCartDialog({ carts, defaultCartId = null, onClose }: Impor
           </label>
           <label className="field">
             <span className="field-label">Or a Picky file</span>
-            <input type="file" accept="application/json,.json" onChange={(event) => void chooseFile(event.target.files?.[0])} />
+            <input
+              type="file"
+              accept="application/json,.json"
+              onChange={(event) => void chooseFile(event.target.files?.[0])}
+            />
           </label>
           {fileError && (
             <p className="form-error" role="alert">
@@ -107,11 +111,17 @@ export function ImportCartDialog({ carts, defaultCartId = null, onClose }: Impor
             <fieldset className="import-target">
               <legend>Put it in</legend>
               <label>
-                <input type="radio" name="import-target" checked={target === null} onChange={() => setTarget(null)} />A new cart
+                <input type="radio" name="import-target" checked={target === null} onChange={() => setTarget(null)} />A
+                new cart
               </label>
               {carts.map((cart) => (
                 <label key={cart.id}>
-                  <input type="radio" name="import-target" checked={target === cart.id} onChange={() => setTarget(cart.id)} />
+                  <input
+                    type="radio"
+                    name="import-target"
+                    checked={target === cart.id}
+                    onChange={() => setTarget(cart.id)}
+                  />
                   {cart.name}
                 </label>
               ))}
@@ -123,7 +133,12 @@ export function ImportCartDialog({ carts, defaultCartId = null, onClose }: Impor
             </p>
           )}
           <div className="cart-dialog-actions">
-            <button type="button" className="primary-button" disabled={!canImport || importing.isPending} onClick={() => importing.mutate()}>
+            <button
+              type="button"
+              className="primary-button"
+              disabled={!canImport || importing.isPending}
+              onClick={() => importing.mutate()}
+            >
               {importing.isPending ? "Importing…" : "Import"}
             </button>
           </div>

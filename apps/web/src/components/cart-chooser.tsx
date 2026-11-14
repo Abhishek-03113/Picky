@@ -37,7 +37,10 @@ export function CartChooser({ carts, productIds, placement = "below", triggerCla
   if (naming) {
     return (
       <CartNameForm
-        initialName={uniqueComparisonName(DEFAULT_CART_NAME, carts.map((cart) => cart.name))}
+        initialName={uniqueComparisonName(
+          DEFAULT_CART_NAME,
+          carts.map((cart) => cart.name),
+        )}
         isPending={addToCart.isPending}
         errorMessage={addToCart.isError ? addToCart.error.message : null}
         onCreate={(name) => add({ newCartName: name }, name)}

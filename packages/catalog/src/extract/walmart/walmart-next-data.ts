@@ -55,7 +55,8 @@ export function walmartProductFields(product: unknown, currency: string): Partia
     price: walmartPrice(product, "currentPrice", currency),
     listPrice: walmartPrice(product, "wasPrice", currency),
     images: walmartImages(product),
-    rating: average === undefined ? undefined : { average, count: jsonNumber(jsonAt(product, ["numberOfReviews"])) ?? 0 },
+    rating:
+      average === undefined ? undefined : { average, count: jsonNumber(jsonAt(product, ["numberOfReviews"])) ?? 0 },
     availability: status === undefined ? undefined : statusCodeLabel(status),
   };
 }

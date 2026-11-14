@@ -138,7 +138,8 @@ const cartRoute = createRoute({
 const sharedCartRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/c/$slug",
-  validateSearch: (raw: Record<string, unknown>): { save?: boolean } => (raw["save"] === "1" || raw["save"] === 1 || raw["save"] === true ? { save: true } : {}),
+  validateSearch: (raw: Record<string, unknown>): { save?: boolean } =>
+    raw["save"] === "1" || raw["save"] === 1 || raw["save"] === true ? { save: true } : {},
   component: SharedCartPage,
 });
 

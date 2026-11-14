@@ -46,8 +46,8 @@ export function ShareCartDialog({ cartId, shareSlug, onClose }: ShareCartDialogP
       {slug === null ? (
         <>
           <p className="subtle">
-            Anyone with the link can see this cart, without signing in. They cannot change it, and you can stop
-            sharing at any time.
+            Anyone with the link can see this cart, without signing in. They cannot change it, and you can stop sharing
+            at any time.
           </p>
           <WhatTheySee />
           {(turnOn.isError || turnOff.isError) && (
@@ -56,7 +56,12 @@ export function ShareCartDialog({ cartId, shareSlug, onClose }: ShareCartDialogP
             </p>
           )}
           <div className="cart-dialog-actions">
-            <button type="button" className="primary-button" disabled={turnOn.isPending} onClick={() => turnOn.mutate()}>
+            <button
+              type="button"
+              className="primary-button"
+              disabled={turnOn.isPending}
+              onClick={() => turnOn.mutate()}
+            >
               {turnOn.isPending ? "Turning on…" : "Turn on sharing"}
             </button>
           </div>
@@ -72,7 +77,12 @@ export function ShareCartDialog({ cartId, shareSlug, onClose }: ShareCartDialogP
             </p>
           )}
           <div className="cart-dialog-actions">
-            <button type="button" className="soft-button danger" disabled={turnOff.isPending} onClick={() => turnOff.mutate()}>
+            <button
+              type="button"
+              className="soft-button danger"
+              disabled={turnOff.isPending}
+              onClick={() => turnOff.mutate()}
+            >
               Stop sharing
             </button>
           </div>
@@ -117,7 +127,11 @@ function CopyField({ label, value, copyLabel, code = false }: CopyFieldProps) {
     <div className="copy-field">
       <span className="copy-field-label">{label}</span>
       <div className="copy-field-row">
-        {code ? <code className="copy-field-value">{value}</code> : <input readOnly value={value} aria-label={label} onFocus={(event) => event.target.select()} />}
+        {code ? (
+          <code className="copy-field-value">{value}</code>
+        ) : (
+          <input readOnly value={value} aria-label={label} onFocus={(event) => event.target.select()} />
+        )}
         <button type="button" className="pill-button" onClick={() => void copy()}>
           {copied ? "Copied" : copyLabel}
         </button>

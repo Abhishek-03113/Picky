@@ -20,7 +20,9 @@ export function CheckoutStoreRow({ step, items, done, onToggleDone }: CheckoutSt
     for (const url of step.urls) window.open(url, "_blank", "noopener");
   };
   const buttonLabel =
-    step.kind === "cart-link" ? `Open cart on ${step.label}` : `Open ${pluralize(step.urls.length, "item")} on ${step.label}`;
+    step.kind === "cart-link"
+      ? `Open cart on ${step.label}`
+      : `Open ${pluralize(step.urls.length, "item")} on ${step.label}`;
   return (
     <section className={`card checkout-step${done ? " is-done" : ""}`} aria-label={step.label}>
       <div className="checkout-step-head">

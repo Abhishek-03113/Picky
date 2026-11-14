@@ -85,8 +85,8 @@ export function PrivacyPage() {
             <li>It does not track the sites you visit or collect your browsing history.</li>
             <li>
               Some stores are optional. The extension asks for access to one the first time it needs to download a
-              product link from it in the background, such as saving from a link. Saving the page you have open does
-              not need it, and you can remove the access in your browser at any time.
+              product link from it in the background, such as saving from a link. Saving the page you have open does not
+              need it, and you can remove the access in your browser at any time.
             </li>
           </ul>
 
@@ -98,9 +98,7 @@ export function PrivacyPage() {
               title, image, price, store, quantity, variant and the store link.
             </li>
             <li>It never shows your email address or your notes.</li>
-            <li>
-              Search engines are asked not to list shared carts, but anyone you give the link to can pass it on.
-            </li>
+            <li>Search engines are asked not to list shared carts, but anyone you give the link to can pass it on.</li>
             <li>You can turn a link off at any time. It then stops working for everyone.</li>
             <li>A person who opens a link can save a copy to their own account. Their copy is theirs, not yours.</li>
           </ul>

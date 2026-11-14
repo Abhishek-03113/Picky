@@ -50,7 +50,8 @@ export function createCartSharingClient(fetchFunction: FetchFunction, baseUrl: s
   const requestJson = createJsonRequester(fetchFunction, baseUrl);
   const cartPath = (id: string) => `/api/carts/${encodeURIComponent(id)}`;
   return {
-    share: async (cartId) => (await requestJson<{ slug: string }>(`${cartPath(cartId)}/share`, { method: "POST" })).slug,
+    share: async (cartId) =>
+      (await requestJson<{ slug: string }>(`${cartPath(cartId)}/share`, { method: "POST" })).slug,
     unshare: (cartId) => requestJson<void>(`${cartPath(cartId)}/share`, { method: "DELETE" }),
     readShared: async (slug) =>
       (await requestJson<{ cart: SharedCartView }>(`/api/shared-carts/${encodeURIComponent(slug)}`)).cart,

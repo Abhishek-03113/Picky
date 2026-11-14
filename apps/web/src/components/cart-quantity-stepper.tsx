@@ -14,7 +14,13 @@ interface CartQuantityStepperProps {
 }
 
 /** "− 2 +" stepper for one cart item, 1 to 99. */
-export function CartQuantityStepper({ quantity, title, onChange, onRemove, disabled = false }: CartQuantityStepperProps) {
+export function CartQuantityStepper({
+  quantity,
+  title,
+  onChange,
+  onRemove,
+  disabled = false,
+}: CartQuantityStepperProps) {
   const atMin = quantity <= MIN_CART_QUANTITY;
   const decrease = () => (atMin ? onRemove?.() : onChange(quantity - 1));
   return (
@@ -43,4 +49,3 @@ export function CartQuantityStepper({ quantity, title, onChange, onRemove, disab
     </span>
   );
 }
-

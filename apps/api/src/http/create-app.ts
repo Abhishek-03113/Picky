@@ -15,10 +15,7 @@ import { requireUser, type SessionCookieOptions } from "./session-cookie.ts";
 import { createSharedCartRoutes } from "./shared-cart-routes.ts";
 
 export interface AppDependencies
-  extends ProductRouteDependencies,
-    PriceRouteDependencies,
-    CartRouteDependencies,
-    BackupRouteDependencies {
+  extends ProductRouteDependencies, PriceRouteDependencies, CartRouteDependencies, BackupRouteDependencies {
   auth: AuthService;
   comparisons: ComparisonRepository;
   sessionCookie: SessionCookieOptions;

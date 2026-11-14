@@ -52,12 +52,7 @@ function InCartControl({ cart, productId, title }: InCartControlProps) {
   const quantity = cart.items.find((item) => item.productId === productId)?.quantity ?? 1;
   return (
     <>
-      <Link
-        to="/carts/$cartId"
-        params={{ cartId: cart.id }}
-        className="in-cart-link"
-        title={`Open ${cart.name}`}
-      >
+      <Link to="/carts/$cartId" params={{ cartId: cart.id }} className="in-cart-link" title={`Open ${cart.name}`}>
         In cart × {quantity}
       </Link>
       <CartQuantityStepper

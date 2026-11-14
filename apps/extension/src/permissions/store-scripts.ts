@@ -71,7 +71,9 @@ export class StoreScriptSync {
 
   /** Re-checks the stores whose origins changed (chrome.permissions.onAdded / onRemoved). */
   async syncOrigins(origins: readonly string[]): Promise<void> {
-    const changed = optionalStoreSites().filter((site) => storeOrigins(site).some((origin) => origins.includes(origin)));
+    const changed = optionalStoreSites().filter((site) =>
+      storeOrigins(site).some((origin) => origins.includes(origin)),
+    );
     await Promise.all(changed.map((site) => this.sync(site)));
   }
 

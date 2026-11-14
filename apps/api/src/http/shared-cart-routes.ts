@@ -44,7 +44,8 @@ function rateLimitPerAddress(now: () => number): MiddlewareHandler {
     if (windows.size > PRUNE_AT) pruneExpired(windows, time);
     const address = clientAddress(c);
     const current = windows.get(address);
-    const window = current === undefined || time - current.startedAt >= WINDOW_MS ? { startedAt: time, count: 0 } : current;
+    const window =
+      current === undefined || time - current.startedAt >= WINDOW_MS ? { startedAt: time, count: 0 } : current;
     window.count += 1;
     windows.set(address, window);
     if (window.count > REQUESTS_PER_WINDOW) {

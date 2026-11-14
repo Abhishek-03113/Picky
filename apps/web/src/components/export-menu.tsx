@@ -38,10 +38,22 @@ export function ExportMenu({ cartId }: { cartId: string }) {
       <MenuPopover label="Export" triggerClassName="soft-button" trigger="Export">
         {(close) => (
           <>
-            <a className="menu-item" role="menuitem" href={cartSharingClient.exportUrl(cartId, "csv")} download onClick={close}>
+            <a
+              className="menu-item"
+              role="menuitem"
+              href={cartSharingClient.exportUrl(cartId, "csv")}
+              download
+              onClick={close}
+            >
               This cart as CSV
             </a>
-            <a className="menu-item" role="menuitem" href={cartSharingClient.exportUrl(cartId, "json")} download onClick={close}>
+            <a
+              className="menu-item"
+              role="menuitem"
+              href={cartSharingClient.exportUrl(cartId, "json")}
+              download
+              onClick={close}
+            >
               This cart as a Picky file
             </a>
             <button
